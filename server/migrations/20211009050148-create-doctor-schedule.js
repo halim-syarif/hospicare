@@ -9,21 +9,35 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       EmployeeId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Employees',
+          key: 'id'
+        }
       },
       DayId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Days',
+          key: 'id'
+        }
       },
       booking_limit: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       price: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       start_hour: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       end_hour: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       createdAt: {

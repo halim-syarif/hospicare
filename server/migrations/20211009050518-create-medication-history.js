@@ -9,15 +9,23 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       BookingScheduleId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Booking_Schedules',
+          key: 'id'
+        }
       },
       description: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       total_price: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       is_paid: {
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

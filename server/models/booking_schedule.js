@@ -14,11 +14,25 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Booking_Schedule.init({
-    PatientId: DataTypes.INTEGER,
-    DoctorScheduleId: DataTypes.INTEGER,
-    booking_date: DataTypes.DATE,
+    PatientId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    DoctorScheduleId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    booking_date: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    },
     status: DataTypes.BOOLEAN
   }, {
+    hooks: {
+      beforeCreate(item){
+        item.status = false
+      }
+    },
     sequelize,
     modelName: 'Booking_Schedule',
   });

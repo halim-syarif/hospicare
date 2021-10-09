@@ -14,9 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Medicine.init({
-    name: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    description: DataTypes.STRING
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    price: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    description: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    }
   }, {
     sequelize,
     modelName: 'Medicine',

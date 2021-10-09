@@ -14,12 +14,30 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Doctor_Schedule.init({
-    EmployeeId: DataTypes.INTEGER,
-    DayId: DataTypes.INTEGER,
-    booking_limit: DataTypes.INTEGER,
-    price: DataTypes.INTEGER,
-    start_hour: DataTypes.DATE,
-    end_hour: DataTypes.DATE
+    EmployeeId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    DayId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    booking_limit: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    price: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    start_hour: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    },
+    end_hour: {
+      allowNull: false,
+      type: DataTypes.DATE,
+    }
   }, {
     sequelize,
     modelName: 'Doctor_Schedule',

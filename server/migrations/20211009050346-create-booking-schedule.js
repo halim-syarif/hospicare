@@ -9,15 +9,27 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       PatientId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Patients',
+          key: 'id'
+        }
       },
       DoctorScheduleId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Doctor_Schedules',
+          key: 'id'
+        }
       },
       booking_date: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       status: {
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

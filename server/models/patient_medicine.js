@@ -14,10 +14,21 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Patient_Medicine.init({
-    MedicationId: DataTypes.INTEGER,
-    MedicineId: DataTypes.INTEGER,
-    quantity: DataTypes.INTEGER,
-    price: DataTypes.INTEGER
+    MedicationId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    MedicineId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    quantity: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    price: {
+      type: DataTypes.INTEGER,
+    }
   }, {
     sequelize,
     modelName: 'Patient_Medicine',

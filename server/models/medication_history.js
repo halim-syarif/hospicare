@@ -14,11 +14,25 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Medication_History.init({
-    BookingScheduleId: DataTypes.INTEGER,
-    description: DataTypes.STRING,
-    total_price: DataTypes.INTEGER,
+    BookingScheduleId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+    description: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    total_price: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
     is_paid: DataTypes.BOOLEAN
   }, {
+    hooks: {
+      beforeCreate(item){
+        item.is_paid = false
+      }
+    },
     sequelize,
     modelName: 'Medication_History',
   });

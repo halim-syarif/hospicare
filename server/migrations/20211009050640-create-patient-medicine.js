@@ -9,12 +9,23 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       MedicationId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Medication_Histories',
+          key: 'id'
+        }
       },
       MedicineId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Medicines',
+          key: 'id'
+        }
       },
       quantity: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       price: {
