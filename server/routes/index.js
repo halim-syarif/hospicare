@@ -1,49 +1,24 @@
 const routes = require('express').Router()
-
-routes.get('/patients')
-routes.get('/patients/:id')
-routes.post('/patients')
-routes.put('/patients')
-routes.delete('/patients')
-
-routes.get('/employees')
-routes.get('/employees/:id')
-routes.get('/employees/doctors')
-routes.get('/employees/doctors/:poli')
-routes.post('/employees')
-routes.put('/employees')
-routes.delete('/employees')
-
-routes.get('/days')
-routes.post('/days')
-routes.delete('/days')
-
-routes.get('/medicines')
-routes.get('/medicines/:id')
-routes.post('/medicines')
-routes.put('/medicines')
-routes.delete('/medicines')
+const errorHandler = require('../middlewares/errorhandler')
+const patientsRoutes = require('./patients')
+const employeesRoutes = require('./employees')
+const daysRoutes = require('./days')
+const medicinesRoutes = require('./medicines')
+const scheduleRoutes = require('./schedules')
+const bookingsRoutes = require('./bookings')
+const historiesRoutes = require('./histories')
 
 
-routes.get('/schedule')
-routes.get('/schedule/:doctorId')
-routes.post('/schedule')
-routes.put('/schedule')
-routes.delete('/schedule')
+routes.use('/patients', patientsRoutes)
+routes.use('/employees', employeesRoutes)
+routes.use('/days', daysRoutes)
+routes.use('/medicines', medicinesRoutes)
+routes.use('/schedules', scheduleRoutes)
+routes.use('/bookings', bookingsRoutes)
+routes.use('/history', historiesRoutes)
 
+routes.use(errorHandler)
 
-routes.get('/bookings')
-routes.get('/bookings/:patientId')
-routes.get('/bookings/:doctorId')
-routes.post('/bookings')
-routes.patch('/bookings') //change status
-routes.delete('/bookings')
-
-routes.get('/history')
-routes.get('/history/:bookingId')
-routes.post('/history')
-routes.patch('/history') //change is_paid
-routes.delete('/history')
 
 
 module.exports = routes
