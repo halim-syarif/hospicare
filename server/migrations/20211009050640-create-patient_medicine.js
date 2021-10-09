@@ -1,36 +1,35 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Booking_Schedules', {
+    await queryInterface.createTable('PatientMedicines', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      PatientId: {
+      MedicationId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Patients',
+          model: 'MedicationHistories',
           key: 'id'
         }
       },
-      DoctorScheduleId: {
+      MedicineId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Doctor_Schedules',
+          model: 'Medicines',
           key: 'id'
         }
       },
-      booking_date: {
+      quantity: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.INTEGER
       },
-      status: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN
+      price: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +42,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Booking_Schedules');
+    await queryInterface.dropTable('PatientMedicines');
   }
 };

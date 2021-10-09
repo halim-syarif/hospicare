@@ -12,4 +12,5 @@ Hospicare's intentions are straightforward. It helps those who are in need of me
 <br>
 
 > Schema Databases
+
 ![Alt text](server/images/schema.png "Schema Database")
