@@ -37,8 +37,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      poli: {
-        type: Sequelize.STRING
+      poliId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Polis',
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,

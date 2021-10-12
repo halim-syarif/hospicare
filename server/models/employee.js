@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    poli: DataTypes.STRING
+    poliId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Employee',
