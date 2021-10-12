@@ -14,3 +14,36 @@ Hospicare's intentions are straightforward. It helps those who are in need of me
 > Schema Databases
 
 ![Alt text](server/images/schema.png "Schema Database")
+
+<br>
+
+> Business Logic
+
+<br>
+
+```
+Admin
+
+- Login
+- CRUD Dokter
+- CRUD Jadwal Dokter
+- CRUD Obat
+- CRUD Pasien
+- Change status pemeriksaan pasien
+```
+
+```
+Dokter
+
+- Update Data Penyakit Pasien
+- Update Obat Pasien
+```
+
+```
+Patient
+
+- Lihat Jadwal Dokter
+- Booking Jadwal Dokter
+- Lihat Riwayat Pemeriksaan 
+- Lihat biaya pengobatan
+```
