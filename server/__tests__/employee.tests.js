@@ -40,7 +40,7 @@ describe("employee Routes Test", () => {
       age: 25,
       gender: "male",
       address: "testing",
-      role: "admin",
+      role: "Admin",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -51,7 +51,7 @@ describe("employee Routes Test", () => {
       age: 25,
       gender: "male",
       address: "testing",
-      role: "admin",
+      role: "Admin",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -92,6 +92,8 @@ describe("employee Routes Test", () => {
       updatedAt: new Date(),
     },
   ];
+  let access_token = ''
+
   beforeAll((done) => {
     Poli.destroy({
       where: {},
@@ -106,11 +108,21 @@ describe("employee Routes Test", () => {
       .then((_) => {
         return queryInterface.bulkInsert("Employees", employeeData);
       })
-      .then(() => done())
+      .then(() => {
+        return request(app).post("/employees/login").send({
+          email: "testing@mail.com",
+          password: "12345",
+        })
+      })
+      .then(data => {
+        access_token = data.body.access_token
+        done()
+      })
       .catch((err) => {
         done(err);
       });
   });
+
 
   afterAll((done) => {
     queryInterface
@@ -155,6 +167,7 @@ describe("employee Routes Test", () => {
   test("200 Get All Employee - should return all employee", (done) => {
     request(app)
       .get("/employees")
+      .set('access_token', access_token)
       .then((response) => {
         const { body, status } = response;
         expect(status).toBe(200);
@@ -167,6 +180,7 @@ describe("employee Routes Test", () => {
   test("200 Get All Employee with limit success - should return all employee with limit item", (done) => {
     request(app)
       .get("/employees?limit=3")
+      .set('access_token', access_token)
       .then((response) => {
         const { body, status } = response;
         expect(status).toBe(200);
@@ -179,6 +193,7 @@ describe("employee Routes Test", () => {
   test("200 Get All Employee with offset success - should return all employee with offset", (done) => {
     request(app)
       .get("/employees?offset=4&limit=3")
+      .set('access_token', access_token)
       .then((response) => {
         const { body, status } = response;
         expect(status).toBe(200);
@@ -203,6 +218,7 @@ describe("employee Routes Test", () => {
   test("200 Get Employee By Id - should return employee by id", (done) => {
     request(app)
       .get("/employees/2")
+      .set('access_token', access_token)
       .then((response) => {
         const { body, status } = response;
         expect(status).toBe(200);
@@ -215,6 +231,7 @@ describe("employee Routes Test", () => {
   test("404 Failed get employee - should return error message", (done) => {
     request(app)
       .get("/employees/200")
+      .set('access_token', access_token)
       .then((response) => {
         const { body, status } = response;
         expect(status).toBe(404);
@@ -226,6 +243,7 @@ describe("employee Routes Test", () => {
   test("401 Failed get employee - should return error message", (done) => {
     request(app)
       .get("/employees/eeee")
+      .set('access_token', access_token)
       .then((response) => {
         const { body, status } = response;
         expect(status).toBe(401);
@@ -237,6 +255,7 @@ describe("employee Routes Test", () => {
   test('201 Success create employee - should create new employee', (done) => {
     request(app)
       .post('/employees')
+      .set('access_token', access_token)
       .send({
         name: "doctor",
         email: "doctor@mail.com",
@@ -261,6 +280,7 @@ describe("employee Routes Test", () => {
   test('400 Failed create employee - should return error if email is null', (done) => {
     request(app)
       .post('/employees')
+      .set('access_token', access_token)
       .send({
         name: "doctor",
         password: "12345",
@@ -280,9 +300,10 @@ describe("employee Routes Test", () => {
       })
   })
 
-  test('400 Failed register - should return error if email is already used', (done) => {
+  test('400 Failed create employee - should return error if email is already used', (done) => {
     request(app)
       .post('/employees')
+      .set('access_token', access_token)
       .send({
         name: "doctor",
         password: "12345",
@@ -306,6 +327,7 @@ describe("employee Routes Test", () => {
   test('400 Failed register - should return error if email have invalid format', (done) => {
     request(app)
       .post('/employees')
+      .set('access_token', access_token)
       .send({
         name: "doctor",
         password: "12345",
@@ -329,6 +351,7 @@ describe("employee Routes Test", () => {
   test('200 Success updated - should return message data updated', (done) => {
     request(app)
       .put('/employees/2')
+      .set('access_token', access_token)
       .send({
         name: "doctor",
         password: "12345",
@@ -347,6 +370,7 @@ describe("employee Routes Test", () => {
   test('200 Success deleted - should return message data deleted', (done) => {
     request(app)
       .delete('/employees/2')
+      .set('access_token', access_token)
       .then(response => {
         const { body, status } = response
         expect(status).toBe(200)

@@ -30,6 +30,29 @@ const errorHandler = (err, req, res, next) => {
         return err.message;
       });
       break;
+
+    case "Token Invalid":
+      code = 401;
+      message = `Authentication Failed`
+      break;
+
+    case "JsonWebTokenError":
+      if (err.message == "jwt must be provided") {
+        code = 401;
+        message = "You must login first"
+      } else if (err.message == "jwt malformed"){
+        code = 403;
+        message = "You token is invalid"
+      } else {
+        code = 401;
+        message = err.message
+      }
+      break;
+
+    case 'Authorization Failed':
+      code = 403
+      message = 'You dont have permission'
+      break;
   }
 
   console.log(err);
