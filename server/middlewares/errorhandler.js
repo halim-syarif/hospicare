@@ -3,6 +3,16 @@ const errorHandler = (err, req, res, next) => {
   let message = "internal server error";
 
   switch (err.name) {
+    case "emailPasswordRequired":
+      code = 400;
+      message = "Email or password can't be empty";
+      break;
+
+    case "UserNotFound":
+      code = 401;
+      message = "Wrong email or password";
+      break;
+
     case "SequelizeValidationError":
       code = 400;
       message = err.errors.map((el) => el.message);
@@ -43,6 +53,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   console.log(err);
+  console.log(err.name);
   res.status(code).json({ message });
 };
 

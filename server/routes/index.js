@@ -17,6 +17,7 @@ routes.use('/schedules', scheduleRoutes)
 routes.use('/bookings', bookingsRoutes)
 routes.use('/history', historiesRoutes)
 
+
 routes.use(errorHandler)
 
 
