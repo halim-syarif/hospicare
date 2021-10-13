@@ -1,7 +1,11 @@
 const routes = require('express').Router()
+const PatientController = require('../controllers/Patient')
+const { authentication, authorization } = require('../middlewares/auth')
 
 
-routes.get('/', (req, res)=> res.send('oksss'))
+routes.use(authentication, authorization)
+
+routes.get('/', PatientController.getAllPatient)
 routes.get('/:id')
 routes.post('/')
 routes.put('/')

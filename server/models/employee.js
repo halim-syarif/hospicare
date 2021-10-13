@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Employee.belongsTo(models.Poli,{foreignKey:'poliId'})
+      Employee.hasMany(models.DoctorSchedule, {foreignKey: 'EmployeeId'})
     }
   };
   Employee.init({
