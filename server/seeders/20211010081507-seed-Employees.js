@@ -34,7 +34,7 @@ module.exports = {
         age: 41,
         gender: 'female',
         address:'Gg. Pelajar Pejuang 45 No. 943, Bekasi',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -46,7 +46,7 @@ module.exports = {
         age: 38,
         gender: 'female',
         address:'Jl Raden Mataher 70, Jakarta Utara',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -58,7 +58,7 @@ module.exports = {
         age: 38,
         gender: 'female',
         address:'Jl Guru Mughni 127, Jakarta Utara',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -70,7 +70,7 @@ module.exports = {
         age: 35,
         gender: 'male',
         address:'Jl Gombel Permai X/254, Jakarta Utara',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -82,7 +82,7 @@ module.exports = {
         age: 39,
         gender: 'female',
         address:'Jl Kalilio 17-19 Ged Unas Bl D, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -94,7 +94,7 @@ module.exports = {
         age: 41,
         gender: 'female',
         address:'Jl Jend Basuki Rachmad 8-12 Plaza Tunjungan III Lt 3 303,Kedungdoro',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -106,7 +106,7 @@ module.exports = {
         age: 33,
         gender: 'female',
         address:'Jl Perintis Kemerdekaan, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -118,7 +118,7 @@ module.exports = {
         age: 32,
         gender: 'male',
         address:'Kel Paslaten Satu Lingk IV 95375, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 2,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -130,7 +130,7 @@ module.exports = {
         age: 40,
         gender: 'male',
         address:'JL. Ahmad Yani II No. 8 G, 2nd Floor, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -142,7 +142,7 @@ module.exports = {
         age: 45,
         gender: 'male',
         address:'Jl Ki Mangunsakoro 40, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -154,7 +154,7 @@ module.exports = {
         age: 40,
         gender: 'male',
         address:'Jl Patal Pusri 56, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -166,7 +166,7 @@ module.exports = {
         age: 32,
         gender: 'female',
         address:'Jl Bajak II/7 H, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -178,7 +178,7 @@ module.exports = {
         age: 35,
         gender: 'male',
         address:'Jl Legundi II/7 H, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 3,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -190,7 +190,7 @@ module.exports = {
         age: 33,
         gender: 'female',
         address:'Jl Panjang 30 C, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 4,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -202,7 +202,7 @@ module.exports = {
         age: 37,
         gender: 'female',
         address:'Gg Tembok 17 E, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 4,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -214,7 +214,7 @@ module.exports = {
         age: 42,
         gender: 'male',
         address:'Kel Kerobokan Br Gede,Kerobokan, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 4,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -226,7 +226,7 @@ module.exports = {
         age: 38,
         gender: 'female',
         address:'Jl Bekasi Tmr Km 18 16 RT 002/01, Bekasi',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -238,7 +238,7 @@ module.exports = {
         age: 35,
         gender: 'female',
         address:'Jl Bekasi Barat Km 18 16 RT 002/01, Bekasi',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -250,7 +250,7 @@ module.exports = {
         age: 32,
         gender: 'female',
         address:'Jl Radio Dlm Raya 20, Bekasi',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 5,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -262,7 +262,7 @@ module.exports = {
         age: 37,
         gender: 'female',
         address:'Br Petengan Kutuh Ungasan, Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 6,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -274,7 +274,7 @@ module.exports = {
         age: 33,
         gender: 'female',
         address:'Gajahmada Plaza B/33-66, Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 6,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -286,7 +286,7 @@ module.exports = {
         age: 45,
         gender: 'male',
         address:'Jl Jababeka 14-A Kawasan Industri Jababeka Bl J/3-G, Cibitung',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 6,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -298,7 +298,7 @@ module.exports = {
         age: 36,
         gender: 'female',
         address:'Jl Kerinci 19, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 7,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -310,7 +310,7 @@ module.exports = {
         age: 48,
         gender: 'male',
         address:'Jl Jend Basuki Rachmad 123, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 7,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -322,7 +322,7 @@ module.exports = {
         age: 42,
         gender: 'male',
         address:'Jl Singosari 2 A Kompl Pharmindo, Bandung',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 7,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -334,7 +334,7 @@ module.exports = {
         age: 36,
         gender: 'male',
         address:'Jl Tembung 28, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 7,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -346,7 +346,7 @@ module.exports = {
         age: 34,
         gender: 'female',
         address:'Jl Lap Ros 34, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 8,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -358,7 +358,7 @@ module.exports = {
         age: 44,
         gender: 'female',
         address:'Jl Tebet Brt X A 16, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 8,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -370,7 +370,7 @@ module.exports = {
         age: 36,
         gender: 'female',
         address:'Jl Bungur Besar 77 Kemayoran Jakarta Pusat, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 8,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -382,7 +382,7 @@ module.exports = {
         age: 37,
         gender: 'male',
         address:'Jl Semangka 56 RT 019/056, DKI Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 9,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -394,7 +394,7 @@ module.exports = {
         age: 50,
         gender: 'male',
         address:'Jl Jatinegara Tmr III 23, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 9,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -406,7 +406,7 @@ module.exports = {
         age: 46,
         gender: 'male',
         address:'Jl Astana Anyar 72, Jawa Barat',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 9,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -418,7 +418,7 @@ module.exports = {
         age: 41,
         gender: 'female',
         address:'Jl Ruko 1 Kentungan Condongcatur Yogyakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 10,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -430,7 +430,7 @@ module.exports = {
         age: 38,
         gender: 'female',
         address:'Jl Kampung Durian 63, Jakarta Timur',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 10,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -442,7 +442,7 @@ module.exports = {
         age: 45,
         gender: 'male',
         address:'Jl TB Simatupang Kav 1 B Graha Elnusa, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 10,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -454,7 +454,7 @@ module.exports = {
         age: 46,
         gender: 'female',
         address:'Jl Mangga Dua Raya Psr Pagi Mangga Dua Bl A/188, Dki Jakarta',
-        role: 'Dokter',
+        role: 'Doctor',
         poliId: 10,
         createdAt: new Date(),
         updatedAt: new Date()

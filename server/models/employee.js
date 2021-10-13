@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { hashPassword } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class Employee extends Model {
     /**
@@ -11,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Employee.belongsTo(models.Poli,{foreignKey:'poliId'})
     }
   };
   Employee.init({
@@ -21,7 +23,16 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       allowNull: false,
       type: DataTypes.STRING,
-      unique: true
+      unique: {
+        args: true,
+        msg: 'Email is already exists'
+      },
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'Invalid email format'
+        }
+      }
     },
     password: {
       allowNull: false,
@@ -45,6 +56,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     poliId: DataTypes.INTEGER
   }, {
+    hooks:{
+      beforeCreate(employee){
+        employee.password = hashPassword(employee.password)
+      },
+      beforeBulkUpdate(employee){
+        if(employee.attributes.password){
+          employee.attributes.password = hashPassword(employee.attributes.password)
+        }
+      }
+    },
     sequelize,
     modelName: 'Employee',
   });
