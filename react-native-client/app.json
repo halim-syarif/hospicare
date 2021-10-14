@@ -17,12 +17,12 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "react-native-client",
+      "bundleIdentifier": "com.hactiv8.hospicare",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
-      "package": "react-native-client",
+      "package": "com.hactiv8.hospicare",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
