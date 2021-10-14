@@ -17,7 +17,7 @@ class PatientController {
       }
       if (!offset) {
         offset = 0;
-      }
+      } 
       const result = await Patient.findAndCountAll({
         attributes: ["id", "name", "email", "age", "gender", "address"],
         order: [["id", "ASC"]],
