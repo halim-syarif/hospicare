@@ -5,13 +5,13 @@ class MedicineController {
         try {
             let { limit, offset } = req.query;
             if (!limit) {
-                limit = 50;
+                limit = 20;
             }
             if (!offset) {
                 offset = 0;
             }
             const medicines = await Medicine.findAndCountAll({
-                attributes: ["id", "name", "price"],
+                attributes: ["id", "name", "price", "description"],
                 order: [["id", "ASC"]],
                 limit,
                 offset,
@@ -30,7 +30,7 @@ class MedicineController {
               throw { name: "WrongFormatId" };
             }
             const medicines = await Medicine.findByPk(id, {
-              attributes: ["id", "name", "price"],
+              attributes: ["id", "name", "price", "description"],
             });
             if (!medicines) {
               throw { name: "IdNotFound" };
@@ -44,7 +44,7 @@ class MedicineController {
     static async createMedecine(req, res, next){
         try {
             const medicine = await Medicine.create(req.body);
-            res.status(201).json({id: medicine.id, name: medicine.name});
+            res.status(201).json({id: medicine.id, name: medicine.name, price: medicine.price, description: medicine.description});
         } catch (err) {
             next(err);
         }
@@ -74,6 +74,7 @@ class MedicineController {
     static async deleteMedicine(req, res, next){
         try {
             const { id } = req.params;
+            console.log(id);
             if (isNaN(+id)) {
               throw { name: "WrongFormatId" };
             }
