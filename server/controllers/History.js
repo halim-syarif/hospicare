@@ -30,22 +30,6 @@ class HistoryController {
         }
     }
 
-    static async deleteHistory(req, res, next) {
-        const {id} = req.params
-        try {
-            const found = await MedicationHistory.findByPk(id)
-            if (!found) {
-                throw ({name: "IdNotFound"})
-            }
-            await MedicationHistory.destroy({
-                where: {id}
-            })
-            res.status(200).json({message: "Data has been deleted"})
-        } catch (err) {
-            next(err)
-        }
-    }
-
     static async findHistoryByBookingId(req, res, next) {
         const { BookingScheduleId } = req.params
         try {
