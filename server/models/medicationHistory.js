@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       MedicationHistory.belongsTo(models.BookingSchedule, {foreignKey:'BookingScheduleId'})
       MedicationHistory.hasMany(models.PatientMedicine, {foreignKey: 'MedicationId'})
+      // MedicationHistory.belongsToMany(models.Medicine, {through: 'PatientMedicines'})
     }
   };
   MedicationHistory.init({
