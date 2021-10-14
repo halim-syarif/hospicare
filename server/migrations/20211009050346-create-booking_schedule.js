@@ -14,7 +14,9 @@ module.exports = {
         references: {
           model: 'Patients',
           key: 'id'
-        }
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       DoctorScheduleId: {
         allowNull: false,
@@ -22,7 +24,9 @@ module.exports = {
         references: {
           model: 'DoctorSchedules',
           key: 'id'
-        }
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       booking_date: {
         allowNull: false,
