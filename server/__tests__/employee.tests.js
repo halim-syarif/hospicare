@@ -1,5 +1,5 @@
 const app = require("../app.js");
-const { Employee, Poli, sequelize } = require("../models");
+const { Poli, sequelize } = require("../models");
 const request = require("supertest");
 const { hashPassword } = require("../helpers/bcrypt.js");
 const { queryInterface } = sequelize;

@@ -14,7 +14,9 @@ module.exports = {
         references: {
           model: 'MedicationHistories',
           key: 'id'
-        }
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       MedicineId: {
         allowNull: false,
@@ -22,7 +24,9 @@ module.exports = {
         references: {
           model: 'Medicines',
           key: 'id'
-        }
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       quantity: {
         allowNull: false,
