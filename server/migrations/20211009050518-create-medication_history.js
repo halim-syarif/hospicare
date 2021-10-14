@@ -14,7 +14,9 @@ module.exports = {
         references: {
           model: 'BookingSchedules',
           key: 'id'
-        }
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'
       },
       description: {
         allowNull: false,
