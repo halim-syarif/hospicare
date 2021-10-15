@@ -1,7 +1,19 @@
-import { INCREMENT_COUNTER, SET_LOADING_MOVIES, SET_MOVIES, SET_MOVIE_DETAIL, SET_MOVIE_DETAIL_LOADING, SET_MOVIE_NAME, SET_PATIENT_DATA , SET_PATIENT_LOGIN_ERROR} from "../keys";
+import { 
+    INCREMENT_COUNTER, 
+    SET_LOADING_MOVIES, 
+    SET_MOVIES, 
+    SET_MOVIE_DETAIL, 
+    SET_MOVIE_DETAIL_LOADING, 
+    SET_MOVIE_NAME, 
+    SET_PATIENT_DATA, 
+    SET_PATIENT_ERROR_LOGIN, 
+    SET_PATIENT_LOADING_LOGIN, 
+    REGISTER_PATIENT, 
+    SET_PATIENT_ERROR_REGISTER, 
+    SET_PATIENT_LOADING_REGISTER 
+} from "../keys";
 import axios from 'axios'
-
-const baseUrl = process.env.REACT_APP_BASE_URL
+import http from '../../libs/patients'
 
 function setPatientData(data){
     return {
@@ -12,26 +24,69 @@ function setPatientData(data){
 
 function setErrorLogin(error){
     return {
-        type: SET_PATIENT_LOGIN_ERROR,
+        type: SET_PATIENT_ERROR_LOGIN,
         payload: error
+    }
+}
+
+function setLoadingLogin(isLoading){
+    return {
+        type: SET_PATIENT_LOADING_LOGIN,
+        payload: isLoading
     }
 }
 
 function loginAsync(data){
     return async function (dispatch){
         try {
-            const patient = await axios({
+            dispatch(setLoadingLogin(true))
+            const patient = await http({
                 method: 'post',
-                url: 'http://10.0.2.2:3000/patients/login',
+                url: 'login',
                 data
             })
             const result = patient.data
             dispatch(setPatientData(result))
+            dispatch(setLoadingLogin(false))
         } catch (err) {
             dispatch(setErrorLogin(err.response.data))
+            dispatch(setLoadingLogin(false))
         }
     }
-} 
+}
+
+function setErrorRegister(error){
+    return {
+        type: SET_PATIENT_ERROR_REGISTER,
+        payload: error
+    }
+}
+
+function setLoadingRegister(isLoading){
+    return {
+        type: SET_PATIENT_LOADING_REGISTER,
+        payload: isLoading
+    }
+}
+
+function registerAsync(data, navigation){
+    return async function (dispatch){
+        try {
+            dispatch(setLoadingRegister(true))
+            const patient = await http({
+                method: 'post',
+                data
+            })
+            console.log(patient.data, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+            dispatch(setLoadingRegister(false))
+            dispatch(setErrorRegister(''))
+            navigation.navigate('SignInScreen')
+        } catch (err) {
+            dispatch(setErrorRegister(err.response.data))
+            dispatch(setLoadingRegister(false))
+        }
+    }
+}
 
 function incrementCounter(){
     return {
@@ -110,4 +165,15 @@ function setMovieDetailAsync(id){
         }
       }
 }
-export { loginAsync, incrementCounter, setMoviesAsync, setMovies, setMovieName, setLoadingMovies, setMovieDetail, setLoadingMovieDetail, setMovieDetailAsync }
+export { 
+    loginAsync, 
+    registerAsync,
+    incrementCounter, 
+    setMoviesAsync, 
+    setMovies, 
+    setMovieName, 
+    setLoadingMovies, 
+    setMovieDetail, 
+    setLoadingMovieDetail, 
+    setMovieDetailAsync
+ }
