@@ -3,6 +3,7 @@ const PatientController = require('../controllers/Patient')
 const { authentication, authOnlyAdmin } = require('../middlewares/auth')
 
 routes.post('/', PatientController.createPatient) // ntar bisa login
+routes.post('/login', PatientController.loginPatient)
 
 routes.use(authentication, authOnlyAdmin)
 
