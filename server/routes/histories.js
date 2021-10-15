@@ -1,9 +1,9 @@
 const routes = require('express').Router()
+const history = require("../controllers/History")
 
-routes.get('/')
-routes.get('/:bookingId')
-routes.post('/')
-routes.patch('/') //change is_paid
-routes.delete('/')
+routes.get('/', history.showAll)
+routes.get('/:BookingScheduleId', history.findHistoryByBookingId)
+// routes.post('/')
+routes.patch('/:id', history.editStatus) //change is_paid
 
 module.exports = routes
