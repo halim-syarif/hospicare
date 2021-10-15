@@ -66,7 +66,7 @@ export default function SignIn({navigation, route}) {
             ...data,
             secureTextEntry: true
         })
-        dispatch(loginAsync(data))       
+        dispatch(loginAsync(data))
     }
 
     return (
@@ -199,7 +199,8 @@ const styles = StyleSheet.create({
     text_footer_error_login: {
         color: 'red',
         fontSize: 15,
-        marginTop: 35
+        marginTop: 35,
+        paddingLeft: 5
     },
     
     action: {
