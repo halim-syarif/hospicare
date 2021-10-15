@@ -206,24 +206,24 @@ describe("History Routes Test", () => {
             });
     });
 
-    // afterAll((done) => {
-    //     queryInterface
-    //         .bulkDelete("Employees", {})
-    //         .then(() => {
-    //             return queryInterface.bulkDelete("MedicationHistories", {});
-    //         })
-    //         .then(() => {
-    //             return queryInterface.bulkDelete("BookingSchedules", {});
-    //         })
-    //         .then(() => {
-    //             return queryInterface.bulkDelete("Patients", {});
-    //         })
-    //         .then(() => {
-    //             return queryInterface.bulkDelete("Employees", {});
-    //         })
-    //         .then(() => done())
-    //         .catch((err) => done(err));
-    // });
+    afterAll((done) => {
+        queryInterface
+            .bulkDelete("Employees", {})
+            .then(() => {
+                return queryInterface.bulkDelete("MedicationHistories", {});
+            })
+            .then(() => {
+                return queryInterface.bulkDelete("BookingSchedules", {});
+            })
+            .then(() => {
+                return queryInterface.bulkDelete("Patients", {});
+            })
+            .then(() => {
+                return queryInterface.bulkDelete("Employees", {});
+            })
+            .then(() => done())
+            .catch((err) => done(err));
+    });
 
     //test here
     test("200 Success get all histories - should return all histories data", (done) => {
@@ -242,6 +242,7 @@ describe("History Routes Test", () => {
     test("200 Success get data history by BookingScheduleId", (done) => {
         request(app)
             .get("/history/1")
+
             .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response
@@ -291,7 +292,9 @@ describe("History Routes Test", () => {
             .then((response) => {
                 const { body, status } = response
                 expect(status).toBe(404)
+
                 expect(body).toHaveProperty("message", "Id not found")
+
                 done()
             })
     })
