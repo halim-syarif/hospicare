@@ -12,7 +12,6 @@ class EmployeeController {
       let result = await Employee.findOne({
         where: { email },
       });
-
       if (!result || !checkPassword(password, result.password)) {
         throw { name: "UserNotFound" };
       }
@@ -23,8 +22,9 @@ class EmployeeController {
         email: result.email,
         role: result.role,
       };
-
+      
       let access_token = signToken(payload);
+      console.log(access_token)
 
       res.status(200).json({
         access_token,
