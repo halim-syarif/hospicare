@@ -5,14 +5,12 @@ import {
     StyleSheet, 
     Platform,
     TextInput,
-    Dimensions,
     TouchableOpacity,
     StatusBar,
     ScrollView
 } from 'react-native';
 import * as Animatable from 'react-native-animatable'
 import {LinearGradient} from 'expo-linear-gradient'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
 
@@ -35,30 +33,31 @@ export default function SignIn({navigation, route}) {
         if(val.length !== 0){
             setData({
                 ...data,
-                email: val,
+                name: val,
                 check_textInputChange: true
             })
         } else {
             setData({
                 ...data,
-                email: val,
+                name: val,
                 check_textInputChange: false
             })
         }
     }
 
-    const handlePasswordChange = (val) => {
+    const handleChange = (val, key) => {
         setData({
             ...data,
-            password: val
+            [key]: val
         })
     }
 
-    const handleConfrimPasswordChange = (val) => {
-        setData({
-            ...data,
-            confirm_password: val
-        })
+    const handleSignUp = () => {
+        delete data.check_textInputChange
+        delete data.confirm_secureTextEntry
+        delete data.secureTextEntry
+        delete data.confirm_password
+        console.log(data)
     }
 
     const updateSecureTextEntry = () => {
@@ -94,6 +93,7 @@ export default function SignIn({navigation, route}) {
                         <TextInput
                             placeholder="Your username"
                             style={styles.textInput}
+                            value={data.name}
                             autoCapitalize="none"
                             onChangeText={(val) => textInputChange(val)}
                         />
@@ -121,19 +121,8 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your email"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => handleChange(val, 'email')}
                         />
-                        {data.check_textInputChange ? 
-                        <Animatable.View
-                            animation="bounceIn"
-                            >
-                            <Feather
-                                name="check-circle"
-                                size={20}
-                                color="green"
-                            />
-                        </Animatable.View>
-                        : null}
                 </View>
 
                 <Text style={styles.text_footer_below}>Password</Text>
@@ -148,7 +137,7 @@ export default function SignIn({navigation, route}) {
                             secureTextEntry={data.secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handlePasswordChange(val)}
+                            onChangeText={(val) => handleChange(val, 'password')}
 
                         />
                         <TouchableOpacity
@@ -180,7 +169,7 @@ export default function SignIn({navigation, route}) {
                             secureTextEntry={data.confirm_secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleConfrimPasswordChange(val)}
+                            onChangeText={(val) => handleChange(val, 'confirm_password')}
 
                         />
                         <TouchableOpacity
@@ -211,19 +200,8 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your email"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => handleChange(val, 'age')}
                         />
-                        {data.check_textInputChange ? 
-                        <Animatable.View
-                            animation="bounceIn"
-                            >
-                            <Feather
-                                name="check-circle"
-                                size={20}
-                                color="green"
-                            />
-                        </Animatable.View>
-                        : null}
                 </View>
                 <Text style={styles.text_footer_below}>Gender</Text>
                 <View style={styles.action}>
@@ -236,19 +214,8 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your email"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => handleChange(val, 'gender')}
                         />
-                        {data.check_textInputChange ? 
-                        <Animatable.View
-                            animation="bounceIn"
-                            >
-                            <Feather
-                                name="check-circle"
-                                size={20}
-                                color="green"
-                            />
-                        </Animatable.View>
-                        : null}
                 </View>
                 <Text style={styles.text_footer_below}>Address</Text>
                 <View style={styles.action}>
@@ -261,27 +228,35 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your email"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => handleChange(val, 'address')}
                         />
-                        {data.check_textInputChange ? 
-                        <Animatable.View
-                            animation="bounceIn"
-                            >
-                            <Feather
-                                name="check-circle"
-                                size={20}
-                                color="green"
-                            />
-                        </Animatable.View>
-                        : null}
+                </View>
+                <Text style={styles.text_footer_below}>Image Url</Text>
+                <View style={styles.action}>
+                        <FontAwesome
+                            name="image"
+                            color='#05375a'
+                            size={20}
+                        /> 
+                        <TextInput
+                            placeholder="Your email"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => handleChange(val, 'imgUrl')}
+                        />
                 </View>
                 <View style={styles.button}>
-                    <LinearGradient
-                        colors={['#08d4c4', '#01ab9d']}
-                        style={styles.signIn}
-                    >
-                        <Text style={styles.textSign}>Sign Up</Text>
-                    </LinearGradient>
+                    <TouchableOpacity
+                        onPress={handleSignUp}
+                        style={styles.signUp}
+                        >
+                        <LinearGradient
+                            colors={['#08d4c4', '#01ab9d']}
+                            style={styles.signIn}
+                        >
+                            <Text style={styles.textSign}>Sign Up</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignInScreen')}
                         style={styles.signUp}

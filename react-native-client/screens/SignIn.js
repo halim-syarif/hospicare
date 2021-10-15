@@ -5,22 +5,26 @@ import {
     StyleSheet, 
     Platform,
     TextInput,
-    Dimensions,
     TouchableOpacity,
     StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable'
+
 import {LinearGradient} from 'expo-linear-gradient'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginAsync } from '../store/actions';
+
 
 export default function SignIn({navigation, route}) {
+    const errorLogin = useSelector(state => state.patients.errorLogin)
+    const dispatch = useDispatch()
     const [data, setData] = useState({
         email: '',
         password: '',
-        check_textInputChange: false,
-        secureTextEntry: true
+        secureTextEntry: true,
+        check_textInputChange: false
     })
 
     const textInputChange = (val) => {
@@ -53,6 +57,12 @@ export default function SignIn({navigation, route}) {
         })
     }
 
+    function handleSignIn() {
+        delete data.secureTextEntry
+        delete data.check_textInputChange
+        dispatch(loginAsync(data))       
+    }
+
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="#009387" barStyle='light-content'/>
@@ -75,17 +85,6 @@ export default function SignIn({navigation, route}) {
                             autoCapitalize="none"
                             onChangeText={(val) => textInputChange(val)}
                         />
-                        {data.check_textInputChange ? 
-                        <Animatable.View
-                            animation="bounceIn"
-                            >
-                            <Feather
-                                name="check-circle"
-                                size={20}
-                                color="green"
-                            />
-                        </Animatable.View>
-                        : null}
                 </View>
                 <Text style={styles.text_footer_below}>Password</Text>
                 <View style={styles.action}>
@@ -118,13 +117,19 @@ export default function SignIn({navigation, route}) {
                         />}
                         </TouchableOpacity>
                 </View>
+                {errorLogin ? <Text style={styles.text_footer_error_login}>{errorLogin}</Text> : null }
                 <View style={styles.button}>
-                    <LinearGradient
-                        colors={['#08d4c4', '#01ab9d']}
-                        style={styles.signIn}
-                    >
-                        <Text style={styles.textSign}>Sign In</Text>
-                    </LinearGradient>
+                <TouchableOpacity
+                        onPress={handleSignIn}
+                        style={styles.signUp}
+                        >
+                        <LinearGradient
+                            colors={['#08d4c4', '#01ab9d']}
+                            style={styles.signIn}
+                        >
+                            <Text style={styles.textSign}>Sign In</Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignUpScreen')}
                         style={styles.signUp}
@@ -173,6 +178,12 @@ const styles = StyleSheet.create({
     text_footer_below: {
         color: '#05375a',
         fontSize: 18,
+        marginTop: 35
+    },
+
+    text_footer_error_login: {
+        color: 'red',
+        fontSize: 15,
         marginTop: 35
     },
     
