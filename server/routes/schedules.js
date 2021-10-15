@@ -1,9 +1,11 @@
 const routes = require('express').Router()
+const doctorSchedule = require("../controllers/schedule")
 
-routes.get('/')
-routes.get('/:doctorId')
-routes.post('/')
-routes.put('/')
-routes.delete('/')
+routes.get('/', doctorSchedule.showAll)
+// routes.get('/:doctorId', doctorSchedule.findScheduleByDoctorId)
+// router.get('/:dayId', doctorSchedule.findScheduleByDayId)
+routes.post('/', doctorSchedule.addSchedule)
+routes.put('/:id', doctorSchedule.editSchedule)
+routes.delete('/:id', doctorSchedule.deleteSchedule)
 
 module.exports = routes
