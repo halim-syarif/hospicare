@@ -1,3 +1,5 @@
+const { checkPassword } = require('../helpers/bcrypt');
+const { signToken } = require('../helpers/jwt');
 const { 
   Employee,
   Patient,
@@ -9,6 +11,33 @@ const {
   Day } = require('../models')
 
 class PatientController {
+  static async loginPatient(req, res, next) {
+    try {
+      let { email, password } = req.body;
+      if (!email || !password) {
+        throw { name: "emailPasswordRequired" };
+      }
+      let result = await Patient.findOne({
+        where: { email },
+      });
+      if (!result || !checkPassword(password, result.password)) {
+        throw { name: "UserNotFound" };
+      }
+      const payload = {
+        id: result.id,
+        name: result.name,
+        email: result.email,
+      };
+      let access_token = signToken(payload);
+
+      res.status(200).json({
+        access_token, ...payload
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async getAllPatient(req, res, next){
     try {
       let { limit, offset } = req.query;
