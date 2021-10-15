@@ -6,7 +6,8 @@ import {
     Platform,
     TextInput,
     TouchableOpacity,
-    StatusBar
+    StatusBar,
+    ActivityIndicator
 } from 'react-native';
 import * as Animatable from 'react-native-animatable'
 
@@ -19,6 +20,7 @@ import { loginAsync } from '../store/actions';
 
 export default function SignIn({navigation, route}) {
     const errorLogin = useSelector(state => state.patients.errorLogin)
+    const loadingLogin = useSelector(state => state.patients.loadingLogin)
     const dispatch = useDispatch()
     const [data, setData] = useState({
         email: '',
@@ -60,6 +62,10 @@ export default function SignIn({navigation, route}) {
     function handleSignIn() {
         delete data.secureTextEntry
         delete data.check_textInputChange
+        setData({
+            ...data,
+            secureTextEntry: true
+        })
         dispatch(loginAsync(data))       
     }
 
@@ -127,7 +133,9 @@ export default function SignIn({navigation, route}) {
                             colors={['#08d4c4', '#01ab9d']}
                             style={styles.signIn}
                         >
-                            <Text style={styles.textSign}>Sign In</Text>
+                            {loadingLogin ? 
+                            <ActivityIndicator style={styles.loading} size="small" color="#0000ff"/> :
+                            <Text style={styles.textSign}>Sign In</Text>}
                         </LinearGradient>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -179,6 +187,13 @@ const styles = StyleSheet.create({
         color: '#05375a',
         fontSize: 18,
         marginTop: 35
+    },
+
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
     },
 
     text_footer_error_login: {

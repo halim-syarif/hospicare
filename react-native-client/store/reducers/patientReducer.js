@@ -1,10 +1,11 @@
-import { SET_PATIENT_DATA, SET_PATIENT_LOGIN_ERROR } from "../keys";
+import { SET_PATIENT_DATA, SET_PATIENT_LOGIN_ERROR, SET_PATIENT_LOGIN_LOADING } from "../keys";
 
 const initialState = {
     email: '',
     id: 0,
     access_token: '',
-    errorLogin: ''
+    errorLogin: '',
+    loadingLogin: false
 }
 
 function reducer(state = initialState, action){
@@ -16,6 +17,8 @@ function reducer(state = initialState, action){
         case SET_PATIENT_LOGIN_ERROR:
             const { message } = payload
             return {...state, errorLogin: message, access_token: '', email: '', id: 0}
+        case SET_PATIENT_LOGIN_LOADING:
+            return {...state, loadingLogin: payload}
         default:
             return state
     }
