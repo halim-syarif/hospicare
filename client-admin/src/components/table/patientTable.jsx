@@ -5,73 +5,55 @@ import PropTypes from "prop-types";
 
 import TableDropdown from "../Dropdown/TableDropdown";
 
-export default function MedicineTable({ color }) {
-  const medicineData = [
+export default function PatientTable({ color }) {
+  const patients = [
     {
-      name: "Parasetamol (asetaminofen)",
-      price: 20000,
-      description:
-        "menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi",
-    },
-    {
-      name: "Dextromethorpan (DMP)",
-      price: 25000,
-      description: "meredakan batuk kering",
-    },
-    {
-      name: "Ambroxol dan Bromexin (Mukolitik)",
-      price: 28000,
-      description: "meredakan batuk berdahak",
-    },
-    {
-      name: "Parasetamol atau Asam Mefenamat",
-      price: 15000,
-      description: "meredakan sakit kepala",
-    },
-    {
-      name: "Magnesium hidroksida",
-      price: 30000,
-      description: "mengurangi nyeri lambung dengan menetralkan asam lambung",
-    },
-    {
-      name: "Attapulgite",
-      price: 40000,
-      description: "mengurangi nyeri lambung dengan menetralkan asam lambung",
+      name: "Jamil Rajasa",
+      age: 25,
+      gender: "male",
+      address: "Jl Biduri Bulan Bl N/10, Dki Jakarta",
+      email: "jamilrsa@yahoo.com",
+      imgUrl: 'https://www.random-name-generator.com/images/faces/male-asia/19.jpg',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
     {
-      name: "amoxicillin",
-      price: 10000,
-      description: "antibiotik",
+      name: "Karen Uyainah",
+      age: 28,
+      gender: "female",
+      address: "Jl Suci 11, Dki Jakarta",
+      email: "novitasari.ayu@kuswandari.asia",
+      imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/13.jpg",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
     {
-      name: "alogliptin",
-      price: 65000,
-      description: "mengobati diabetes",
+      name: "Karen Uyainah",
+      age: 30,
+      gender: "female",
+      address: "Jl Jend Sudirman 45, Jakarta Timur",
+      email: "ratih.mulyani@wulandari.in",
+      imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/04.jpg",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
     {
-      name: "Aspirin",
-      price: 15000,
-      description: "mengurangi sakit kepala",
+      name: "Maryadi Firgantoro",
+      age: 35,
+      gender: "male",
+      address: "Proy Senen Bl IV/4, Dki Jakarta",
+      email: "luwar.sinaga@yahoo.com",
+      imgUrl: "https://www.random-name-generator.com/images/faces/male-asia/22.jpg",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
     {
-      name: "Anastrazole",
-      price: 75000,
-      description: "hormon treatment",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Benzoyl peroxide",
-      price: 65000,
-      description: "mengobati jerawat",
+      name: "Kartika Usamah",
+      age: 30,
+      gender: "female",
+      address: "Jl Melasti 18 A, Dki Jakarta",
+      email: "adriansyah.laila@yahoo.com",
+      imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -85,21 +67,16 @@ export default function MedicineTable({ color }) {
         }
       >
         <div className="rounded-t mb-0 px-4 py-3 border-0">
-          <div className="flex flex-wrap w-full items-center">
-            <div className="flex flex-row w-full justify-between">
-              <div className=" px-2 ">
-                <h3
-                  className={
-                    "font-semibold text-lg " +
-                    (color === "light" ? "text-blueGray-700" : "text-white")
-                  }
-                >
-                  Medicine List
-                </h3>
-              </div>
-              <div >
-                pagination area
-              </div>
+          <div className="flex flex-wrap items-center">
+            <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+              <h3
+                className={
+                  "font-semibold text-lg " +
+                  (color === "light" ? "text-blueGray-700" : "text-white")
+                }
+              >
+                Patient List
+              </h3>
             </div>
           </div>
         </div>
@@ -136,7 +113,7 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Price
+                  Age
                 </th>
                 <th
                   className={
@@ -146,7 +123,7 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Description
+                  Genre
                 </th>
                 <th
                   className={
@@ -156,7 +133,17 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Completion
+                  Address
+                </th>
+                <th
+                  className={
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    (color === "light"
+                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                  }
+                >
+                  Email
                 </th>
                 <th
                   className={
@@ -169,36 +156,35 @@ export default function MedicineTable({ color }) {
               </tr>
             </thead>
             <tbody>
-              {medicineData?.map((el, index) => {
+              {patients?.map((el, index) => {
                 return (
                   <tr>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       {index + 1}
                     </td>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        {el.name}
+                      </span>
+                    </th>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {el.name}
+                      {el.age}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <i className="fas fa-circle text-orange-500 mr-2"></i> Rp{" "}
-                      {el.price.toLocaleString("id-ID")},-
+                      {el.gender}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {el.description.length > 30
-                        ? el.description.slice(0, 30) + "..."
-                        : el.description}
+                      {el.address}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <div className="flex items-center">
-                        <span className="mr-2">60%</span>
-                        <div className="relative w-full">
-                          <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                            <div
-                              style={{ width: "60%" }}
-                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
+                      {el.email}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
                       <TableDropdown />
@@ -214,10 +200,10 @@ export default function MedicineTable({ color }) {
   );
 }
 
-MedicineTable.defaultProps = {
+PatientTable.defaultProps = {
   color: "light",
 };
 
-MedicineTable.propTypes = {
+PatientTable.propTypes = {
   color: PropTypes.oneOf(["light", "dark"]),
 };

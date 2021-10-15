@@ -5,75 +5,99 @@ import PropTypes from "prop-types";
 
 import TableDropdown from "../Dropdown/TableDropdown";
 
-export default function MedicineTable({ color }) {
-  const medicineData = [
+export default function ScheduleTable({ color }) {
+  const doctors = [
     {
-      name: "Parasetamol (asetaminofen)",
-      price: 20000,
-      description:
-        "menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi",
+      id: 4,
+      name: "dr. Ida Ayu Indira Mandini Manuaba, M.Biomed., Sp. OG",
+      email: "indira.mandiri@gmail.com",
+      age: 38,
+      gender: "female",
+      address: "Jl Raden Mataher 70, Jakarta Utara",
+      role: "Doctor",
+      Poli: {
+        id: 1,
+        name: "Kebidanan",
+      },
     },
     {
-      name: "Dextromethorpan (DMP)",
-      price: 25000,
-      description: "meredakan batuk kering",
+      id: 5,
+      name: "dr. Oka Rahmatika Noviyanti., Sp. OG",
+      email: "oka.noviyanti@gmail.com",
+      age: 38,
+      gender: "female",
+      address: "Jl Guru Mughni 127, Jakarta Utara",
+      role: "Doctor",
+      Poli: {
+        id: 1,
+        name: "Kebidanan",
+      },
     },
     {
-      name: "Ambroxol dan Bromexin (Mukolitik)",
-      price: 28000,
-      description: "meredakan batuk berdahak",
+      id: 6,
+      name: "dr. M. Adya F. Dilmy, Sp.OG",
+      email: "adya.dilmi@gmail.com",
+      age: 35,
+      gender: "male",
+      address: "Jl Gombel Permai X/254, Jakarta Utara",
+      role: "Doctor",
+      Poli: {
+        id: 1,
+        name: "Kebidanan",
+      },
     },
     {
-      name: "Parasetamol atau Asam Mefenamat",
-      price: 15000,
-      description: "meredakan sakit kepala",
+      id: 7,
+      name: "dr. Nia Kurniati, Sp.A(K)",
+      email: "nia.kurniati@gmail.com",
+      age: 39,
+      gender: "female",
+      address: "Jl Kalilio 17-19 Ged Unas Bl D, Dki Jakarta",
+      role: "Doctor",
+      Poli: {
+        id: 2,
+        name: "Anak/Pediatrik",
+      },
     },
     {
-      name: "Magnesium hidroksida",
-      price: 30000,
-      description: "mengurangi nyeri lambung dengan menetralkan asam lambung",
+      id: 8,
+      name: "dr. Ludi Dhyani Rahmartani, Sp.A",
+      email: "dhyani.rahma@gmail.com",
+      age: 41,
+      gender: "female",
+      address:
+        "Jl Jend Basuki Rachmad 8-12 Plaza Tunjungan III Lt 3 303,Kedungdoro",
+      role: "Doctor",
+      Poli: {
+        id: 2,
+        name: "Anak/Pediatrik",
+      },
     },
     {
-      name: "Attapulgite",
-      price: 40000,
-      description: "mengurangi nyeri lambung dengan menetralkan asam lambung",
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      id: 9,
+      name: "Dr. dr. Murti Andriastuti, Sp.A(K)",
+      email: "murti.andria@gmail.com",
+      age: 33,
+      gender: "female",
+      address: "Jl Perintis Kemerdekaan, Dki Jakarta",
+      role: "Doctor",
+      Poli: {
+        id: 2,
+        name: "Anak/Pediatrik",
+      },
     },
     {
-      name: "amoxicillin",
-      price: 10000,
-      description: "antibiotik",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "alogliptin",
-      price: 65000,
-      description: "mengobati diabetes",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Aspirin",
-      price: 15000,
-      description: "mengurangi sakit kepala",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Anastrazole",
-      price: 75000,
-      description: "hormon treatment",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Benzoyl peroxide",
-      price: 65000,
-      description: "mengobati jerawat",
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      id: 10,
+      name: "dr. Yoga Devaera, Sp.A(K)",
+      email: "yoga.deveara@gmail.com",
+      age: 32,
+      gender: "male",
+      address: "Kel Paslaten Satu Lingk IV 95375, Dki Jakarta",
+      role: "Doctor",
+      Poli: {
+        id: 2,
+        name: "Anak/Pediatrik",
+      },
     },
   ];
   return (
@@ -85,21 +109,16 @@ export default function MedicineTable({ color }) {
         }
       >
         <div className="rounded-t mb-0 px-4 py-3 border-0">
-          <div className="flex flex-wrap w-full items-center">
-            <div className="flex flex-row w-full justify-between">
-              <div className=" px-2 ">
-                <h3
-                  className={
-                    "font-semibold text-lg " +
-                    (color === "light" ? "text-blueGray-700" : "text-white")
-                  }
-                >
-                  Medicine List
-                </h3>
-              </div>
-              <div >
-                pagination area
-              </div>
+          <div className="flex flex-wrap items-center">
+            <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+              <h3
+                className={
+                  "font-semibold text-lg " +
+                  (color === "light" ? "text-blueGray-700" : "text-white")
+                }
+              >
+                Schedule List
+              </h3>
             </div>
           </div>
         </div>
@@ -136,7 +155,7 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Price
+                  Email
                 </th>
                 <th
                   className={
@@ -146,7 +165,7 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Description
+                  Poliklinik
                 </th>
                 <th
                   className={
@@ -156,7 +175,7 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Completion
+                  Schedule
                 </th>
                 <th
                   className={
@@ -169,23 +188,29 @@ export default function MedicineTable({ color }) {
               </tr>
             </thead>
             <tbody>
-              {medicineData?.map((el, index) => {
+              {doctors?.map((el, index) => {
                 return (
                   <tr>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       {index + 1}
                     </td>
+                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                      <span
+                        className={
+                          "ml-3 font-bold " +
+                          +(color === "light"
+                            ? "text-blueGray-600"
+                            : "text-white")
+                        }
+                      >
+                        {el.name}
+                      </span>
+                    </th>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {el.name}
+                      <i className="fas fa-email text-orange-500 mr-2"></i>{el.email}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <i className="fas fa-circle text-orange-500 mr-2"></i> Rp{" "}
-                      {el.price.toLocaleString("id-ID")},-
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {el.description.length > 30
-                        ? el.description.slice(0, 30) + "..."
-                        : el.description}
+                      <i className="fas fa-circle text-orange-500 mr-2"></i>{el.Poli.name}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       <div className="flex items-center">
@@ -214,10 +239,10 @@ export default function MedicineTable({ color }) {
   );
 }
 
-MedicineTable.defaultProps = {
+ScheduleTable.defaultProps = {
   color: "light",
 };
 
-MedicineTable.propTypes = {
+ScheduleTable.propTypes = {
   color: PropTypes.oneOf(["light", "dark"]),
 };

@@ -1,6 +1,6 @@
 import React from "react";
 
-import UserDropdown from "./dropdown/UserDropdown";
+import UserDropdown from "../Dropdown/UserDropdown";
 
 export default function Navbar() {
   return (
