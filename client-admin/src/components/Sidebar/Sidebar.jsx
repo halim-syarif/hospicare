@@ -2,9 +2,42 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+
+  const poli = [
+    {
+      name: "Kebidanan",
+    },
+    {
+      name: "Anak/Pediatrik",
+    },
+    {
+      name: "Jantung/Cardiologist",
+    },
+    {
+      name: "Bedah Umum",
+    },
+    {
+      name: "Mata",
+    },
+    {
+      name: "Kulit dan Kelamin",
+    },
+    {
+      name: "Penyakit Dalam",
+    },
+    {
+      name: "THT",
+    },
+    {
+      name: "Saraf",
+    },
+    {
+      name: "umum",
+    },
+  ];
+
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -139,14 +172,18 @@ export default function Sidebar() {
               </li>
 
               <li className="items-center">
-                <Link
+              <a
                   className={
-                    "text-xs uppercase py-3 font-bold block " +
+                    "text-xs uppercase py-3 font-bold block cursor-pointer" +
                     (window.location.href.indexOf("/schedule") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  to="/schedule"
+                  onClick={() => {
+                    document.getElementById('poli').style.display === 'none'
+                    ? document.getElementById('poli').style.display = 'block'
+                    : document.getElementById('poli').style.display = 'none'
+                  }}
                 >
                   <i
                     className={
@@ -157,8 +194,36 @@ export default function Sidebar() {
                     }
                   ></i>{" "}
                   Schedule
-                </Link>
+                </a>
               </li>
+              <div id="poli" style={{display:'none'}}>
+                {poli.map((el) => {
+                  return (
+                    <li>
+                      <Link
+                        className={
+                          "text-xs py-3 font-bold block" +
+                          (window.location.href.indexOf("/schedule") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                        }
+                        style={{ marginLeft: 20 }}
+                        to={`/schedule?${el.name}`}
+                      >
+                        <i
+                          className={
+                            "fas fa-map-marked mr-2 text-sm " +
+                            (window.location.href.indexOf("/schedule") !== -1
+                              ? "opacity-75"
+                              : "text-blueGray-300")
+                          }
+                        ></i>{" "}
+                        {el.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </div>
             </ul>
 
             {/* Divider */}
@@ -190,7 +255,6 @@ export default function Sidebar() {
                 </Link>
               </li>
             </ul>
-
           </div>
         </div>
       </nav>

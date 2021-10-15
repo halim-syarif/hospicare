@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 // components
 
@@ -111,14 +112,24 @@ export default function DoctorTable({ color }) {
         <div className="rounded-t mb-0 px-4 py-3 border-0">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-              <h3
-                className={
-                  "font-semibold text-lg " +
-                  (color === "light" ? "text-blueGray-700" : "text-white")
-                }
-              >
-                Doctor List
-              </h3>
+              <div className="flex flex-row justify-start">
+                <div>
+                  <h3
+                    className={
+                      "font-semibold text-lg " +
+                      (color === "light" ? "text-blueGray-700" : "text-white")
+                    }
+                  >
+                    Doctor List
+                  </h3>
+                </div>
+                <div className="bg-blue w-24 ml-5 border">
+                <Link
+                  className={ "text-xs py-1 font-bold block"}
+                  to="/doctor/add"
+                >add</Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

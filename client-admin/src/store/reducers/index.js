@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux'
-import userReducer from './users'
+import userReducer from './user'
 import productReducer from './products'
 
 

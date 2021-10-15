@@ -5,4 +5,3 @@ import thunk from 'redux-thunk'
 
 export const store = createStore(reducer, applyMiddleware(thunk))
 
-// console.log(store.getState());

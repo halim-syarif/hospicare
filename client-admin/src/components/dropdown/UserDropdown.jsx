@@ -1,8 +1,10 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
+import { useHistory } from "react-router";
 
 const UserDropdown = () => {
   // dropdown props
+  const history = useHistory()
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -15,6 +17,12 @@ const UserDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+
+  const logoutHandle = (e) => {
+    e.preventDefault()
+    localStorage.clear()
+    history.push('/login')
+  }
   return (
     <>
       <a
@@ -76,9 +84,9 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => logoutHandle(e)}
         >
-          Seprated link
+          Logout
         </a>
       </div>
     </>

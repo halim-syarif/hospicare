@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Switch, Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './store'
@@ -10,11 +11,17 @@ import { store } from './store'
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import './assets/styles/tailwind.css'
 
+import Login from './pages/login'
+import PrivateRoute from './privateRoute/privateRoute';
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-          <App />
+        <Switch>
+            <Route path='/login' exact component={Login}/>
+            <PrivateRoute path='/' component={App}/>
+        </Switch>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
