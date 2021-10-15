@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     View, 
     Text, 
@@ -7,14 +7,27 @@ import {
     TextInput,
     TouchableOpacity,
     StatusBar,
-    ScrollView
+    ScrollView,
+    FlatList,
+    LogBox,
+    ActivityIndicator
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 import {LinearGradient} from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
+import { registerAsync } from '../store/actions';
 
 export default function SignIn({navigation, route}) {
+    const errorRegister = useSelector(state => state.patients.errorRegister)
+    const loadingRegister = useSelector(state => state.patients.loadingRegister)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, [])
+
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -57,7 +70,12 @@ export default function SignIn({navigation, route}) {
         delete data.confirm_secureTextEntry
         delete data.secureTextEntry
         delete data.confirm_password
-        console.log(data)
+        setData({
+            ...data,
+            secureTextEntry: true,
+            confirm_secureTextEntry: true
+        })
+        dispatch(registerAsync(data, navigation))
     }
 
     const updateSecureTextEntry = () => {
@@ -80,6 +98,7 @@ export default function SignIn({navigation, route}) {
             <View style={styles.header}>
                 <Text style={styles.text_header}>Register Now</Text>
             </View>
+
             <Animatable.View 
                 style={styles.footer}
                 animation="fadeInUpBig">
@@ -91,7 +110,7 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your username"
+                            placeholder="Your Full name"
                             style={styles.textInput}
                             value={data.name}
                             autoCapitalize="none"
@@ -118,7 +137,7 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your email"
+                            placeholder="Your Email"
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handleChange(val, 'email')}
@@ -133,7 +152,7 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your password"
+                            placeholder="Your Password"
                             secureTextEntry={data.secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
@@ -165,7 +184,7 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your password"
+                            placeholder="Confirm Your Password"
                             secureTextEntry={data.confirm_secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
@@ -197,12 +216,13 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your email"
+                            placeholder="Your Current Age"
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handleChange(val, 'age')}
                         />
                 </View>
+
                 <Text style={styles.text_footer_below}>Gender</Text>
                 <View style={styles.action}>
                         <FontAwesome
@@ -211,12 +231,13 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your email"
+                            placeholder="Your Gender (You can put anything you want)"
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handleChange(val, 'gender')}
                         />
                 </View>
+
                 <Text style={styles.text_footer_below}>Address</Text>
                 <View style={styles.action}>
                         <FontAwesome
@@ -225,26 +246,28 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your email"
+                            placeholder="Your Complete Address"
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => handleChange(val, 'address')}
                         />
                 </View>
-                <Text style={styles.text_footer_below}>Image Url</Text>
-                <View style={styles.action}>
-                        <FontAwesome
-                            name="image"
-                            color='#05375a'
-                            size={20}
-                        /> 
-                        <TextInput
-                            placeholder="Your email"
-                            style={styles.textInput}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'imgUrl')}
-                        />
-                </View>
+
+                {errorRegister ? 
+                    <FlatList
+                    numColumns={2}
+                    horizontal={false}
+                    data={errorRegister}
+                    renderItem={({item}) => 
+                        (
+                            <Text style={styles.text_footer_error_register}>{item}</Text>
+                        )
+                    }
+                    keyExtractor={item => item}
+                />
+                : null}
+                
+
                 <View style={styles.button}>
                     <TouchableOpacity
                         onPress={handleSignUp}
@@ -254,9 +277,12 @@ export default function SignIn({navigation, route}) {
                             colors={['#08d4c4', '#01ab9d']}
                             style={styles.signIn}
                         >
-                            <Text style={styles.textSign}>Sign Up</Text>
+                            {loadingRegister ? 
+                            <ActivityIndicator style={styles.loading} size="small" color="#0000ff"/> :
+                            <Text style={styles.textSign}>Sign Up</Text>}
                         </LinearGradient>
                     </TouchableOpacity>
+
                     <TouchableOpacity
                         onPress={() => navigation.navigate('SignInScreen')}
                         style={styles.signUp}
@@ -306,6 +332,20 @@ const styles = StyleSheet.create({
         color: '#05375a',
         fontSize: 18,
         marginTop: 35
+    },
+
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+    },
+
+    text_footer_error_register: {
+        color: 'red',
+        fontSize: 15,
+        marginTop: 35,
+        paddingLeft: 5
     },
     
     action: {
