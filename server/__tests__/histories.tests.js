@@ -1,24 +1,122 @@
 const app = require("../app.js");
-const { MedicationHistory, sequelize } = require("../models");
+const { MedicationHistory, Employee, Patient, BookingSchedule,  sequelize } = require("../models");
 const request = require("supertest");
 const { hashPassword } = require("../helpers/bcrypt.js");
 const { queryInterface } = sequelize;
 
 //describe here
 describe("History Routes Test", () => {
-    const employeeData = [
+    // const employeeData = [
+    //     {
+    //         name: "testing",
+    //         email: "testing@mail.com",
+    //         password: hashPassword("12345"),
+    //         age: 25,
+    //         gender: "male",
+    //         address: "testing",
+    //         role: "admin",
+    //         createdAt: new Date(),
+    //         updatedAt: new Date(),
+    //     },
+    // ];
+    const employeeId = [
         {
-            name: "testing",
-            email: "testing@mail.com",
-            password: hashPassword("12345"),
+            name: "dr. Ketut Ratna Dewi Wijayanti, Sp. OG",
+            email: "ratna.wijayanti@gmail.com",
+            password: hashPassword('password'),
+            age: 41,
+            gender: 'female',
+            address:'Gg. Pelajar Pejuang 45 No. 943, Bekasi',
+            role: 'Admin',
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          {
+            name: "dr. Ida Ayu Indira Mandini Manuaba, M.Biomed., Sp. OG",
+            email: "indira.mandiri@gmail.com",
+            password: hashPassword('password'),
+            age: 38,
+            gender: 'female',
+            address:'Jl Raden Mataher 70, Jakarta Utara',
+            role: 'Doctor',
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+    ]
+    const patientId = [
+        {
+            name: "Jamil Rajasa",
             age: 25,
             gender: "male",
-            address: "testing",
-            role: "admin",
+            address: "Jl Biduri Bulan Bl N/10, Dki Jakarta",
+            email: "jamilrsa@yahoo.com",
+            imgUrl: 'https://www.random-name-generator.com/images/faces/male-asia/19.jpg',
             createdAt: new Date(),
             updatedAt: new Date(),
-        },
-    ];
+          },
+          {
+            name: "Karen Uyainah",
+            age: 28,
+            gender: "female",
+            address: "Jl Suci 11, Dki Jakarta",
+            email: "novitasari.ayu@kuswandari.asia",
+            imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/13.jpg",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          }
+    ]
+    const dayId = [
+        {
+            name: "Senin",
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          {
+            name: "Selasa",
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+    ]
+    const doctorScheduleId = [
+        {
+            EmployeeId: "1",
+            DayId: "1",
+            booking_limit: 20,
+            price: 50000,
+            start_hour: "08:00:00",
+            end_hour: "12:00:00",
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          {
+            EmployeeId: "2",
+            DayId: "2",
+            booking_limit: 20,
+            price: 50000,
+            start_hour: "08:00:00",
+            end_hour: "12:00:00",
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+    ]
+    const bookingData = [
+        {
+            PatientId: 1,
+            DoctorScheduleId: 1,
+            booking_date: "2021-10-12 00:00:00",
+            status: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          {
+            PatientId: 1,
+            DoctorScheduleId: 2,
+            booking_date: "2021-10-15 00:00:00",
+            status: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+    ]
     const historyData = [
         {
             BookingScheduleId: 1,
@@ -48,18 +146,55 @@ describe("History Routes Test", () => {
             restartIdentity: true,
         })
             .then(() => {
+                return Employee.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return Patient.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return BookingSchedule.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return queryInterface.bulkInsert("Employees", employeeId)
+            })
+            .then(() => {
+                return queryInterface.bulkInsert("Patients", patientId)
+            })
+            .then(() => {
+                return queryInterface.bulkInsert("Days", dayId)
+            })
+            .then(() => {
+                return queryInterface.bulkInsert("DoctorSchedules", doctorScheduleId)
+            })
+            
+            .then(() => {
+                return queryInterface.bulkInsert("BookingSchedules", bookingData)
+            })
+            .then(() => {
                 return queryInterface.bulkInsert(
                     "MedicationHistories",
                     historyData
                 );
             })
             .then(() => {
-                return queryInterface.bulkInsert("Employees", employeeData);
-            })
-            .then(() => {
                 return request(app).post("/employees/login").send({
-                    email: "testing@mail.com",
-                    password: "12345",
+                    email: "ratna.wijayanti@gmail.com",
+                    password: "password",
                 });
             })
             .then((data) => {
@@ -76,6 +211,15 @@ describe("History Routes Test", () => {
             .bulkDelete("Employees", {})
             .then(() => {
                 return queryInterface.bulkDelete("MedicationHistories", {});
+            })
+            .then(() => {
+                return queryInterface.bulkDelete("BookingSchedules", {});
+            })
+            .then(() => {
+                return queryInterface.bulkDelete("Patients", {});
+            })
+            .then(() => {
+                return queryInterface.bulkDelete("Employees", {});
             })
             .then(() => done())
             .catch((err) => done(err));
@@ -95,21 +239,10 @@ describe("History Routes Test", () => {
             });
     });
 
-    test("200 Success deleted - should return message data deleted", (done) => {
-        request(app)
-            .delete("/history/1")
-            .set("access_token", access_token)
-            .then(response => {
-                const { body, status } = response
-                expect(status).toBe(200)
-                expect(body).toHaveProperty('message', "Data has been deleted")
-                done()
-            })
-    })
-
     test("200 Success get data history by BookingScheduleId", (done) => {
         request(app)
-            .get("/patients/1")
+            .get("/history/1")
+
             .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response
@@ -147,21 +280,9 @@ describe("History Routes Test", () => {
             .then((response) => {
                 const { body, status } = response
                 expect(status).toBe(404)
-                expect(body).toHaveProperty("message", "Data not found")
+                expect(body).toHaveProperty("message", "Id not found")
                 done()
             })
-    })
-
-    test("404 Failed to delete history - should return error message", (done) => {
-        request(app)
-            .delete("/history/99")
-            .set("access_token", access_token)
-            .then((response) => {
-                const { body, status } = response
-                expect(status).toBe(404)
-                expect(body).toHaveProperty("message", "Data not found")
-            })
-            done()
     })
 
     test("404 Failed to edit history - should return error message", (done) => {
@@ -171,7 +292,9 @@ describe("History Routes Test", () => {
             .then((response) => {
                 const { body, status } = response
                 expect(status).toBe(404)
-                expect(body).toHaveProperty("message", "Data not found")
+
+                expect(body).toHaveProperty("message", "Id not found")
+
                 done()
             })
     })
