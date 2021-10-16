@@ -40,9 +40,11 @@ export function userLogin(payload){
     })
     .then(res => res.json())
     .then(data => {
-      const {access_token, message} = data
+      const {access_token, name, role, message} = data
       if(access_token){
         localStorage.setItem('access_token', access_token)
+        localStorage.setItem('name', name)
+        localStorage.setItem('role', role)
         dispatch(setIsLogin(true))
       } else {
         dispatch(setErrorMessage(message))

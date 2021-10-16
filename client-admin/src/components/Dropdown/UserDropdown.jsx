@@ -1,10 +1,13 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
 import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { setIsLogin } from "../../store/actions";
 
 const UserDropdown = () => {
   // dropdown props
   const history = useHistory()
+  const dispatch = useDispatch()
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
@@ -21,6 +24,7 @@ const UserDropdown = () => {
   const logoutHandle = (e) => {
     e.preventDefault()
     localStorage.clear()
+    dispatch(setIsLogin(false))
     history.push('/login')
   }
   return (
