@@ -1,42 +1,14 @@
 /*eslint-disable*/
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+  const [poli, setPoli] = useState([])
 
-  const poli = [
-    {
-      name: "Kebidanan",
-    },
-    {
-      name: "Anak/Pediatrik",
-    },
-    {
-      name: "Jantung/Cardiologist",
-    },
-    {
-      name: "Bedah Umum",
-    },
-    {
-      name: "Mata",
-    },
-    {
-      name: "Kulit dan Kelamin",
-    },
-    {
-      name: "Penyakit Dalam",
-    },
-    {
-      name: "THT",
-    },
-    {
-      name: "Saraf",
-    },
-    {
-      name: "umum",
-    },
-  ];
+  useEffect(() => {
+
+  },[])
 
   return (
     <>

@@ -6,8 +6,9 @@ const medicinesRoutes = require('./medicines')
 const scheduleRoutes = require('./schedules')
 const bookingsRoutes = require('./bookings')
 const historiesRoutes = require('./histories')
+const poliRoutes = require('./poli')
 
-
+routes.use('/poli', poliRoutes)
 routes.use('/patients', patientsRoutes)
 routes.use('/employees', employeesRoutes)
 routes.use('/medicines', medicinesRoutes)

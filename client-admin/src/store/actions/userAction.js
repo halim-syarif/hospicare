@@ -2,10 +2,8 @@ import {
   SET_ISLOGIN,
   SET_LOADING,
   SET_ERROR_MESSAGE,
-} from "../keys"
-
-const baseURL = 'http://localhost:3000'
-
+} from "../keys/adminKeys"
+import appApi from '../config/instanceAxios'
 
 export function setIsLogin(payload) {
   return {
@@ -28,19 +26,13 @@ export function setLoading(payload) {
   }
 }
 
+
 export function userLogin(payload){
   return (dispatch) => {
     dispatch(setLoading(true))
-    fetch(`${baseURL}/employees/login`, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
-    .then(res => res.json())
-    .then(data => {
-      const {access_token, name, role, message} = data
+    appApi.post('/employees/login', payload)
+    .then(response => {
+      const {access_token, name, role, message} = response.data
       if(access_token){
         localStorage.setItem('access_token', access_token)
         localStorage.setItem('name', name)
@@ -54,3 +46,4 @@ export function userLogin(payload){
     .finally(() => dispatch(setLoading(false)))
   }
 }
+

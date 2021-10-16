@@ -2,7 +2,7 @@ import React from "react";
 import { createPopper } from "@popperjs/core";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
-import { setIsLogin } from "../../store/actions";
+import { setIsLogin } from "../../store/actions/userAction";
 
 const UserDropdown = () => {
   // dropdown props
