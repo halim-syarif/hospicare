@@ -30,38 +30,161 @@ export default function SignIn({navigation, route}) {
 
     const [data, setData] = useState({
         name: '',
+        isValidName: true,
         email: '',
+        isValidEmail: true,
+        isValidEmailFormat: true,
         password: '',
+        isValidPassword: true,
         confirm_password: '',
+        isValidConfirmPassword: true,
         age: 0,
+        isValidAge: true,
+        isValidAgeFormat: true,
         gender: '',
+        isValidGender: true,
         address: '',
-        imgUrl: '',
+        isValidAddress: true,
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true
     })
 
-    const textInputChange = (val) => {
-        if(val.length !== 0){
-            setData({
-                ...data,
-                name: val,
-                check_textInputChange: true
-            })
-        } else {
-            setData({
-                ...data,
-                name: val,
-                check_textInputChange: false
-            })
+    const textInputChange = (val, key, validKey, validKeyFormat) => {
+        // console.log(val, 'email')
+        // console.log(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val))
+        if(key === 'name'){
+            if(val.trim().length >= 3){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: true
+                })
+            } else {
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: false
+                })
+            }
+        }
+
+        else if(key === 'email') {
+            if (val.trim().length < 1 ) {
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: false,
+                    [validKeyFormat]: false
+                })
+            } 
+            else if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)) {
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: true,
+                    [validKeyFormat]: false
+                })
+            }
+
+            else if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)) {
+                console.log('true')
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: true,
+                    [validKeyFormat]: true
+                })
+            }
+        }
+
+        else if(key === 'password'){
+            if(val.trim().length >= 8){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: true
+                })
+            } else {
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: false
+                })
+            }
+        }
+
+        else if(key === 'confirm_password'){
+            if(val === data.password){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: true
+                })
+            } else {
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: false
+                })
+            }
+        }
+
+        else if(key === 'age'){
+            if(+val){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKeyFormat]: true,
+                    [validKey]: true
+                })
+            }
+            else if(val.trim().length < 1 ){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: false,
+                    [validKeyFormat]: true
+                })
+            }
+            else if(!+val){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKeyFormat]: false,
+                    [validKey]: true
+                })
+            }
+        }
+
+        else {
+            if(val.trim().length >= 1 ){
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: true,
+                })
+            } else {
+                setData({
+                    ...data,
+                    [key]: val,
+                    [validKey]: false,
+                })
+            }
         }
     }
 
-    const handleChange = (val, key) => {
+    const updateSecureTextEntry = () => {
         setData({
             ...data,
-            [key]: val
+            secureTextEntry: !data.secureTextEntry
+        })
+    }
+
+    const updateConfirmSecureTextEntry = () => {
+        setData({
+            ...data,
+            confirm_secureTextEntry: !data.confirm_secureTextEntry
         })
     }
 
@@ -78,19 +201,7 @@ export default function SignIn({navigation, route}) {
         dispatch(registerAsync(data, navigation))
     }
 
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        })
-    }
-
-    const updateConfirmSecureTextEntry = () => {
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
-        })
-    }
+    
 
     return (
         <ScrollView style={styles.container}>
@@ -114,9 +225,9 @@ export default function SignIn({navigation, route}) {
                             style={styles.textInput}
                             value={data.name}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => textInputChange(val, 'name', 'isValidName')}
                         />
-                        {data.check_textInputChange ? 
+                        {data.isValidName ? 
                         <Animatable.View
                             animation="bounceIn"
                             >
@@ -128,6 +239,10 @@ export default function SignIn({navigation, route}) {
                         </Animatable.View>
                         : null}
                 </View>
+                {data.isValidName ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Name must be at least 3 characters long</Text>
+                </Animatable.View>}
 
                 <Text style={styles.text_footer_below}>Email</Text>
                 <View style={styles.action}>
@@ -140,9 +255,28 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your Email"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'email')}
+                            onChangeText={(val) => textInputChange(val, 'email', 'isValidEmail', 'isValidEmailFormat')}
                         />
+                        {data.isValidEmail && data.isValidEmailFormat ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            >
+                            <Feather
+                                name="check-circle"
+                                size={20}
+                                color="green"
+                            />
+                        </Animatable.View>
+                        : null}
                 </View>
+                {data.isValidEmail ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>email cannot be empty</Text>
+                </Animatable.View>}
+                {data.isValidEmailFormat ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Must be a valid email format</Text>
+                </Animatable.View>}
 
                 <Text style={styles.text_footer_below}>Password</Text>
                 <View style={styles.action}>
@@ -156,9 +290,20 @@ export default function SignIn({navigation, route}) {
                             secureTextEntry={data.secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'password')}
-
+                            onChangeText={(val) => textInputChange(val, 'password', 'isValidPassword')}
                         />
+                        {data.isValidPassword ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            style={{paddingRight: 10}}
+                            >
+                            <Feather
+                                name="check-circle"
+                                size={20}
+                                color="green"
+                            />
+                        </Animatable.View>
+                        : null}
                         <TouchableOpacity
                             onPress={updateSecureTextEntry}
                         >
@@ -175,6 +320,10 @@ export default function SignIn({navigation, route}) {
                         />}
                         </TouchableOpacity>
                 </View>
+                {data.isValidPassword ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Password must be at least 8 characters long</Text>
+                </Animatable.View>}
 
                 <Text style={styles.text_footer_below}>Confirm Password</Text>
                 <View style={styles.action}>
@@ -188,9 +337,21 @@ export default function SignIn({navigation, route}) {
                             secureTextEntry={data.confirm_secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'confirm_password')}
+                            onChangeText={(val) => textInputChange(val, 'confirm_password', 'isValidConfirmPassword')}
 
                         />
+                        {data.isValidConfirmPassword ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            style={{paddingRight: 10}}
+                            >
+                            <Feather
+                                name="check-circle"
+                                size={20}
+                                color="green"
+                            />
+                        </Animatable.View>
+                        : null}
                         <TouchableOpacity
                             onPress={updateConfirmSecureTextEntry}
                         >
@@ -207,6 +368,10 @@ export default function SignIn({navigation, route}) {
                         />}
                         </TouchableOpacity>
                 </View>
+                {data.isValidConfirmPassword ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Password does not match</Text>
+                </Animatable.View>}
 
                 <Text style={styles.text_footer_below}>Age</Text>
                 <View style={styles.action}>
@@ -219,9 +384,29 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your Current Age"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'age')}
+                            onChangeText={(val) => textInputChange(val, 'age', 'isValidAge', 'isValidAgeFormat')}
                         />
+                        {data.isValidAge && data.isValidAgeFormat ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            style={{paddingRight: 10}}
+                            >
+                            <Feather
+                                name="check-circle"
+                                size={20}
+                                color="green"
+                            />
+                        </Animatable.View>
+                        : null}
                 </View>
+                {data.isValidAgeFormat ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Must be a number</Text>
+                </Animatable.View>}
+                {data.isValidAge ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Age cannot be empty</Text>
+                </Animatable.View>}
 
                 <Text style={styles.text_footer_below}>Gender</Text>
                 <View style={styles.action}>
@@ -234,9 +419,25 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your Gender (You can put anything you want)"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'gender')}
+                            onChangeText={(val) => textInputChange(val, 'gender', 'isValidGender')}
                         />
+                        {data.isValidGender ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            style={{paddingRight: 10}}
+                            >
+                            <Feather
+                                name="check-circle"
+                                size={20}
+                                color="green"
+                            />
+                        </Animatable.View>
+                        : null}
                 </View>
+                {data.isValidGender ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Gender cannot be empty</Text>
+                </Animatable.View>}
 
                 <Text style={styles.text_footer_below}>Address</Text>
                 <View style={styles.action}>
@@ -249,9 +450,25 @@ export default function SignIn({navigation, route}) {
                             placeholder="Your Complete Address"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => handleChange(val, 'address')}
+                            onChangeText={(val) => textInputChange(val, 'address', 'isValidAddress')}
                         />
+                        {data.isValidAddress ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            style={{paddingRight: 10}}
+                            >
+                            <Feather
+                                name="check-circle"
+                                size={20}
+                                color="green"
+                            />
+                        </Animatable.View>
+                        : null}
                 </View>
+                {data.isValidAddress ? null :
+                <Animatable.View animation="fadeInLeft" duration={2000}>
+                    <Text style={styles.text_footer_error_register_validation}>Address cannot be empty</Text>
+                </Animatable.View>}
 
                 {errorRegister ? 
                     <FlatList
@@ -347,6 +564,13 @@ const styles = StyleSheet.create({
         marginTop: 35,
         paddingLeft: 5
     },
+
+    text_footer_error_register_validation: {
+        color: 'red',
+        fontSize: 15,
+        marginTop: 5,
+        paddingLeft: 5
+    },  
     
     action: {
         flexDirection: 'row',
