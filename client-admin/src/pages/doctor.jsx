@@ -1,13 +1,12 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router";
+import { Switch, Route } from "react-router";
 
 
 import DoctorTable from "../components/Table/doctorTable";
 import AddDoctor from "../components/Form/AddDoctor";
 
 
-export default function Doctor(props) {
-  console.log(props);
+export default function Doctor() {
   return (
     <div>
       <div className="relative bg-lightBlue-600 md:pt-32 pb-32 pt-12">

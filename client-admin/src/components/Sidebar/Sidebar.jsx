@@ -1,14 +1,9 @@
 /*eslint-disable*/
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
-  const [poli, setPoli] = useState([])
-
-  useEffect(() => {
-
-  },[])
 
   return (
     <>
@@ -144,20 +139,16 @@ export default function Sidebar() {
               </li>
 
               <li className="items-center">
-              <a
+                <Link
                   className={
-                    "text-xs uppercase py-3 font-bold block cursor-pointer" +
+                    "text-xs uppercase py-3 font-bold block " +
                     (window.location.href.indexOf("/schedule") !== -1
                       ? "text-lightBlue-500 hover:text-lightBlue-600"
                       : "text-blueGray-700 hover:text-blueGray-500")
                   }
-                  onClick={() => {
-                    document.getElementById('poli').style.display === 'none'
-                    ? document.getElementById('poli').style.display = 'block'
-                    : document.getElementById('poli').style.display = 'none'
-                  }}
+                  to="/schedule"
                 >
-                  <i
+                 <i
                     className={
                       "fas fa-map-marked mr-2 text-sm " +
                       (window.location.href.indexOf("/schedule") !== -1
@@ -166,36 +157,9 @@ export default function Sidebar() {
                     }
                   ></i>{" "}
                   Schedule
-                </a>
+                </Link>
               </li>
-              <div id="poli" style={{display:'none'}}>
-                {poli.map((el) => {
-                  return (
-                    <li>
-                      <Link
-                        className={
-                          "text-xs py-3 font-bold block" +
-                          (window.location.href.indexOf("/schedule") !== -1
-                            ? "text-lightBlue-500 hover:text-lightBlue-600"
-                            : "text-blueGray-700 hover:text-blueGray-500")
-                        }
-                        style={{ marginLeft: 20 }}
-                        to={`/schedule?${el.name}`}
-                      >
-                        <i
-                          className={
-                            "fas fa-map-marked mr-2 text-sm " +
-                            (window.location.href.indexOf("/schedule") !== -1
-                              ? "opacity-75"
-                              : "text-blueGray-300")
-                          }
-                        ></i>{" "}
-                        {el.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </div>
+
             </ul>
 
             {/* Divider */}
