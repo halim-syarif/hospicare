@@ -17,7 +17,7 @@ import * as Animatable from 'react-native-animatable'
 import {LinearGradient} from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
-import { registerAsync } from '../store/actions';
+import { registerAsync, setErrorRegister } from '../store/actions';
 
 export default function SignIn({navigation, route}) {
     const errorRegister = useSelector(state => state.patients.errorRegister)
@@ -28,31 +28,33 @@ export default function SignIn({navigation, route}) {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     }, [])
 
+    useEffect(() => {
+        dispatch(setErrorRegister(''))
+    }, [])
+
     const [data, setData] = useState({
         name: '',
-        isValidName: true,
+        isValidName: false,
         email: '',
-        isValidEmail: true,
-        isValidEmailFormat: true,
+        isValidEmail: false,
+        isValidEmailFormat: false,
         password: '',
-        isValidPassword: true,
+        isValidPassword: false,
         confirm_password: '',
-        isValidConfirmPassword: true,
+        isValidConfirmPassword: false,
         age: 0,
-        isValidAge: true,
-        isValidAgeFormat: true,
+        isValidAge: false,
+        isValidAgeFormat: false,
         gender: '',
-        isValidGender: true,
+        isValidGender: false,
         address: '',
-        isValidAddress: true,
+        isValidAddress: false,
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true
     })
 
     const textInputChange = (val, key, validKey, validKeyFormat) => {
-        // console.log(val, 'email')
-        // console.log(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val))
         if(key === 'name'){
             if(val.trim().length >= 3){
                 setData({
@@ -88,7 +90,6 @@ export default function SignIn({navigation, route}) {
             }
 
             else if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)) {
-                console.log('true')
                 setData({
                     ...data,
                     [key]: val,
@@ -198,7 +199,11 @@ export default function SignIn({navigation, route}) {
             secureTextEntry: true,
             confirm_secureTextEntry: true
         })
-        dispatch(registerAsync(data, navigation))
+        if(!data.isValidName || !data.isValidEmail || !data.isValidEmailFormat || !data.isValidPassword || !data.isValidConfirmPassword || !data.isValidAge || !data.isValidAgeFormat || !data.isValidGender || !data.isValidAddress) {
+            return null
+        } else {
+            dispatch(registerAsync(data, navigation))
+        }
     }
 
     

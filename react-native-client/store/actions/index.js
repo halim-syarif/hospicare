@@ -168,6 +168,8 @@ function setMovieDetailAsync(id){
 export { 
     loginAsync, 
     registerAsync,
+    setErrorRegister,
+    setErrorLogin,
     incrementCounter, 
     setMoviesAsync, 
     setMovies, 

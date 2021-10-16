@@ -23,7 +23,7 @@ function reducer(state = initialState, action){
             const {id, email, access_token } = payload
             return {...state, access_token, id, email, errorLogin: ''}
         case SET_PATIENT_ERROR_LOGIN:
-            return {...state, errorLogin: payload.message, access_token: '', email: '', id: 0}
+            return {...state, errorLogin: payload.message || payload, access_token: '', email: '', id: 0}
         case SET_PATIENT_LOADING_LOGIN:
             return {...state, loadingLogin: payload}
         case SET_PATIENT_ERROR_REGISTER:
