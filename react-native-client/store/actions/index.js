@@ -10,7 +10,9 @@ import {
     SET_PATIENT_LOADING_LOGIN, 
     REGISTER_PATIENT, 
     SET_PATIENT_ERROR_REGISTER, 
-    SET_PATIENT_LOADING_REGISTER 
+    SET_PATIENT_LOADING_REGISTER, 
+    SET_SCHEDULE_LOADING,
+    SET_SCHEDULE_ERROR
 } from "../keys";
 import axios from 'axios'
 import http from '../../libs/patients'
@@ -88,94 +90,36 @@ function registerAsync(data, navigation){
     }
 }
 
-function incrementCounter(){
+function setErrorSchedule(error){
     return {
-        type : INCREMENT_COUNTER
-    }
-}
-function setMovies(movies){
-    return {
-        type : SET_MOVIES,
-        payload : movies
+        type: SET_SCHEDULE_ERROR,
+        payload: error
     }
 }
 
-function setLoadingMovies(isloading){
+function setLoadingSchedule(isLoading){
     return {
-        type : SET_LOADING_MOVIES,
-        payload : isloading
+        type: SET_SCHEDULE_LOADING,
+        payload: isLoading
     }
 }
 
-function setMoviesAsync(){
-    return async function (dispatch){
+function scheduleAsync(){
+    return async function(dispatch){
         try {
-            dispatch(setLoadingMovies(true))
-            const movies = await axios({
-                method : 'GET',
-                url : 'http://10.0.2.2:3000/movies'
-            })
-            const data = movies.data
-            dispatch(setMovies(data))
-            dispatch(setLoadingMovies(false))
-        } 
-        catch (err) {
-            console.log(err);
-        }
-      }
-}
-
-function setMovieName(id, name){
-    return {
-        type : SET_MOVIE_NAME,
-        payload : {
-            id, name
+            dispatch(setLoadingSchedule(true))
+            
+            dispatch(setLoadingSchedule(false))
+        } catch (err) {
+            dispatch(setErrorSchedule(err.response.data))
         }
     }
 }
 
-function setMovieDetail(movies){
-    return {
-        type : SET_MOVIE_DETAIL,
-        payload : movies
-    }
-}
-
-function setLoadingMovieDetail(isloading){
-    return {
-        type : SET_MOVIE_DETAIL_LOADING,
-        payload : isloading
-    }
-}
-
-function setMovieDetailAsync(id){
-    return async function (dispatch){
-        try {
-            dispatch(setLoadingMovieDetail(true))
-            const movie = await axios({
-                method : 'GET',
-                url : `http://10.0.2.2:3000/movies/${id}`
-            })
-            const data = movie.data
-            dispatch(setMovieDetail(data))
-            dispatch(setLoadingMovieDetail(false))
-        } 
-        catch (err) {
-            console.log(err);
-        }
-      }
-}
 export { 
     loginAsync, 
     registerAsync,
     setErrorRegister,
     setErrorLogin,
-    incrementCounter, 
-    setMoviesAsync, 
-    setMovies, 
-    setMovieName, 
-    setLoadingMovies, 
-    setMovieDetail, 
-    setLoadingMovieDetail, 
-    setMovieDetailAsync
+    scheduleAsync
  }
