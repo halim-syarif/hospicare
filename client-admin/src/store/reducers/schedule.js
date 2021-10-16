@@ -6,7 +6,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action){
     switch(action.type){
-        case 'schedule/setIsLoading':
+        case 'schedule/setLoading':
             return {...state, isLoading: action.payload}
         case 'schedule/setErrorMessage':
             return {...state, errorMessage: action.payload}
