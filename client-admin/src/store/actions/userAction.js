@@ -32,17 +32,13 @@ export function userLogin(payload){
     dispatch(setLoading(true))
     appApi.post('/employees/login', payload)
     .then(response => {
-      const {access_token, name, role, message} = response.data
-      if(access_token){
+      const {access_token, name, role} = response.data
         localStorage.setItem('access_token', access_token)
         localStorage.setItem('name', name)
         localStorage.setItem('role', role)
         dispatch(setIsLogin(true))
-      } else {
-        dispatch(setErrorMessage(message))
-      }
     })
-    .catch(err => dispatch(setErrorMessage(JSON.stringify(err))))
+    .catch(err => dispatch(setErrorMessage(err.response.data.message)))
     .finally(() => dispatch(setLoading(false)))
   }
 }
