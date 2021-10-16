@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 
 import CardPoli from "../../components/Cards/CardPoli";
-import { getPolis } from "../../store/actions/schedule.js";
 
 export default function StatPoli() {
   const dispatch = useDispatch();

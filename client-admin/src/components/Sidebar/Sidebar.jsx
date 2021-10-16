@@ -94,7 +94,6 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-             
               <li className="items-center">
                 <Link
                   className={
@@ -105,7 +104,7 @@ export default function Sidebar() {
                   }
                   to="/schedule"
                 >
-                 <i
+                  <i
                     className={
                       "fas fa-map-marked mr-2 text-sm " +
                       (window.location.href.indexOf("/schedule") !== -1
@@ -116,7 +115,6 @@ export default function Sidebar() {
                   Schedule
                 </Link>
               </li>
-
             </ul>
 
             {/* Divider */}
@@ -126,65 +124,67 @@ export default function Sidebar() {
               Asset Setting
             </h6>
             {/* Navigation */}
-
             <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-            <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/patient") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/patient"
-                >
-                  <i
-                    className={
-                      "fas fa-table mr-2 text-sm " +
-                      (window.location.href.indexOf("/patient") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Patients
-                </Link>
-              </li>
-            <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/doctor") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/doctor"
-                >
-                  <i
-                    className={
-                      "fas fa-tools mr-2 text-sm " +
-                      (window.location.href.indexOf("/doctor") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Doctors
-                </Link>
-              </li>
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/medicine") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/medicine"
-                >
-                  <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Medicine
-                </Link>
-              </li>
-
+              {localStorage.getItem("role") === "Admin" ? (
+                <>
+                  <li className="items-center">
+                    <Link
+                      className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/patient") !== -1
+                          ? "text-lightBlue-500 hover:text-lightBlue-600"
+                          : "text-blueGray-700 hover:text-blueGray-500")
+                      }
+                      to="/patient"
+                    >
+                      <i
+                        className={
+                          "fas fa-table mr-2 text-sm " +
+                          (window.location.href.indexOf("/patient") !== -1
+                            ? "opacity-75"
+                            : "text-blueGray-300")
+                        }
+                      ></i>{" "}
+                      Patients
+                    </Link>
+                  </li>
+                  <li className="items-center">
+                    <Link
+                      className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/doctor") !== -1
+                          ? "text-lightBlue-500 hover:text-lightBlue-600"
+                          : "text-blueGray-700 hover:text-blueGray-500")
+                      }
+                      to="/doctor"
+                    >
+                      <i
+                        className={
+                          "fas fa-tools mr-2 text-sm " +
+                          (window.location.href.indexOf("/doctor") !== -1
+                            ? "opacity-75"
+                            : "text-blueGray-300")
+                        }
+                      ></i>{" "}
+                      Doctors
+                    </Link>
+                  </li>
+                  <li className="items-center">
+                    <Link
+                      className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/medicine") !== -1
+                          ? "text-lightBlue-500 hover:text-lightBlue-600"
+                          : "text-blueGray-700 hover:text-blueGray-500")
+                      }
+                      to="/medicine"
+                    >
+                      <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
+                      Medicine
+                    </Link>
+                  </li>
+                </>
+              ) : null}
               <li className="items-center">
                 <Link
                   className={
