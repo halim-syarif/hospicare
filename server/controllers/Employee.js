@@ -24,10 +24,11 @@ class EmployeeController {
       };
       
       let access_token = signToken(payload);
-      console.log(access_token)
 
       res.status(200).json({
         access_token,
+        name: result.name,
+        role: result.role,
       });
     } catch (err) {
       next(err);

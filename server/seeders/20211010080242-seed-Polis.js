@@ -9,12 +9,12 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "Anak/Pediatrik",
+        name: "Anak",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: "Jantung/Cardiologist",
+        name: "Jantung",
         createdAt: new Date(),
         updatedAt: new Date()
       },
