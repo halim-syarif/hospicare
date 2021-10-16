@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
     View, 
     Text, 
@@ -10,12 +10,13 @@ import {
     ActivityIndicator
 } from 'react-native';
 import * as Animatable from 'react-native-animatable'
+import { useFocusEffect } from '@react-navigation/native'
 
 import {LinearGradient} from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginAsync } from '../store/actions';
+import { loginAsync, setErrorLogin } from '../store/actions';
 
 
 export default function SignIn({navigation, route}) {
