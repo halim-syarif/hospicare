@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
-import { Link } from "react-router-dom";
-import { userLogin } from "../store/actions";
-import { setErrorMessage } from "../store/actions";
+import { setErrorMessage, userLogin } from "../store/actions/userAction";
 
 import 'react-toastify/dist/ReactToastify.css';
 
