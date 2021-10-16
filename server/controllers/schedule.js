@@ -1,4 +1,4 @@
-const { DoctorSchedule } = require("../models");
+const { DoctorSchedule, Employee } = require("../models");
 
 class DoctorScheduleController {
     static async showAll(req, res, next) {
@@ -9,6 +9,9 @@ class DoctorScheduleController {
 
                 const foundSchedule = await DoctorSchedule.findOne({
                     where: { EmployeeId },
+                    include: {
+                        model: Employee
+                    }
                 });
                 if (!foundSchedule) {
                     throw { name: "IdNotFound" };

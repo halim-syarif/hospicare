@@ -1,12 +1,10 @@
 import { combineReducers } from "redux";
-import movieReducer from './movieReducer'
-import counterReducer from './counterReducer'
 import patientReducer from './patientReducer'
+import scheduleReducer from './scheduleReducer'
 
 const reducer = combineReducers({
-    counter : counterReducer,
-    movies : movieReducer,
-    patients: patientReducer
+    patients: patientReducer,
+    schedules: scheduleReducer
 })
 
 export default reducer
