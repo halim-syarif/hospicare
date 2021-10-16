@@ -1,6 +1,8 @@
+const BookingController = require('../controllers/Booking')
+
 const routes = require('express').Router()
 
-routes.get('/')
+routes.get('/', BookingController.fetchAllBooking)
 routes.get('/:patientId')
 routes.get('/:doctorId')
 routes.post('/')
