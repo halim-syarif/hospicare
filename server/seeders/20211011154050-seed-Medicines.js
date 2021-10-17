@@ -4,28 +4,28 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert("Medicines", [
       {
-        name: "Parasetamol (asetaminofen)",
+        name: "Parasetamol",
         price: 20000,
         description: 'menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: "Dextromethorpan (DMP)",
+        name: "Dextromethorpan",
         price: 25000,
         description: 'meredakan batuk kering',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: "Ambroxol dan Bromexin (Mukolitik)",
+        name: "Ambroxol",
         price: 28000,
         description: 'meredakan batuk berdahak',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: "Parasetamol atau Asam Mefenamat",
+        name: "Parasetamol",
         price: 15000,
         description: 'meredakan sakit kepala',
         createdAt: new Date(),

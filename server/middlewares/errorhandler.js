@@ -73,6 +73,10 @@ const errorHandler = (err, req, res, next) => {
       code = err.code
       message = err.message
       break;
+    case 'bookinglimitreached':
+      code = 400
+      message = 'booking limit reached'
+      break;
   }
 
   console.log(err);

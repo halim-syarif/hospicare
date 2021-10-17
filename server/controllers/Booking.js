@@ -20,7 +20,7 @@ class BookingController {
                 model: Employee,
                 required: true,
                 attributes: {
-                  exclude: [ 'createdAt', 'updatedAt']
+                  exclude: [ 'createdAt', 'updatedAt', 'password']
                 },
                 include: [
                   {
@@ -49,7 +49,7 @@ class BookingController {
             model: Patient,
             required: true,
             attributes: {
-              exclude: [ 'createdAt', 'updatedAt']
+              exclude: [ 'createdAt', 'updatedAt', 'password']
             },
           }
         ]
@@ -89,7 +89,6 @@ class BookingController {
       })
 
       if (patient.length === 0){
-        console.log('mantap');
         throw{
           name: 'no appointment data for this patient',
           code: 404,
@@ -158,10 +157,24 @@ class BookingController {
   static async createNewBook (req, res, next){
     try {
       const {PatientId, DoctorScheduleId, booking_date} = req.body
+      const antrianAmount = await BookingSchedule.findAll({
+        where: {
+          DoctorScheduleId
+        },
+        include: {
+          model: DoctorSchedule,
+          attributes: ['booking_limit']
+        }
+      })
+      if(antrianAmount.length >= antrianAmount[0].DoctorSchedule.booking_limit){
+        throw {name: 'bookinglimitreached'}
+      }
+      const antrian = antrianAmount.length + 1
       const payload = {
         PatientId,
         DoctorScheduleId,
-        booking_date
+        booking_date,
+        antrian
       }
       const newAppointment = await BookingSchedule.create(payload)
       res.status(201).json(newAppointment)

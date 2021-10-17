@@ -1,158 +1,168 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-// components
-
 import TableDropdown from "../Dropdown/TableDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { getSchedules } from "../../store/actions/schedule";
 
-export default function ScheduleTable({ color }) {
-  const Schedules = [
+export default function ScheduleTable({ color, poliid }) {
+  const dispatch = useDispatch();
+  const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+  const [selectedDay, setSelectedDay] = useState(1);
+  const { schedules, isloading, errorMessage } = useSelector(
+    (state) => state.scheduleState
+  );
+
+  const docters = [
     {
-      price: 50000,
-      booking_limit: 20,
-      start_hour: "13:00:00",
-      end_hour: "17:00:00",
-      Employee: {
-        name: "dr. Ida Ayu Indira Mandini Manuaba, M.Biomed., Sp. OG",
-        Poli: {
-          name: "Kebidanan",
+      name: "dokter budi",
+      jam: "12.00-16.00",
+      patients: [
+        {
+          id: 1,
+          name: "patient1",
         },
-      },
-      Day: {
-        name: "Senin",
-      },
+        {
+          id: 1,
+          name: "patient2",
+        },
+        {
+          id: 2,
+          name: "patient3-2",
+        },
+        {
+          id: 2,
+          name: "patient3-2",
+        },
+      ],
+    },
+    {
+      name: "dokter tono",
+      jam: "12.00-16.00",
+      patients: [
+        {
+          id: 1,
+          name: "patient2-2",
+        },
+        {
+          id: 2,
+          name: "patient2-2",
+        },
+      ],
+    },
+    {
+      name: "dokter tuti",
+      jam: "12.00-16.00",
+      patients: [
+        {
+          id: 1,
+          name: "patient3-1",
+        },
+        {
+          id: 2,
+          name: "patient3-2",
+        },
+        {
+          id: 2,
+          name: "patient3-2",
+        },
+        {
+          id: 2,
+          name: "patient3-2",
+        },
+        {
+          id: 2,
+          name: "patient3-2",
+        },
+      ],
     },
   ];
+
+  useEffect(() => {
+    dispatch(
+      getSchedules({
+        poliid: poliid,
+        dayid: 1,
+      })
+    );
+  }, []);
+
   return (
     <>
-      <div
-        className={
-          "relative flex flex-col min-w-0 break-words w-full mb-2 shadow-lg rounded " +
-          (color === "light" ? "bg-white" : "bg-lightBlue-900 text-white")
-        }
-      >
-        <div className="rounded-t mb-0 px-4 py-3 border-0">
-          <div className="flex flex-wrap items-center">
-            <div className="flex flex-row px-4 max-w-full">
-              <div>
-                <h3
-                  className={
-                    "font-semibold text-lg " +
-                    (color === "light" ? "text-blueGray-700" : "text-white")
-                  }
-                >
-                  Schedule List
-                </h3>
-              </div>
-              <div>select option hari</div>
-            </div>
-          </div>
-        </div>
-        <div className="block w-full overflow-x-auto">
-          {/* Projects table */}
-          <table className="items-center w-full bg-transparent border-collapse">
-            <thead>
-              <tr>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  No
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Name
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Scheduled
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Start Hour
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  End Hour
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                ></th>
-              </tr>
-            </thead>
-            <tbody>
-              {Schedules?.map((el, index) => {
-                return (
-                  <tr>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {index + 1}
-                    </td>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
-                      {el.Employee?.name}
-                    </th>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <div className="flex items-center">
-                        <span className="mr-2">{el.booking_limit}</span>
-                        <div className="relative w-full">
-                          <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                            <div
-                              style={{ width: "60%" }}
-                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-                            ></div>
-                          </div>
-                        </div>
+      <div className="flex flex-wrap">
+        {docters.map((el) => {
+          return (
+            <div key={el} className="w-full lg:w-6/12 xl:w-2/12 px-4 mb-6">
+              <div
+                style={{ minHeight: 300, maxHeight: 300 }}
+                className="overflow-y-auto relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+              >
+                <div className="rounded-t mb-0 px-4 py-3 border-0">
+                  <div className="flex flex-wrap items-center">
+                    <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+                      <h3 className="font-semibold text-base text-blueGray-700">
+                        {el.name}
+                      </h3>
+                    </div>
+                    <div className="relative flex-grow flex-1 text-right">
+                      <div
+                        className="bg-indigo-500 w-20 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="div"
+                      >
+                        Jam {el.jam}
                       </div>
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <i className="fas fa-email text-orange-500 mr-2"></i>
-                      {el.start_hour}
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <i className="fas fa-circle text-orange-500 mr-2"></i>
-                      {el.end_hour}
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                      <TableDropdown />
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="block w-full overflow-x-auto">
+                  {/* Projects table */}
+                  <table className="items-center w-full bg-transparent border-collapse">
+                    <thead>
+                      <tr>
+                        <th className="px-6 bg-blueGray-50 w-10 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
+                          Antrian
+                        </th>
+                        <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
+                          Name
+                        </th>
+                        <th className="px-6 bg-blueGray-50 max-w-20 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {el.patients.map((patients) => {
+                        return (
+                          <tr>
+                            <th className="border-t-0 text-center align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                              {patients.id}
+                            </th>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                              {patients.name}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                              <div className="flex flex-row justify-between ">
+                                <div className="cursor-pointer">
+                                  <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div className="cursor-pointer">
+                                  <i class="fas fa-minus-circle"></i>
+                                </div>
+                                <div className="cursor-pointer">
+                                  <i class="fas fa-paper-plane"></i>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </>
   );
