@@ -1,6 +1,17 @@
 import React, { useState  } from 'react'
 import { useDispatch } from 'react-redux';
-import { ActivityIndicator, Button, View, Text, StyleSheet, FlatList, Picker, ImageBackground, Platform } from 'react-native';
+import { 
+    ActivityIndicator,
+    Button, 
+    View, 
+    Text, 
+    StyleSheet, 
+    FlatList, 
+    Picker, 
+    ImageBackground,
+    Platform,
+    StatusBar
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Feather } from '@expo/vector-icons'
@@ -72,10 +83,13 @@ export default function HeaderComponent(){
 
 
     return (
-            <View style={styles.header}>
+        <View style={styles.header}>
+            <StatusBar backgroundColor="#009387" barStyle='light-content'/>
+            <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={styles.dropDown}>
                     <Picker
                         selectedValue={data.poliid}
+                        style={styles.text_header}
                         onValueChange={(itemValue) => handleChange(itemValue)}>
                         <Picker.Item label='Kebidanan' value={1}/>
                         <Picker.Item label='Anak' value={2}/>
@@ -98,7 +112,7 @@ export default function HeaderComponent(){
                             color="grey"
                         />
                     </TouchableOpacity>
-                    <Text style={styles.pickedDate}>{data.fullDate}</Text>
+                    <Text style={styles.text_header}>{data.fullDate}</Text>
                     {data.show 
                     ? <DateTimePicker
                         testID="dateTimePicker"
@@ -113,27 +127,36 @@ export default function HeaderComponent(){
                     : null}
                     
                 </View>
-                <View style={styles.button}>
-                    <TouchableOpacity
-                            onPress={search}
-                            style={styles.button1}
-                        >
-                            <Text style={styles.textSearch}>Search</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
+            <View style={styles.button}>
+                <TouchableOpacity
+                        onPress={search}
+                        style={styles.button1}
+                    >
+                        <Text style={styles.textSearch}>Search</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     header: {
-        flex:1, 
-        flexDirection: 'row',
+        flex:3, 
+        flexDirection: 'column',
+        paddingHorizontal: 20,
+        padding: 30
     },
 
     dropDown: {
-        flex: 0.5, 
+        flex: 0.6, 
         justifyContent: 'center', 
+    },
+
+    text_header: {
+        color: '#fff',
+        fontWeight: 'bold',
+        paddingHorizontal: 5
     },
 
     date: {
@@ -143,12 +166,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    pickedDate : {
-        paddingHorizontal: 5
-    },
-
     button1: {
-        borderColor: '#009387',
+        borderColor: '#fff',
         borderWidth: 1,
         marginTop: 15,
         width: '100%',
@@ -161,7 +180,7 @@ const styles = StyleSheet.create({
     textSearch: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: '#009387',
+        color: '#fff',
     },
 
     button :{

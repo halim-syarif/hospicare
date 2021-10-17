@@ -7,7 +7,7 @@ export default function Schedule() {
 
     return (
       <Stack.Navigator initialRouteName="ScheduleFilter">
-        <Stack.Screen name="ScheduleFilter" options={{title: 'Schedule'}} component={ScheduleFilter}/>
+        <Stack.Screen name="ScheduleFilter" options={{headerShown: false}} component={ScheduleFilter}/>
         <Stack.Screen name="ScheduleBooking" options={({ route }) => ({title : route.params.name})} component={ScheduleBooking}/>
       </Stack.Navigator>
     );
