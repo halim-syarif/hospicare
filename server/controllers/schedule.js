@@ -1,4 +1,4 @@
-const { DoctorSchedule, Employee, Poli, Day } = require("../models");
+const { DoctorSchedule, BookingSchedule, Employee, Poli, Day, Patient } = require("../models");
 
 class DoctorScheduleController {
   static async showAll(req, res, next) {
@@ -15,6 +15,7 @@ class DoctorScheduleController {
       const { poliid, dayid } = req.params;
       const foundSchedule = await DoctorSchedule.findAll({
         attributes: ["id","price", "booking_limit", "start_hour", "end_hour"],
+        order: [[BookingSchedule, 'antrian', 'asc']],
         include: [
           {
             model: Day,
@@ -34,6 +35,14 @@ class DoctorScheduleController {
               where: {
                 id: poliid,
               },
+            },
+          },
+          {
+            model: BookingSchedule,
+            attributes: ["id","antrian","keluhan","status"],
+            include: {
+              model: Patient,
+              attributes: ["name"]
             },
           },
         ],

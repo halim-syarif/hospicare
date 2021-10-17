@@ -17,10 +17,10 @@ export default function CardPoli({
         <div className="flex-auto p-4">
           <div className="flex flex-wrap">
             <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
-              <h5 className="text-blueGray-400 uppercase font-bold text-xs">
+              <h5 className="text-blueGray-400 normalcase font-bold text-xs ">
                 {statSubtitle}
               </h5>
-              <span className="font-semibold text-xl text-blueGray-700">
+              <span className="font-semibold text-sm text-blueGray-700">
                 {statTitle}
               </span>
             </div>
@@ -46,7 +46,7 @@ export default function CardPoli({
                     : ""
                 }
               ></i>{" "}
-              {statPercent}%
+              {statPercent} orang
             </span>
             <span className="whitespace-nowrap">{statDescripiron}</span>
           </p>

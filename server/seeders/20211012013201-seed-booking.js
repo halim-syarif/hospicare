@@ -14,16 +14,6 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        PatientId: 1,
-        DoctorScheduleId: 23,
-        booking_date: "2021-10-15 00:00:00",
-        keluhan: 'Nyeri di perut bagian atas atau ulu hati',
-        antrian: 1,
-        status: true,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
         PatientId: 2,
         DoctorScheduleId: 90,
         booking_date: "2021-10-25 00:00:00",

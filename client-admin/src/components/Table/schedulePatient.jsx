@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
@@ -91,8 +92,9 @@ export default function SchedulePatient({ color, poliid }) {
         theme: "dark",
       });
       dispatch(setSuccessMessage(""));
-      setSelectedMedicines([])
-      closeModal()
+      dispatch(getPatients());
+      setSelectedMedicines([]);
+      closeModal();
     }
   }, [successMessage]);
 
@@ -174,15 +176,24 @@ export default function SchedulePatient({ color, poliid }) {
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <div className="flex flex-row justify-center">
-                            <div
-                              onClick={() => {
-                                setBookingScheduleId(el.id);
-                                openModal();
-                              }}
-                              className="cursor-pointer bg-indigo-500 w-20 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                            >
-                              Update
-                            </div>
+                            {el.status ? (
+                              <div
+                                style={{ backgroundColor: "#10B981" }}
+                                className="min-w-24 text-white text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                              >
+                                Updated
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => {
+                                  setBookingScheduleId(el.id);
+                                  openModal();
+                                }}
+                                className="cursor-pointer bg-indigo-500 min-w-24 text-white active:bg-indigo-600 text-xs font-bold uppercase px-4 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                              >
+                                Update
+                              </div>
+                            )}
                             <div
                               onClick={() => hidePatient(el.id)}
                               className="cursor-pointer bg-red-500 w-20 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ml-3 mb-1 ease-linear transition-all duration-150"
@@ -224,9 +235,7 @@ export default function SchedulePatient({ color, poliid }) {
                         className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                        {
-                          !historyLoading ? 'Save' : null
-                        }
+                        {!historyLoading ? "Save" : null}
                         <span className="mt-1">
                           <ScaleLoader
                             color="lightBlue"
