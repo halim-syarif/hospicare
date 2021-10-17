@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE,
     },
+    antrian: {
+      type: DataTypes.INTEGER,
+    },
     keluhan: {
       type: DataTypes.DATE,
     },

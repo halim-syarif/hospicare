@@ -3,13 +3,10 @@ import PropTypes from "prop-types";
 import Modal from "react-modal";
 
 import { useDispatch, useSelector } from "react-redux";
-import MedicineDropdown from "../Dropdown/MedicineDropdown";
-import {
-  getMedicine,
-  setSelectedMedicines,
-} from "../../store/actions/medicine";
-Modal.setAppElement("#root");
+import { getMedicine } from "../../store/actions/medicine";
+import { getPatients } from "../../store/actions/schedule";
 
+Modal.setAppElement("#root");
 export default function SchedulePatient({ color, poliid }) {
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -20,9 +17,8 @@ export default function SchedulePatient({ color, poliid }) {
     medicine: false
   })
   const [selectedMedicines, setSelectedMedicines] = useState([])
-  const { medicines } = useSelector(
-    (state) => state.medicineState
-  );
+  const { medicines } = useSelector((state) => state.medicineState);
+  const { patients } = useSelector((state) => state.scheduleState);
 
   function openModal() {
     setIsOpen(true);
@@ -34,65 +30,8 @@ export default function SchedulePatient({ color, poliid }) {
 
   useEffect(() => {
     dispatch(getMedicine());
+    dispatch(getPatients())
   }, []);
-
-  const patients = [
-    {
-      id: 1,
-      name: "patient1",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 1,
-      name: "patient2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 2,
-      name: "patient3-2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 2,
-      name: "patient3-2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 1,
-      name: "patient1",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 1,
-      name: "patient2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 2,
-      name: "patient3-2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 2,
-      name: "patient3-2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 1,
-      name: "patient2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 2,
-      name: "patient3-2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-    {
-      id: 2,
-      name: "patient3-2",
-      keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
-    },
-  ];
 
   function selectHandle(target) {
     setSelectedMedicines([...selectedMedicines, target])
@@ -109,6 +48,8 @@ export default function SchedulePatient({ color, poliid }) {
     const newList = selectedMedicines.filter(el => el.id !== id)
     setSelectedMedicines(newList)
   }
+
+  
 
   function updateDataPatient(){
     if (!diagnosa){
@@ -147,7 +88,6 @@ export default function SchedulePatient({ color, poliid }) {
               </div>
             </div>
             <div className="block w-full overflow-x-auto">
-              {/* Projects table */}
               <table className="items-center w-full bg-transparent border-collapse">
                 <thead>
                   <tr>
@@ -166,17 +106,17 @@ export default function SchedulePatient({ color, poliid }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {patients.map((patients) => {
+                  {patients?.map((el, index) => {
                     return (
-                      <tr>
+                      <tr key={el.id}>
                         <th className="border-t-0 text-center align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                          {patients.id}
+                          {el.antrian}
                         </th>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          {patients.name}
+                          {el.Patient.name}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          {patients.keluhan}
+                          {el.keluhan}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <div className="flex flex-row justify-center">

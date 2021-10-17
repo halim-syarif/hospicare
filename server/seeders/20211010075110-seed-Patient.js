@@ -28,7 +28,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        name: "Karen Uyainah",
+        name: "Ratih Mulyana",
         age: 30,
         gender: "female",
         address: "Jl Jend Sudirman 45, Jakarta Timur",

@@ -31,6 +31,9 @@ module.exports = {
       keluhan: {
         type: Sequelize.STRING
       },
+      antrian: {
+        type: Sequelize.INTEGER
+      },
       booking_date: {
         allowNull: false,
         type: Sequelize.DATE
