@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
+import { css } from "@emotion/react";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getMedicine } from "../../store/actions/medicine";
-import { getPatients } from "../../store/actions/schedule";
+import { getPatients, setPatients } from "../../store/actions/schedule";
+import { setSuccessMessage, updateHistory } from "../../store/actions/history";
 
 Modal.setAppElement("#root");
 export default function SchedulePatient({ color, poliid }) {
   const dispatch = useDispatch();
+  const [BookingScheduleId, setBookingScheduleId] = useState(0);
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const [findMedicine, setfindMedicine] = useState([])
-  const [diagnosa, setdiagnosa] = useState('')
+  const [findMedicine, setfindMedicine] = useState([]);
+  const [diagnosa, setdiagnosa] = useState("");
   const [blankField, setBlankField] = useState({
     diagnosis: false,
-    medicine: false
-  })
-  const [selectedMedicines, setSelectedMedicines] = useState([])
+    medicine: false,
+  });
+  const [selectedMedicines, setSelectedMedicines] = useState([]);
   const { medicines } = useSelector((state) => state.medicineState);
   const { patients } = useSelector((state) => state.scheduleState);
+  const { successMessage, isLoading: historyLoading } = useSelector(
+    (state) => state.historyState
+  );
 
   function openModal() {
     setIsOpen(true);
@@ -30,48 +39,93 @@ export default function SchedulePatient({ color, poliid }) {
 
   useEffect(() => {
     dispatch(getMedicine());
-    dispatch(getPatients())
+    dispatch(getPatients());
   }, []);
 
   function selectHandle(target) {
-    setSelectedMedicines([...selectedMedicines, target])
-    setfindMedicine([])
-    document.getElementById('searchMedicine').value = ''
+    setSelectedMedicines([...selectedMedicines, target]);
+    setfindMedicine([]);
+    document.getElementById("searchMedicine").value = "";
   }
 
-  function filterMedicine(e){
-    const newList = medicines.filter(el => el.name.toLowerCase().startsWith(e.target.value.toLowerCase()))
-    setfindMedicine(newList)
+  function filterMedicine(e) {
+    const newList = medicines.filter((el) =>
+      el.name.toLowerCase().startsWith(e.target.value.toLowerCase())
+    );
+    setfindMedicine(newList);
   }
 
-  function deleteMedicineList(id){
-    const newList = selectedMedicines.filter(el => el.id !== id)
-    setSelectedMedicines(newList)
+  function deleteMedicineList(id) {
+    const newList = selectedMedicines.filter((el) => el.id !== id);
+    setSelectedMedicines(newList);
   }
 
-  
-
-  function updateDataPatient(){
-    if (!diagnosa){
-      console.log('masuk');
+  useEffect(() => {
+    if (diagnosa) {
       setBlankField({
         ...blankField,
-        diagnosis: true
-      })
+        diagnosis: false,
+      });
     }
-    if (!selectedMedicines.length){
+  }, [diagnosa]);
+
+  useEffect(() => {
+    if (selectedMedicines) {
       setBlankField({
         ...blankField,
-        medicine: true
-      })
+        medicine: false,
+      });
     }
-    console.log(blankField);
-    console.log(selectedMedicines, diagnosa);
+  }, [selectedMedicines]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      dispatch(setSuccessMessage(""));
+      setSelectedMedicines([])
+      closeModal()
+    }
+  }, [successMessage]);
+
+  function hidePatient(id) {
+    const newPatientList = patients.filter((el) => el.id !== id);
+    dispatch(setPatients(newPatientList));
   }
 
+  function updateDataPatient() {
+    if (!diagnosa) {
+      return setBlankField({
+        ...blankField,
+        diagnosis: true,
+      });
+    }
+    if (!selectedMedicines.length) {
+      return setBlankField({
+        ...blankField,
+        medicine: true,
+      });
+    }
+    dispatch(
+      updateHistory({
+        BookingScheduleId,
+        medicine_list: selectedMedicines,
+        description: diagnosa,
+      })
+    );
+  }
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-wrap">
         <div className="w-full px-4 mb-6">
           <div
@@ -121,12 +175,18 @@ export default function SchedulePatient({ color, poliid }) {
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <div className="flex flex-row justify-center">
                             <div
-                              onClick={openModal}
+                              onClick={() => {
+                                setBookingScheduleId(el.id);
+                                openModal();
+                              }}
                               className="cursor-pointer bg-indigo-500 w-20 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             >
                               Update
                             </div>
-                            <div className="cursor-pointer bg-red-500 w-20 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ml-3 mb-1 ease-linear transition-all duration-150">
+                            <div
+                              onClick={() => hidePatient(el.id)}
+                              className="cursor-pointer bg-red-500 w-20 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ml-3 mb-1 ease-linear transition-all duration-150"
+                            >
                               Hide
                             </div>
                           </div>
@@ -158,12 +218,24 @@ export default function SchedulePatient({ color, poliid }) {
                       <h6 className="text-blueGray-700 text-xl font-bold">
                         Update Data Pasien
                       </h6>
+
                       <button
                         onClick={updateDataPatient}
                         className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                        Save
+                        {
+                          !historyLoading ? 'Save' : null
+                        }
+                        <span className="mt-1">
+                          <ScaleLoader
+                            color="lightBlue"
+                            loading={historyLoading}
+                            css={override}
+                            height="15px"
+                            width="2px"
+                          />
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -243,11 +315,11 @@ export default function SchedulePatient({ color, poliid }) {
                               className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                               placeholder="type your diagnosis"
                             />
-                            {
-                              blankField.diagnosis
-                              ? <div style={{color: '#EF4444', fontSize: 12}}>please give patient diagnosis</div>
-                              : null
-                            }
+                            {blankField.diagnosis ? (
+                              <div style={{ color: "#EF4444", fontSize: 12 }}>
+                                please give patient diagnosis
+                              </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>
@@ -261,22 +333,33 @@ export default function SchedulePatient({ color, poliid }) {
                         <div className="w-full">
                           <div className="relative w-full mb-6">
                             <div className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap text-right">
-                              <input type="text" id="searchMedicine" onKeyUp={filterMedicine} placeholder="type your medicine" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"/>
-                              {
-                                findMedicine.map(el => {
-                                  return (
-                                    <div key={el.id} 
+                              <input
+                                type="text"
+                                id="searchMedicine"
+                                onKeyUp={filterMedicine}
+                                placeholder="type your medicine"
+                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                              />
+                              {findMedicine.map((el) => {
+                                return (
+                                  <div
+                                    key={el.id}
                                     onClick={() => selectHandle(el)}
-                                    className="bg-white text-sm z-50 float-left py-2 px-3 list-none text-left shadow-lg w-full cursor-pointer">{el.name}</div>
-                                  )
-                                })
-                              }
+                                    className="bg-white text-sm z-50 float-left py-2 px-3 list-none text-left shadow-lg w-full cursor-pointer"
+                                  >
+                                    {el.name}
+                                  </div>
+                                );
+                              })}
                             </div>
-                            {
-                              blankField.medicine
-                              ? <div className="mt-2" style={{color: '#EF4444', fontSize: 12}}>please select atleast 1 medicine</div>
-                              : null
-                            }
+                            {blankField.medicine ? (
+                              <div
+                                className="mt-2"
+                                style={{ color: "#EF4444", fontSize: 12 }}
+                              >
+                                please select atleast 1 medicine
+                              </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>
@@ -314,9 +397,9 @@ export default function SchedulePatient({ color, poliid }) {
                             >
                               <div>
                                 <input
-                                  checked
+                                  defaultChecked
                                   type="radio"
-                                  name="dosis"
+                                  name={`dosis${el.id}`}
                                   className="ml-3"
                                 />
                                 <span className="relative ml-1 text-blueGray-600 text-xs ">
@@ -324,13 +407,20 @@ export default function SchedulePatient({ color, poliid }) {
                                 </span>
                               </div>
                               <div>
-                                <input type="radio" name="dosis" className="" />
+                                <input
+                                  type="radio"
+                                  name={`dosis${el.id}`}
+                                  className=""
+                                />
                                 <span className="relative ml-1 text-blueGray-600 text-xs ">
                                   sesudah makan
                                 </span>
                               </div>
-                              <div className="cursor-pointer" onClick={() => deleteMedicineList(el.id)}>
-                                <i class="fas fa-trash-alt"></i>
+                              <div
+                                className="cursor-pointer"
+                                onClick={() => deleteMedicineList(el.id)}
+                              >
+                                <i className="fas fa-trash-alt"></i>
                               </div>
                             </div>
                           </div>
@@ -360,6 +450,12 @@ const customStyles = {
     minWidth: "640px",
   },
 };
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: lime;
+`;
 
 SchedulePatient.defaultProps = {
   color: "light",
