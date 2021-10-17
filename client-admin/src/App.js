@@ -1,8 +1,9 @@
 // eslint-disable-next-line
 import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setIsLogin } from "./store/actions/userAction";
+import { getPolis } from "./store/actions/schedule";
 
 import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -18,6 +19,7 @@ function App() {
 
   useEffect(() => {
     dispatch(setIsLogin(true));
+    dispatch(getPolis());
     // eslint-disable-next-line
   }, []);
 

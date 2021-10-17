@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux'
 import userReducer from './user'
 import scheduleReducer from './schedule'
-import medicineReducer from "./medicine"
+import medicineReducer from './medicine'
 
 
 export const reducer = combineReducers({

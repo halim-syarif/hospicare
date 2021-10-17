@@ -2,14 +2,16 @@ import React, {useEffect} from "react";
 import PropTypes from "prop-types"
 import {useDispatch, useSelector} from "react-redux"
 import { fetchMedicines, deleteMed } from "../../store/actions/medicineAction";
-import ReactPaginate from "react-paginate"
+import Modal from "react-modal";
+// import ReactPaginate from "react-paginate"
 
 
 
 // components
-
+Modal.setAppElement("#root");
 export default function MedicineTable({ color }) {
   const medicineData = useSelector(state => state.medicineState.medicines)
+  const [modalIsOpen, setIsOpen] = React.useState(false);
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -21,8 +23,12 @@ export default function MedicineTable({ color }) {
       console.log(id);
   }
 
-  function handleDelete(e, id) {
-    
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
   }
 
   
@@ -159,6 +165,12 @@ export default function MedicineTable({ color }) {
                       <div>
                         <button className="bg-gray-500 hover:bg-blue-700 text-blue font-bold py-2 px-4 rounded" onClick={() => handleEdit(el.id)}>Edit</button>
                       </div>
+                      <div
+                        onClick={openModal}
+                        className="cursor-pointer bg-indigo-500 w-20 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        >
+                          EditForm
+                        </div>
                       <div>
                         <button onClick={() => dispatch(deleteMed(el.id))}>Delete</button>
                       </div>
@@ -170,6 +182,13 @@ export default function MedicineTable({ color }) {
           </table>
         </div>
       </div>
+      <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+        >
+          <div>testForm</div>
+        </Modal>
     </>
   );
 }
@@ -180,4 +199,17 @@ MedicineTable.defaultProps = {
 
 MedicineTable.propTypes = {
   color: PropTypes.oneOf(["light", "dark"]),
+};
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    maxHeight: "80%",
+    transform: "translate(-50%, -50%)",
+    border: "none",
+    minWidth: "640px",
+  },
 };

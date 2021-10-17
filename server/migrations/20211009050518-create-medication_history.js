@@ -23,7 +23,6 @@ module.exports = {
         type: Sequelize.STRING
       },
       total_price: {
-        allowNull: false,
         type: Sequelize.INTEGER
       },
       is_paid: {
