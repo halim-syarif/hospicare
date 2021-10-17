@@ -3,31 +3,8 @@ const { DoctorSchedule, Employee, Poli, Day } = require("../models");
 class DoctorScheduleController {
   static async showAll(req, res, next) {
     try {
-      const { EmployeeId, DayId } = req.query;
-      if (EmployeeId) {
-        if (isNaN(+EmployeeId)) throw { name: "WrongFormatId" };
-
-        const foundSchedule = await DoctorSchedule.findOne({
-          where: { EmployeeId },
-        });
-        if (!foundSchedule) {
-          throw { name: "IdNotFound" };
-        }
-        res.status(200).json(foundSchedule);
-      } else if (DayId) {
-        if (isNaN(+DayId)) throw { name: "WrongFormatId" };
-
-        const foundSchedule = await DoctorSchedule.findOne({
-          where: { DayId },
-        });
-        if (!foundSchedule) {
-          throw { name: "IdNotFound" };
-        }
-        res.status(200).json(foundSchedule);
-      } else {
         const schedules = await DoctorSchedule.findAll();
         res.status(200).json(schedules);
-      }
     } catch (error) {
       next(error);
     }
