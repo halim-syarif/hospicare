@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE,
     },
+    keluhan: {
+      type: DataTypes.DATE,
+    },
     status: DataTypes.BOOLEAN
   }, {
     hooks: {

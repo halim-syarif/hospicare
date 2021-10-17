@@ -3,14 +3,26 @@ import PropTypes from "prop-types";
 import Modal from "react-modal";
 
 import { useDispatch, useSelector } from "react-redux";
-import MedicineDropdown from "../Dropdown/MedicineDropdown"
-import { getMedicine } from "../../store/actions/medicine";
+import MedicineDropdown from "../Dropdown/MedicineDropdown";
+import {
+  getMedicine,
+  setSelectedMedicines,
+} from "../../store/actions/medicine";
 Modal.setAppElement("#root");
 
 export default function SchedulePatient({ color, poliid }) {
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const { medicines } = useSelector(state => state.medicineState)
+  const [findMedicine, setfindMedicine] = useState([])
+  const [diagnosa, setdiagnosa] = useState('')
+  const [blankField, setBlankField] = useState({
+    diagnosis: false,
+    medicine: false
+  })
+  const [selectedMedicines, setSelectedMedicines] = useState([])
+  const { medicines } = useSelector(
+    (state) => state.medicineState
+  );
 
   function openModal() {
     setIsOpen(true);
@@ -21,8 +33,8 @@ export default function SchedulePatient({ color, poliid }) {
   }
 
   useEffect(() => {
-    dispatch(getMedicine())
-  },[])
+    dispatch(getMedicine());
+  }, []);
 
   const patients = [
     {
@@ -81,6 +93,41 @@ export default function SchedulePatient({ color, poliid }) {
       keluhan: "hsdkjhsdfjkhsdkfjhsdjkfhskjfhdsj",
     },
   ];
+
+  function selectHandle(target) {
+    setSelectedMedicines([...selectedMedicines, target])
+    setfindMedicine([])
+    document.getElementById('searchMedicine').value = ''
+  }
+
+  function filterMedicine(e){
+    const newList = medicines.filter(el => el.name.toLowerCase().startsWith(e.target.value.toLowerCase()))
+    setfindMedicine(newList)
+  }
+
+  function deleteMedicineList(id){
+    const newList = selectedMedicines.filter(el => el.id !== id)
+    setSelectedMedicines(newList)
+  }
+
+  function updateDataPatient(){
+    if (!diagnosa){
+      console.log('masuk');
+      setBlankField({
+        ...blankField,
+        diagnosis: true
+      })
+    }
+    if (!selectedMedicines.length){
+      setBlankField({
+        ...blankField,
+        medicine: true
+      })
+    }
+    console.log(blankField);
+    console.log(selectedMedicines, diagnosa);
+  }
+
 
   return (
     <>
@@ -159,7 +206,7 @@ export default function SchedulePatient({ color, poliid }) {
         >
           <div
             className={
-              "relative flex flex-col min-w-0 break-words w-full mb-2 shadow-lg rounded bg-white"
+              "relative flex flex-col min-w-0 break-words w-full mb-2 shadow-lg rounded"
             }
           >
             <div className="rounded-t border-0">
@@ -172,6 +219,7 @@ export default function SchedulePatient({ color, poliid }) {
                         Update Data Pasien
                       </h6>
                       <button
+                        onClick={updateDataPatient}
                         className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="button"
                       >
@@ -181,7 +229,7 @@ export default function SchedulePatient({ color, poliid }) {
                   </div>
                   <div className="flex-auto w-full px-4 lg:px-10 py-10 pt-0">
                     <form>
-                      <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                      {/* <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                         Patient Information
                       </h6>
                       <div className="flex flex-col justify-start">
@@ -239,9 +287,9 @@ export default function SchedulePatient({ color, poliid }) {
                             </label>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
-                      <hr className="mt-2 border-b-1 border-blueGray-300" />
+                      {/* <hr className="mt-2 border-b-1 border-blueGray-300" /> */}
 
                       <h6 className="text-blueGray-400 text-sm mt-3 mb-3 font-bold uppercase">
                         Diagnosa
@@ -250,10 +298,16 @@ export default function SchedulePatient({ color, poliid }) {
                         <div className="w-full">
                           <div className="relative w-full mb-3">
                             <textarea
+                              onChange={(e) => setdiagnosa(e.target.value)}
                               type="text"
                               className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                              defaultValue="Gejala Diabetes ringan"
+                              placeholder="type your diagnosis"
                             />
+                            {
+                              blankField.diagnosis
+                              ? <div style={{color: '#EF4444', fontSize: 12}}>please give patient diagnosis</div>
+                              : null
+                            }
                           </div>
                         </div>
                       </div>
@@ -267,47 +321,81 @@ export default function SchedulePatient({ color, poliid }) {
                         <div className="w-full">
                           <div className="relative w-full mb-6">
                             <div className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap text-right">
-                              <MedicineDropdown medicines={medicines} />
+                              <input type="text" id="searchMedicine" onKeyUp={filterMedicine} placeholder="type your medicine" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"/>
+                              {
+                                findMedicine.map(el => {
+                                  return (
+                                    <div key={el.id} 
+                                    onClick={() => selectHandle(el)}
+                                    className="bg-white text-sm z-50 float-left py-2 px-3 list-none text-left shadow-lg w-full cursor-pointer">{el.name}</div>
+                                  )
+                                })
+                              }
                             </div>
+                            {
+                              blankField.medicine
+                              ? <div className="mt-2" style={{color: '#EF4444', fontSize: 12}}>please select atleast 1 medicine</div>
+                              : null
+                            }
                           </div>
                         </div>
                       </div>
-
-                        <div className="flex flex-row w-full">
-                          <div className="relative mb-3" style={{width: "25%"}}>
-                            <label
-                              className="block text-blueGray-600 text-xs font-bold mb-1"
-                              htmlFor="grid-password"
+                      {selectedMedicines?.map((el) => {
+                        return (
+                          <div key={el.id} className="flex flex-row w-full">
+                            <div
+                              className="relative mb-3"
+                              style={{ width: "25%" }}
                             >
-                              Amoxicilin
-                            </label>
-                          </div>
-                          <div className="relative mb-3" style={{width: "25%"}}>
-                            <input type="number" className="h-5 text-xs w-1/2 px-1"/>
-                            <span
-                              className="relative ml-2 text-blueGray-600 text-xs mb-1"
+                              <label
+                                className="block text-blueGray-600 text-xs font-bold mb-1"
+                                htmlFor="grid-password"
+                              >
+                                {el.name}
+                              </label>
+                            </div>
+                            <div
+                              className="relative mb-3"
+                              style={{ width: "25%" }}
                             >
-                              x sehari
-                            </span>
-                          </div>
-                          <div className="relative mb-3 flex flex-row justify-between" style={{width: "50%"}}>
-                            <div >
-                              <input type="radio" name="dosis" className="ml-3" />
-                              <span className="relative ml-1 text-blueGray-600 text-xs ">
-                                sebelum makan
+                              <input
+                                type="number"
+                                className="h-5 text-xs w-1/2 px-1"
+                                defaultValue="2"
+                                min="1"
+                              />
+                              <span className="relative ml-2 text-blueGray-600 text-xs mb-1">
+                                x sehari
                               </span>
                             </div>
-                            <div >
-                              <input type="radio" name="dosis" className="" />
-                              <span className="relative ml-1 text-blueGray-600 text-xs ">
-                                sesudah makan
-                              </span>
-                            </div>
-                            <div >
-                              <i class="fas fa-trash-alt"></i>
+                            <div
+                              className="relative mb-3 flex flex-row justify-between"
+                              style={{ width: "50%" }}
+                            >
+                              <div>
+                                <input
+                                  checked
+                                  type="radio"
+                                  name="dosis"
+                                  className="ml-3"
+                                />
+                                <span className="relative ml-1 text-blueGray-600 text-xs ">
+                                  sebelum makan
+                                </span>
+                              </div>
+                              <div>
+                                <input type="radio" name="dosis" className="" />
+                                <span className="relative ml-1 text-blueGray-600 text-xs ">
+                                  sesudah makan
+                                </span>
+                              </div>
+                              <div className="cursor-pointer" onClick={() => deleteMedicineList(el.id)}>
+                                <i class="fas fa-trash-alt"></i>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        );
+                      })}
                     </form>
                   </div>
                 </div>
@@ -328,8 +416,8 @@ const customStyles = {
     bottom: "auto",
     maxHeight: "80%",
     transform: "translate(-50%, -50%)",
-    border: 'none',
-    minWidth: "640px"
+    border: "none",
+    minWidth: "640px",
   },
 };
 

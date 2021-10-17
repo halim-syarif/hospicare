@@ -1,42 +1,7 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 
-// Imagine you have a list of languages that you'd like to autosuggest.
-const languages = [
-  {
-    name: 'Abdbajd',
-    year: 1972
-  },{
-    name: 'Abdbajd',
-    year: 1972
-  },{
-    name: 'Abdbajd',
-    year: 1972
-  },{
-    name: 'Abdbajd',
-    year: 1972
-  },
-  {
-    name: 'csaasd',
-    year: 2012
-  },{
-    name: 'sddsd',
-    year: 1972
-  },
-  {
-    name: 'Elm',
-    year: 2012
-  },{
-    name: 'C',
-    year: 1972
-  },
-  {
-    name: 'Elm',
-    year: 2012
-  },
-];
 
-// Teach Autosuggest how to calculate suggestions for any given input value.
 const getSuggestions = (value, medicines) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
@@ -48,25 +13,26 @@ const getSuggestions = (value, medicines) => {
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-const renderSuggestion = suggestion => (
-  <a
-  onClick={(e) => {
-    e.preventDefault()
-    console.log(suggestion.name);
-    suggestion.name = ''
-  }} 
-  className="bg-white text-sm z-50 float-left py-2 px-3 list-none text-left shadow-lg w-full cursor-pointer">
-    {suggestion.name}
-  </a>
-);
+// const renderSuggestion = suggestion => (
+//   <a
+//   onClick={(e) => {
+//     e.preventDefault()
+//     console.log(suggestion.name);
+//     suggestion.name = ''
+//   }} 
+//   className="bg-white text-sm z-50 float-left py-2 px-3 list-none text-left shadow-lg w-full cursor-pointer">
+//     {suggestion.name}
+//   </a>
+// );
 
-export default class Example extends React.Component {
-  constructor({medicines}) {
+export default class MedicineDropdown extends React.Component {
+  constructor({medicines, selectHandle}) {
     super();
     this.state = {
       value: '',
       suggestions: [],
-      medicines
+      medicines,
+      selectHandle
     };
   }
   
@@ -89,6 +55,19 @@ export default class Example extends React.Component {
     });
   };
 
+
+  renderSuggestion = suggestion => (
+    <a
+    onClick={(e) => {
+      e.preventDefault()
+      this.state.selectHandle(suggestion.id)
+      suggestion.name = ''
+    }} 
+    className="bg-white text-sm z-50 float-left py-2 px-3 list-none text-left shadow-lg w-full cursor-pointer">
+      {suggestion.name}
+    </a>
+  );
+
   render() {
     const { value, suggestions } = this.state;
 
@@ -104,7 +83,7 @@ export default class Example extends React.Component {
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
+        renderSuggestion={this.renderSuggestion}
         inputProps={inputProps}
         theme={{
           input: {

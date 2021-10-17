@@ -28,6 +28,9 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
+      keluhan: {
+        type: Sequelize.STRING
+      },
       booking_date: {
         allowNull: false,
         type: Sequelize.DATE

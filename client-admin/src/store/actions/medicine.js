@@ -21,6 +21,12 @@ export function setErrorMessage(payload) {
   };
 }
 
+export function setSelectedMedicines(payload) {
+  return {
+    type: 'medicine/setSelectedMedicines',
+    payload,
+  };
+}
 
 export function getMedicine() {
   return (dispatch) => {
