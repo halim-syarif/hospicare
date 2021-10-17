@@ -1,81 +1,31 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, {useEffect} from "react";
+import PropTypes from "prop-types"
+import {useDispatch, useSelector} from "react-redux"
+import { fetchMedicines, deleteMed } from "../../store/actions/medicineAction";
+import ReactPaginate from "react-paginate"
+
+
 
 // components
 
-import TableDropdown from "../Dropdown/TableDropdown";
-
 export default function MedicineTable({ color }) {
-  const medicineData = [
-    {
-      name: "Parasetamol (asetaminofen)",
-      price: 20000,
-      description:
-        "menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi",
-    },
-    {
-      name: "Dextromethorpan (DMP)",
-      price: 25000,
-      description: "meredakan batuk kering",
-    },
-    {
-      name: "Ambroxol dan Bromexin (Mukolitik)",
-      price: 28000,
-      description: "meredakan batuk berdahak",
-    },
-    {
-      name: "Parasetamol atau Asam Mefenamat",
-      price: 15000,
-      description: "meredakan sakit kepala",
-    },
-    {
-      name: "Magnesium hidroksida",
-      price: 30000,
-      description: "mengurangi nyeri lambung dengan menetralkan asam lambung",
-    },
-    {
-      name: "Attapulgite",
-      price: 40000,
-      description: "mengurangi nyeri lambung dengan menetralkan asam lambung",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "amoxicillin",
-      price: 10000,
-      description: "antibiotik",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "alogliptin",
-      price: 65000,
-      description: "mengobati diabetes",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Aspirin",
-      price: 15000,
-      description: "mengurangi sakit kepala",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Anastrazole",
-      price: 75000,
-      description: "hormon treatment",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      name: "Benzoyl peroxide",
-      price: 65000,
-      description: "mengobati jerawat",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ];
+  const medicineData = useSelector(state => state.medicineState.medicines)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+      dispatch(fetchMedicines())
+  }, [])
+
+  function handleEdit(id) {
+      //redirect / tampilkan form edit
+      console.log(id);
+  }
+
+  function handleDelete(e, id) {
+    
+  }
+
+  
   return (
     <>
       <div
@@ -97,9 +47,21 @@ export default function MedicineTable({ color }) {
                   Medicine List
                 </h3>
               </div>
-              <div >
-                pagination area
+              <div>
+                Pagination
+              {/* <ReactPaginate 
+                containerClassName={"pagination"}
+                previousLabel={"Previous"}
+                nextLabel={"Next"}
+                breakLabel={"..."}
+                breakClassName={"break-me"}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                activeClassName={"active"}
+                >
+                </ReactPaginate> */}
               </div>
+             
             </div>
           </div>
         </div>
@@ -156,7 +118,7 @@ export default function MedicineTable({ color }) {
                       : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }
                 >
-                  Completion
+                  Action
                 </th>
                 <th
                   className={
@@ -169,9 +131,15 @@ export default function MedicineTable({ color }) {
               </tr>
             </thead>
             <tbody>
-              {medicineData?.map((el, index) => {
-                return (
+              {/* {
                   <tr>
+                    <td>{console.log(medicineData, "~~~~~~~~~~")}</td>
+                  </tr>
+              } */}
+
+              {medicineData.rows?.map((el, index) => {
+                return (
+                  <tr key={index}>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       {index + 1}
                     </td>
@@ -179,7 +147,7 @@ export default function MedicineTable({ color }) {
                       {el.name}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <i className="fas fa-circle text-orange-500 mr-2"></i> Rp{" "}
+                      Rp{" "}
                       {el.price.toLocaleString("id-ID")},-
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
@@ -188,20 +156,12 @@ export default function MedicineTable({ color }) {
                         : el.description}
                     </td>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <div className="flex items-center">
-                        <span className="mr-2">60%</span>
-                        <div className="relative w-full">
-                          <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                            <div
-                              style={{ width: "60%" }}
-                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-                            ></div>
-                          </div>
-                        </div>
+                      <div>
+                        <button className="bg-gray-500 hover:bg-blue-700 text-blue font-bold py-2 px-4 rounded" onClick={() => handleEdit(el.id)}>Edit</button>
                       </div>
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
-                      <TableDropdown />
+                      <div>
+                        <button onClick={() => dispatch(deleteMed(el.id))}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 );
