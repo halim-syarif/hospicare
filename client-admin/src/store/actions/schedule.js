@@ -75,7 +75,6 @@ export function getPatients() {
     dispatch(setLoading(true))
     appApi.get(`/bookings?Poli=10&Day=3`)
     .then(response => {
-      console.log(response.data);
       dispatch(setPatients(response.data))
     })
     .catch(err => {
