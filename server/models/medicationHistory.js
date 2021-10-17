@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     total_price: {
-      allowNull: false,
       type: DataTypes.INTEGER,
     },
     is_paid: DataTypes.BOOLEAN
