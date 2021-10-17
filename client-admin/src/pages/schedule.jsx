@@ -15,14 +15,14 @@ export default function Schedule() {
 
   return (
     <div>
-      <div className="relative bg-lightBlue-600 md:pt-32 pb-32 pt-12">
+      <div className="relative bg-lightBlue-600 md:pt-32 pb-32 pt-12 min-h-screen">
         <div className="px-4 md:px-10 mx-auto w-full">
           {localStorage.getItem("role") === "Admin" ? (
             <Switch>
               <Route path="/schedule" exact component={StatPoli} />
               {poli.map((el) => {
                 return (
-                  <Route path={`/schedule/${el.name.toLowerCase()}`}>
+                  <Route key={el.id} path={`/schedule/${el.name.toLowerCase()}`}>
                     <ScheduleTable poliid={el.id} />
                   </Route>
                 );

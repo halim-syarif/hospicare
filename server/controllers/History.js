@@ -122,7 +122,10 @@ class HistoryController {
         { total_price },
         {
           where: { id: history.id }
-        },{ transaction: t })
+        })
+      await BookingSchedule.update({status: true},{
+        where: { id: BookingScheduleId}
+      })
       res.status(201).json({message: 'Medication History Patient updated'})
     } catch (err) {
       await t.rollback()

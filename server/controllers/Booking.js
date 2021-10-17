@@ -6,8 +6,9 @@ class BookingController {
       const { dayid, poliid, employeeid} = req.params
       const bookList = await BookingSchedule.findAll({
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ['createdAt', 'updatedAt'],
         },
+        order: [['antrian', 'asc']],
         include: [
           {
             model: DoctorSchedule,
