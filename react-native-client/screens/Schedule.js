@@ -1,17 +1,14 @@
-import React, { useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import ScheduleCards from '../components/ScheduleCards';
-import { scheduleAsync } from '../store/actions';
-
-export default function Schedule({navigation, route}) {
-    const schedules = useSelector(state => state.schedules.data)
-    const isLoading = useSelector(state => state.schedules.loadingSchedule)
-    const error = useSelector(state => state.schedules.errorSchedule)
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import ScheduleBooking from './ScheduleBooking';
+import ScheduleFilter from './ScheduleFilter';
+export default function Schedule() {
+   const Stack = createNativeStackNavigator()
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ScheduleCards schedules={schedules} isLoading={isLoading} error={error}/>
-      </View>
+      <Stack.Navigator initialRouteName="ScheduleFilter">
+        <Stack.Screen name="ScheduleFilter" options={{title: 'Schedule'}} component={ScheduleFilter}/>
+        <Stack.Screen name="ScheduleBooking" options={({ route }) => ({title : route.params.name})} component={ScheduleBooking}/>
+      </Stack.Navigator>
     );
 }

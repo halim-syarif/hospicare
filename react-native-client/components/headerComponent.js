@@ -23,6 +23,16 @@ export default function HeaderComponent(){
             poliid : itemValue
         })
     }
+
+    const dateFormat = (value) => {
+        value = value.toString()
+        if(value.length < 2){
+            return `0${value}`
+        } else {
+            return value
+        }
+    }
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || data.date;
         setData({
@@ -30,7 +40,7 @@ export default function HeaderComponent(){
             date: currentDate,
             show: Platform.OS === 'ios',
             dayid: currentDate.getDay(),
-            fullDate: `${selectedDate.getDate()}/${selectedDate.getMonth()}/${selectedDate.getYear()}`
+            fullDate: `${dateFormat(selectedDate.getDate())}/${dateFormat(selectedDate.getMonth())}/${dateFormat(selectedDate.getFullYear())}`
         })
     };
 
@@ -59,21 +69,11 @@ export default function HeaderComponent(){
             show: false
         })
     }
-    
-    const showDatepicker = () => {
-        showMode('date');
-    };
-
-    const showTimepicker = () => {
-        showMode('time');
-    };
 
 
     return (
-        <View style={{flex: 1}}>
-
-            <View style={{flex:1, flexDirection: 'row'}}>
-                <View style={{flex: 0.5, justifyContent: 'center', }}>
+            <View style={styles.header}>
+                <View style={styles.dropDown}>
                     <Picker
                         selectedValue={data.poliid}
                         onValueChange={(itemValue) => handleChange(itemValue)}>
@@ -88,18 +88,17 @@ export default function HeaderComponent(){
                         <Picker.Item label='Umum' value={9}/>
                     </Picker>
                 </View>
-                <View style={{flex: 0.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={styles.date}>
                     <TouchableOpacity
                         onPress={showDateTimePicker}
                     >
-                        
                         <Feather
                             name="calendar"
                             size={20}
                             color="grey"
                         />
                     </TouchableOpacity>
-                    <Text>{data.fullDate}</Text>
+                    <Text style={styles.pickedDate}>{data.fullDate}</Text>
                     {data.show 
                     ? <DateTimePicker
                         testID="dateTimePicker"
@@ -114,13 +113,60 @@ export default function HeaderComponent(){
                     : null}
                     
                 </View>
-                <View style={{ padding: 10}}>
-                    <Button
-                        title="Search"
-                        onPress={search}
-                    />
+                <View style={styles.button}>
+                    <TouchableOpacity
+                            onPress={search}
+                            style={styles.button1}
+                        >
+                            <Text style={styles.textSearch}>Search</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    header: {
+        flex:1, 
+        flexDirection: 'row',
+    },
+
+    dropDown: {
+        flex: 0.5, 
+        justifyContent: 'center', 
+    },
+
+    date: {
+        flex: 0.5, 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+
+    pickedDate : {
+        paddingHorizontal: 5
+    },
+
+    button1: {
+        borderColor: '#009387',
+        borderWidth: 1,
+        marginTop: 15,
+        width: '100%',
+        height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
+
+    textSearch: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#009387',
+    },
+
+    button :{
+        flex: 0.5,
+        padding: 5,
+        width: '100%'
+    }
+})

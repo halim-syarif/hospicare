@@ -11,10 +11,15 @@ import HeaderComponent from './headerComponent';
 
 
 export default function ScheduleCards({schedules, isLoading, error, navigation}){
-    async function handleDetail(id, name){
-        navigation.navigate('MovieDetail', {
+    async function bookAppointment(id, name){
+        navigation.navigate('ScheduleBooking', {
             id, name
         })
+    }
+
+    const priceFormat = (price) => {
+        const formattedPrice = `Rp ${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+        return formattedPrice
     }
 
     return (
@@ -30,24 +35,26 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
 					renderItem={({item}) => 
 						(
                             schedules.length == 0 ?
-                                <Text style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>No data yet, input your preferences</Text> :
+                            <View style={styles.containers}>
+                                <Text style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>No data yet, input your preferences</Text> 
+                            </View> :
                                 //Gatau kenapa gak muncul
 							<View style={styles.containers}>
 								<View style={styles.box}>
 									<View style={{paddingVertical: 5}}>
-                                        <Text>{item?.day?.name}</Text>
-                                        <Text>{item?.Employee?.Poli?.name}</Text>
-                                        <Text>{item?.Employee?.name}</Text>
-                                        <Text>{item?.booking_limit}</Text>
-                                        <Text>{item?.start_hour}</Text>
-                                        <Text>{item?.end_hour}</Text>
-                                        <Text>{item?.price}</Text>
+                                        <Text>Day {item?.Day?.name}</Text>
+                                        <Text>Poli Name {item?.Employee?.Poli?.name}</Text>
+                                        <Text>Employee Name {item?.Employee?.name}</Text>
+                                        <Text>Booking Limit {item?.booking_limit}</Text>
+                                        <Text>Start Hour {item?.start_hour}</Text>
+                                        <Text>End Hour {item?.end_hour}</Text>
+                                        <Text>Price {priceFormat(item?.price)}</Text>
 										<Button
 											title="Book Appointment"
 											type="outline"
 											raised="true"
 											titleStyle={{color: '#0F430E'}}
-											onPress={() => handleDetail(item.id, item.title)}
+											onPress={() => bookAppointment(item.id, item.Employee.name)}
 										/>
 									</View>
 								</View>
