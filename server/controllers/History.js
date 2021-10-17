@@ -3,6 +3,8 @@ const {
   MedicationHistory,
   PatientMedicine,
   BookingSchedule,
+  Patient,
+  Medicine,
   sequelize,
 } = require("../models");
 
@@ -42,6 +44,41 @@ class HistoryController {
     try {
       const history = await MedicationHistory.findOne({
         where: { BookingScheduleId },
+      });
+      if (!history) {
+        throw { name: "IdNotFound" };
+      }
+      res.status(200).json(history);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async findHistoryByPatientId(req, res, next) {
+    const { patientId } = req.params;
+    try {
+      const history = await MedicationHistory.findAll({
+        attributes: ['id','description', 'total_price'],
+        include:[{
+          model: BookingSchedule,
+          attributes: ['id','antrian', 'keluhan', 'status'],
+          include: {
+            model: Patient,
+            required: true,
+            attributes: ['id','name'],
+            where: {
+              id: patientId
+            }
+          }
+        },{
+          model: PatientMedicine,
+          required: false,
+          attributes: ['quantity', 'price'],
+          include: {
+            model: Medicine,
+            attributes: ['name']
+          }
+        }]
       });
       if (!history) {
         throw { name: "IdNotFound" };

@@ -3,7 +3,7 @@ const {BookingSchedule, DoctorSchedule, Patient, Employee, Day, Poli} = require(
 class BookingController {
   static  async fetchAllBooking(req, res, next) {
     try {
-      const { Day: DayId, Poli: PoliId} = req.query
+      const { dayid, poliid, employeeid} = req.params
       const bookList = await BookingSchedule.findAll({
         attributes: {
           exclude: ['createdAt', 'updatedAt']
@@ -22,13 +22,16 @@ class BookingController {
                 attributes: {
                   exclude: [ 'createdAt', 'updatedAt', 'password']
                 },
+                where: {
+                  id: employeeid
+                },
                 include: [
                   {
                     model: Poli,
                     required: true,
                     attributes: ['name', 'id'],
                     where: {
-                      id: PoliId
+                      id: poliid
                     }
                   }
                 ],
@@ -40,7 +43,7 @@ class BookingController {
                   exclud: [ 'createdAt', 'updatedAt']
                 },
                 where: {
-                  id: DayId
+                  id: dayid
                 }
               }
             ]

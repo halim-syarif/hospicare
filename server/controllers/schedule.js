@@ -1,4 +1,4 @@
-const { DoctorSchedule, Employee, Poli, Day } = require("../models");
+const { DoctorSchedule, BookingSchedule, Employee, Poli, Day, Patient } = require("../models");
 
 class DoctorScheduleController {
   static async showAll(req, res, next) {
@@ -34,6 +34,18 @@ class DoctorScheduleController {
               where: {
                 id: poliid,
               },
+            },
+          },
+          {
+            model: BookingSchedule,
+            required: false,
+            attributes: ["id","antrian"],
+            include: {
+              model: Patient,
+              attributes: ["name"]
+            },
+            where: {
+              status: false,
             },
           },
         ],
