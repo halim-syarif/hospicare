@@ -12,7 +12,8 @@ import {
     SET_BOOKING_ERROR,
     SET_BOOKING_LOADING,
     SET_BOOKING_DATE,
-    SET_BOOKING_DOCTOR_SCHEDULE_ID
+    SET_BOOKING_DOCTOR_SCHEDULE_ID,
+    DELETE_PATIENT_DATA
 } from "../keys";
 import http from '../../libs/patients'
 import httpSchedule from '../../libs/schedule'
@@ -36,6 +37,12 @@ function setLoadingLogin(isLoading){
     return {
         type: SET_PATIENT_LOADING_LOGIN,
         payload: isLoading
+    }
+}
+
+function deletePatientData(){
+    return {
+        type: DELETE_PATIENT_DATA
     }
 }
 
@@ -189,6 +196,7 @@ function createBookingAsync(data){
 
 export { 
     loginAsync, 
+    deletePatientData,
     registerAsync,
     setErrorRegister,
     setErrorLogin,
