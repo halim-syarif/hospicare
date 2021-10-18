@@ -1,6 +1,6 @@
 import React from "react";
-
 import MedicineTable from "../components/Table/medicineTable";
+
 
 export default function Medicine() {
   return (

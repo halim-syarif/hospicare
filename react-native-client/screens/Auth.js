@@ -13,6 +13,7 @@ import Detail from './Detail';
 import Home from './Home';
 import About from './About'
 import Schedule from './Schedule';
+import History from './History';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -23,7 +24,7 @@ export default function Auth(){
         // <View style={{flex: 1}}>
         //     {access_token ? 
             <Tab.Navigator 
-                initialRouteName="Schedule"
+                initialRouteName="History"
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                       let iconName;
@@ -42,6 +43,17 @@ export default function Auth(){
                         ? 'ios-information-circle' 
                         : 'ios-information-circle-outline';
                       } 
+
+                      else if (route.name === 'History') {
+                        iconName = focused 
+                        ? 'ios-clipboard' 
+                        : 'ios-clipboard-outline';
+                      } 
+                      else if(route.name === 'Schedule'){
+                          iconName = focused 
+                          ? 'calendar' 
+                          : 'calendar-outline'
+                      }
                       return <Ionicons name={iconName} size={size} color={color} />;
                     },
                     tabBarActiveTintColor: '#0F430E',
@@ -50,6 +62,7 @@ export default function Auth(){
                 >
                 <Tab.Screen name="Home" component={Home}/>
                 <Tab.Screen name="Schedule" options={{headerShown: false}} component={Schedule}/>
+                <Tab.Screen name="History" component={History}/>
                 <Tab.Screen name="About" component={About}/>
             </Tab.Navigator> 
             // : 

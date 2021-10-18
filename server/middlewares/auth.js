@@ -4,6 +4,7 @@ const { verifyToken } = require('../helpers/jwt')
 const authentication = async (req, res, next) => {
     try {
         const { access_token } = req.headers
+        console.log(req.headers);
         const { id } = verifyToken(access_token)
         const user = await Employee.findByPk(id)
 

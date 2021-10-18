@@ -158,7 +158,7 @@ export default function PatientTable({ color }) {
             <tbody>
               {patients?.map((el, index) => {
                 return (
-                  <tr>
+                  <tr key={index}>
                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                       {index + 1}
                     </td>

@@ -53,6 +53,30 @@ const errorHandler = (err, req, res, next) => {
       code = 403
       message = 'You dont have permission'
       break;
+    case 'found no patient':
+      code = 404
+      message = err.message
+      break;
+    case 'no appointment data for this patient':
+      code = 404
+      message = err.message
+      break;
+    case 'no doctor found':
+      code = 404
+      message = err.message
+      break; 
+    case 'not a doctor':
+      code = 404
+      message = err.message
+      break;
+    case 'no appointment found':
+      code = err.code
+      message = err.message
+      break;
+    case 'bookinglimitreached':
+      code = 400
+      message = 'booking limit reached'
+      break;
   }
 
   console.log(err);
