@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { useHistory } from "react-router";
+import { fetchPoli, addDoctor, fetchDoctor } from "../../store/actions/doctor";
 
 // components
 
 export default function AddDoctor() {
+  const [inputForm, setInputForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    age: "",
+    gender: "",
+    address: "",
+    role: "Doctor",
+    poliId: 1
+  })
+  const polis = useSelector(state => state.doctorState.polis)
+
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  useEffect(() => {
+      dispatch(fetchPoli())
+  }, [])
+
+  function handleAddForm() {
+      dispatch(addDoctor(inputForm))
+      dispatch(fetchDoctor())
+      history.push("/doctor")
+  }
+
   return (
     <>
       <div
@@ -20,6 +48,7 @@ export default function AddDoctor() {
                     Add Doctor
                   </h6>
                   <button
+                    onClick={handleAddForm}
                     className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                     type="button"
                   >
@@ -42,9 +71,9 @@ export default function AddDoctor() {
                           Full Name
                         </label>
                         <input
+                          onChange={(e) => setInputForm({...inputForm, name: e.target.value})}
                           type="text"
                           className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="lucky.jesse"
                         />
                       </div>
                     </div>
@@ -57,9 +86,9 @@ export default function AddDoctor() {
                           Email address
                         </label>
                         <input
+                          onChange={(e) => setInputForm({...inputForm, email: e.target.value})}
                           type="email"
                           className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="jesse@example.com"
                         />
                       </div>
                     </div>
@@ -72,10 +101,44 @@ export default function AddDoctor() {
                           Age
                         </label>
                         <input
+                          onChange={(e) => setInputForm({...inputForm, age: e.target.value})}
                           type="number"
                           className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="Lucky"
                         />
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                          htmlFor="grid-password"
+                        >
+                          Password
+                        </label>
+                        <input
+                          onChange={(e) => setInputForm({...inputForm, password: e.target.value})}
+                          type="password"
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        />     
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                          htmlFor="grid-password"
+                        >
+                          Poli
+                        </label>
+                        <select onChange={(e) => setInputForm({...inputForm, poliId: Number(e.target.value)})} value={inputForm.poliId} id="poliId" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
+                        {
+                             polis?.map(poli => (
+                                <option key={poli.id} value={poli.id}>
+                                    {poli.name}
+                                </option>
+                             ))
+                           }
+                        </select>      
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -86,10 +149,10 @@ export default function AddDoctor() {
                         >
                           Gender
                         </label>
-                        <select className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
-                            <option value="1">1</option>
-                        </select>
-                        
+                        <select onChange={(e) => setInputForm({...inputForm, gender: e.target.value})} value={inputForm.gender} id="gender" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>            
                       </div>
                     </div>
                   </div>
@@ -109,59 +172,14 @@ export default function AddDoctor() {
                           Address
                         </label>
                         <input
+                          onChange={(e) => setInputForm({...inputForm, address: e.target.value})}
                           type="text"
                           className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                         />
                       </div>
                     </div>
-                    <div className="w-full lg:w-4/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                          htmlFor="grid-password"
-                        >
-                          City
-                        </label>
-                        <input
-                          type="email"
-                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="New York"
-                        />
-                      </div>
+                    
                     </div>
-                    <div className="w-full lg:w-4/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                          htmlFor="grid-password"
-                        >
-                          Country
-                        </label>
-                        <input
-                          type="text"
-                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="United States"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-full lg:w-4/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                          htmlFor="grid-password"
-                        >
-                          Postal Code
-                        </label>
-                        <input
-                          type="text"
-                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                          defaultValue="Postal Code"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
                 </form>
               </div>
             </div>
