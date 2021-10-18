@@ -73,7 +73,7 @@ export function getSchedules({poliid, dayid }) {
 export function getPatients() {
   return (dispatch) => {
     dispatch(setLoading(true))
-    appApi.get(`/bookings/10/3/37`)
+    appApi.get(`/bookings/6/3/22`)
     .then(response => {
       dispatch(setPatients(response.data))
     })

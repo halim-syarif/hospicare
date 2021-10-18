@@ -4,30 +4,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert("Medicines", [
       {
-        name: "Parasetamol",
-        price: 20000,
-        description: 'menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: "Dextromethorpan",
-        price: 25000,
-        description: 'meredakan batuk kering',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
         name: "Ambroxol",
         price: 28000,
         description: 'meredakan batuk berdahak',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: "Parasetamol",
-        price: 15000,
-        description: 'meredakan sakit kepala',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -133,6 +112,13 @@ module.exports = {
         name: "Codeine",
         price: 87000,
         description: 'obat penghilang rasa sakit, digunakan setelah operasi atau cedera.',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Dextromethorpan",
+        price: 25000,
+        description: 'meredakan batuk kering',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -287,6 +273,13 @@ module.exports = {
         name: "Melatonin",
         price: 52000,
         description: 'membantu mengontrol pola tidur',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: "Parasetamol",
+        price: 20000,
+        description: 'menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi',
         createdAt: new Date(),
         updatedAt: new Date()
       }
