@@ -160,7 +160,7 @@ class BookingController {
 
   static async createNewBook (req, res, next){
     try {
-      const {PatientId, DoctorScheduleId, booking_date} = req.body
+      const { PatientId, DoctorScheduleId, booking_date, keluhan } = req.body
       const antrianAmount = await BookingSchedule.findAll({
         where: {
           DoctorScheduleId
@@ -170,7 +170,15 @@ class BookingController {
           attributes: ['booking_limit']
         }
       })
-      if(antrianAmount.length >= antrianAmount[0].DoctorSchedule.booking_limit){
+      
+      const booking_limit = await DoctorSchedule.findAll({
+        where : {
+          id : DoctorScheduleId,
+        },
+        attributes: ['booking_limit']
+      })
+
+      if(antrianAmount.length >= booking_limit[0].booking_limit){
         throw {name: 'bookinglimitreached'}
       }
       const antrian = antrianAmount.length + 1
@@ -178,11 +186,14 @@ class BookingController {
         PatientId,
         DoctorScheduleId,
         booking_date,
-        antrian
+        antrian,
+        keluhan
       }
+      console.log(payload)
       const newAppointment = await BookingSchedule.create(payload)
       res.status(201).json(newAppointment)
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }

@@ -1,9 +1,44 @@
+const { Op } = require('sequelize');
 const { DoctorSchedule, BookingSchedule, Employee, Poli, Day, Patient } = require("../models");
 
 class DoctorScheduleController {
   static async showAll(req, res, next) {
     try {
-        const schedules = await DoctorSchedule.findAll();
+        let { limit, offset } = req.query;
+        if (!limit) {
+            limit = 5;
+        }
+        if (!offset) {
+            offset = 0;
+        }
+        const schedules = await DoctorSchedule.findAndCountAll({
+            attributes: ["id","price", "booking_limit", "start_hour", "end_hour"],
+            order: [["id", "ASC"]],
+            limit,
+            offset,
+            include: [
+                {
+                    model: Day,
+                    attributes: ["name"],
+                },
+                {
+                    model: Employee,
+                    attributes: ["name"],
+                    include: {
+                        model: Poli,
+                        attributes: ['name']
+                    },
+                },
+                {
+                    model: BookingSchedule,
+                    attributes: ["id","antrian","keluhan","status"],
+                    include: {
+                        model: Patient,
+                        attributes: ["name"]
+                    },
+                },
+            ],
+        });
         res.status(200).json(schedules);
     } catch (error) {
       next(error);
