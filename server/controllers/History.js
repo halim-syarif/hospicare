@@ -5,6 +5,7 @@ const {
   BookingSchedule,
   Patient,
   Medicine,
+  Employee,
   sequelize,
 } = require("../models");
 
@@ -57,29 +58,62 @@ class HistoryController {
   static async findHistoryByPatientId(req, res, next) {
     const { patientId } = req.params;
     try {
-      const history = await MedicationHistory.findAll({
-        attributes: ['id','description', 'total_price'],
-        include:[{
-          model: BookingSchedule,
-          attributes: ['id','antrian', 'keluhan', 'status'],
+      // const history = await MedicationHistory.findAll({
+      //   attributes: ['id','description', 'total_price'],
+      //   include:[{
+      //     model: BookingSchedule,
+      //     attributes: ['id','antrian', 'keluhan', 'status'],
+      //     include: [{
+      //       model: Patient,
+      //       required: true,
+      //       attributes: ['id','name'],
+      //       where: {
+      //         id: patientId
+      //       }
+      //     },{
+      //       model: MedicationHistory,
+      //       required: true,
+      //       attributes: ['id',],
+      //       where: {
+      //         id: patientId
+      //       }
+      //     }]
+      //   },{
+      //     model: PatientMedicine,
+      //     required: true,
+      //     attributes: ['quantity', 'price'],
+      //     include: {
+      //       model: Medicine,
+      //       attributes: ['name']
+      //     },
+      //   }]
+      // });
+      const history = await BookingSchedule.findAll({
+        where: {
+          PatientId: patientId,
+        },
+        attributes: ['id','antrian', 'keluhan', 'status'],
+        include: [{
+          model: MedicationHistory,
+          attributes: ['id','description', 'total_price', 'is_paid'],
           include: {
-            model: Patient,
-            required: true,
-            attributes: ['id','name'],
-            where: {
-              id: patientId
+            model: PatientMedicine,
+            attributes: ['id','quantity', 'price'],
+            include: {
+              model: Medicine,
+              attributes: ['id', 'name']
             }
           }
         },{
-          model: PatientMedicine,
-          required: false,
-          attributes: ['quantity', 'price'],
+          model: DoctorSchedule,
+          attributes: ['id', 'price', 'start_hour', 'end_hour'],
           include: {
-            model: Medicine,
-            attributes: ['name']
+            model: Employee,
+            attributes: ['id', 'name']
           }
-        }]
-      });
+        }
+        ]
+      })
       if (!history) {
         throw { name: "IdNotFound" };
       }

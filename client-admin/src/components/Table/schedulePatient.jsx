@@ -1,6 +1,5 @@
 // eslint-disable-next-line
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Modal from "react-modal";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -8,12 +7,12 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getMedicine } from "../../store/actions/medicine";
 import { getPatients, setPatients } from "../../store/actions/schedule";
 import { setSuccessMessage, updateHistory } from "../../store/actions/history";
+import { fetchMedicines } from "../../store/actions/medicineAction";
 
 Modal.setAppElement("#root");
-export default function SchedulePatient({ color, poliid }) {
+export default function SchedulePatient() {
   const dispatch = useDispatch();
   const [BookingScheduleId, setBookingScheduleId] = useState(0);
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -32,14 +31,18 @@ export default function SchedulePatient({ color, poliid }) {
 
   function openModal() {
     setIsOpen(true);
+    setSelectedMedicines([]);
+    setdiagnosa('')
   }
 
   function closeModal() {
     setIsOpen(false);
+    setSelectedMedicines([]);
+    setdiagnosa('')
   }
 
   useEffect(() => {
-    dispatch(getMedicine());
+    dispatch(fetchMedicines());
     dispatch(getPatients());
   }, []);
 
@@ -50,7 +53,7 @@ export default function SchedulePatient({ color, poliid }) {
   }
 
   function filterMedicine(e) {
-    const newList = medicines.filter((el) =>
+    const newList = medicines.rows.filter((el) =>
       el.name.toLowerCase().startsWith(e.target.value.toLowerCase())
     );
     setfindMedicine(newList);
@@ -93,7 +96,6 @@ export default function SchedulePatient({ color, poliid }) {
       });
       dispatch(setSuccessMessage(""));
       dispatch(getPatients());
-      setSelectedMedicines([]);
       closeModal();
     }
   }, [successMessage]);
@@ -466,10 +468,3 @@ const override = css`
   border-color: lime;
 `;
 
-SchedulePatient.defaultProps = {
-  color: "light",
-};
-
-SchedulePatient.propTypes = {
-  color: PropTypes.oneOf(["light", "dark"]),
-};
