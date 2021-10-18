@@ -66,7 +66,7 @@ export function getSchedules({poliid, dayid }) {
     .catch(err => {
       dispatch(setErrorMessage(err.response.data))
     })
-    .finally(() => dispatch(setLoading(false)))
+    .finally(() => dispatch(setLoading(true)))
   }
 }
 
