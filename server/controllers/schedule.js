@@ -37,10 +37,19 @@ class DoctorScheduleController {
     try {
       const { poliid, dayid } = req.params;
       const foundSchedule = await DoctorSchedule.findAll({
-        attributes: ["price", "booking_limit", "start_hour", "end_hour"],
+        attributes: ["id","price", "booking_limit", "start_hour", "end_hour"],
         include: [
           {
+            model: Day,
+            required: true,
+            attributes: ["name"],
+            where: {
+              id: dayid,
+            },
+          },
+          {
             model: Employee,
+            required: true,
             attributes: ["name"],
             include: {
               model: Poli,
@@ -48,13 +57,6 @@ class DoctorScheduleController {
               where: {
                 id: poliid,
               },
-            },
-          },
-          {
-            model: Day,
-            attributes: ["name"],
-            where: {
-              id: dayid,
             },
           },
         ],

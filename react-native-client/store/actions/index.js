@@ -1,21 +1,17 @@
-import { 
-    INCREMENT_COUNTER, 
-    SET_LOADING_MOVIES, 
-    SET_MOVIES, 
-    SET_MOVIE_DETAIL, 
-    SET_MOVIE_DETAIL_LOADING, 
-    SET_MOVIE_NAME, 
+import {  
     SET_PATIENT_DATA, 
     SET_PATIENT_ERROR_LOGIN, 
     SET_PATIENT_LOADING_LOGIN, 
     REGISTER_PATIENT, 
+
     SET_PATIENT_ERROR_REGISTER, 
     SET_PATIENT_LOADING_REGISTER, 
+    SET_SCHEDULE_DATA,
     SET_SCHEDULE_LOADING,
     SET_SCHEDULE_ERROR
 } from "../keys";
-import axios from 'axios'
 import http from '../../libs/patients'
+import httpSchedule from '../../libs/schedule'
 
 function setPatientData(data){
     return {
@@ -79,7 +75,6 @@ function registerAsync(data, navigation){
                 method: 'post',
                 data
             })
-            console.log(patient.data, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
             dispatch(setLoadingRegister(false))
             dispatch(setErrorRegister(''))
             navigation.navigate('SignInScreen')
@@ -87,6 +82,13 @@ function registerAsync(data, navigation){
             dispatch(setErrorRegister(err.response.data))
             dispatch(setLoadingRegister(false))
         }
+    }
+}
+
+function setDataSchedule(schedule){
+    return {
+        type: SET_SCHEDULE_DATA,
+        payload: schedule
     }
 }
 
@@ -104,13 +106,18 @@ function setLoadingSchedule(isLoading){
     }
 }
 
-function scheduleAsync(){
+function scheduleAsync(poliid, dayid){
     return async function(dispatch){
         try {
             dispatch(setLoadingSchedule(true))
-            
+            const schedule = await httpSchedule({
+                method: 'get',
+                url: `${poliid}/${dayid}`,
+            })
+            dispatch(setDataSchedule(schedule.data))
             dispatch(setLoadingSchedule(false))
         } catch (err) {
+            console.log(err.response.data, '======================================')
             dispatch(setErrorSchedule(err.response.data))
         }
     }

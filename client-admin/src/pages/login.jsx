@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +19,7 @@ export default function Login() {
     if(isLogin || localStorage.getItem('access_token')){ 
       history.push('/home')
     }
+    // eslint-disable-next-line
   }, [isLogin])
 
   useEffect(() => {

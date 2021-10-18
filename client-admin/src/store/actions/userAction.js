@@ -1,27 +1,22 @@
-import {
-  SET_ISLOGIN,
-  SET_LOADING,
-  SET_ERROR_MESSAGE,
-} from "../keys/adminKeys"
 import appApi from '../config/instanceAxios'
 
 export function setIsLogin(payload) {
   return {
-    type: SET_ISLOGIN,
+    type: 'users/setLogin',
     payload
   }
 }
 
 export function setErrorMessage(payload) {
   return {
-    type: SET_ERROR_MESSAGE,
+    type: 'users/setErrorMessage',
     payload
   }
 }
 
 export function setLoading(payload) {
   return {
-    type: SET_LOADING,
+    type: 'users/setLoading',
     payload
   }
 }

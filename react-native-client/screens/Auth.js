@@ -23,7 +23,7 @@ export default function Auth(){
         // <View style={{flex: 1}}>
         //     {access_token ? 
             <Tab.Navigator 
-                initialRouteName="Home"
+                initialRouteName="Schedule"
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                       let iconName;
@@ -32,16 +32,16 @@ export default function Auth(){
                           ? 'home-sharp'
                           : 'home-outline';
                       } 
+                      else if(route.name === 'Schedule'){
+                        iconName = focused 
+                        ? 'calendar' 
+                        : 'calendar-outline'
+                      }
                       else if (route.name === 'About') {
                         iconName = focused 
                         ? 'ios-information-circle' 
                         : 'ios-information-circle-outline';
                       } 
-                      else if(route.name === 'Schedule'){
-                          iconName = focused 
-                          ? 'calendar' 
-                          : 'calendar-outline'
-                      }
                       return <Ionicons name={iconName} size={size} color={color} />;
                     },
                     tabBarActiveTintColor: '#0F430E',
@@ -49,7 +49,7 @@ export default function Auth(){
                   })}
                 >
                 <Tab.Screen name="Home" component={Home}/>
-                <Tab.Screen name="Schedule" component={Schedule}/>
+                <Tab.Screen name="Schedule" options={{headerShown: false}} component={Schedule}/>
                 <Tab.Screen name="About" component={About}/>
             </Tab.Navigator> 
             // : 
