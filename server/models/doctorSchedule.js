@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       DoctorSchedule.hasMany(models.BookingSchedule, {foreignKey: 'DoctorScheduleId'})
       DoctorSchedule.belongsTo(models.Day, {foreignKey: 'DayId'})
       DoctorSchedule.belongsTo(models.Employee, {foreignKey: 'EmployeeId'})
+      // DoctorSchedule.belongsToMany(models.Patient, {through: 'BookingSchedules'})
     }
   };
   DoctorSchedule.init({

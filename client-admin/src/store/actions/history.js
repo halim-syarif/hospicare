@@ -42,8 +42,6 @@ export function updateHistory(payload){
     .catch(err => {
       dispatch(setErrorMessage(err.response.data))
     })
-    .finally(() => setTimeout(() => {
-      dispatch(setLoading(false))
-    },5000))
+    .finally(() => setLoading(false))
   }
 }

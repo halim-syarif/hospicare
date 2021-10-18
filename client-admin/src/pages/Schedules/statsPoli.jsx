@@ -22,16 +22,17 @@ export default function StatPoli() {
         {poli?.map((el) => {
           return (
             <div
+              key={el.id}
               className="w-full lg:w-6/12 xl:w-3/12 px-4 mb-6 cursor-pointer"
               onClick={() => choosePoli(el)}
             >
               <CardPoli
                 statSubtitle={el.name}
-                statTitle="350,897"
+                statTitle="Dokter : 3"
                 statArrow="up"
-                statPercent="3.48"
+                statPercent="25"
                 statPercentColor="text-emerald-500"
-                statDescripiron="Since last month"
+                statDescripiron="total patient"
                 statIconName="far fa-chart-bar"
                 statIconColor="bg-red-500"
               />

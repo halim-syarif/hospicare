@@ -1,5 +1,5 @@
+// eslint-disable-next-line
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Modal from "react-modal";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -7,12 +7,12 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getMedicine } from "../../store/actions/medicine";
 import { getPatients, setPatients } from "../../store/actions/schedule";
 import { setSuccessMessage, updateHistory } from "../../store/actions/history";
+import { fetchMedicines } from "../../store/actions/medicineAction";
 
 Modal.setAppElement("#root");
-export default function SchedulePatient({ color, poliid }) {
+export default function SchedulePatient() {
   const dispatch = useDispatch();
   const [BookingScheduleId, setBookingScheduleId] = useState(0);
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -31,14 +31,18 @@ export default function SchedulePatient({ color, poliid }) {
 
   function openModal() {
     setIsOpen(true);
+    setSelectedMedicines([]);
+    setdiagnosa('')
   }
 
   function closeModal() {
     setIsOpen(false);
+    setSelectedMedicines([]);
+    setdiagnosa('')
   }
 
   useEffect(() => {
-    dispatch(getMedicine());
+    dispatch(fetchMedicines());
     dispatch(getPatients());
   }, []);
 
@@ -49,7 +53,7 @@ export default function SchedulePatient({ color, poliid }) {
   }
 
   function filterMedicine(e) {
-    const newList = medicines.filter((el) =>
+    const newList = medicines.rows.filter((el) =>
       el.name.toLowerCase().startsWith(e.target.value.toLowerCase())
     );
     setfindMedicine(newList);
@@ -91,8 +95,8 @@ export default function SchedulePatient({ color, poliid }) {
         theme: "dark",
       });
       dispatch(setSuccessMessage(""));
-      setSelectedMedicines([])
-      closeModal()
+      dispatch(getPatients());
+      closeModal();
     }
   }, [successMessage]);
 
@@ -174,15 +178,24 @@ export default function SchedulePatient({ color, poliid }) {
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                           <div className="flex flex-row justify-center">
-                            <div
-                              onClick={() => {
-                                setBookingScheduleId(el.id);
-                                openModal();
-                              }}
-                              className="cursor-pointer bg-indigo-500 w-20 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                            >
-                              Update
-                            </div>
+                            {el.status ? (
+                              <div
+                                style={{ backgroundColor: "#10B981" }}
+                                className="min-w-24 text-white text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                              >
+                                Updated
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => {
+                                  setBookingScheduleId(el.id);
+                                  openModal();
+                                }}
+                                className="cursor-pointer bg-indigo-500 min-w-24 text-white active:bg-indigo-600 text-xs font-bold uppercase px-4 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                              >
+                                Update
+                              </div>
+                            )}
                             <div
                               onClick={() => hidePatient(el.id)}
                               className="cursor-pointer bg-red-500 w-20 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none ml-3 mb-1 ease-linear transition-all duration-150"
@@ -224,9 +237,7 @@ export default function SchedulePatient({ color, poliid }) {
                         className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                        {
-                          !historyLoading ? 'Save' : null
-                        }
+                        {!historyLoading ? "Save" : null}
                         <span className="mt-1">
                           <ScaleLoader
                             color="lightBlue"
@@ -457,10 +468,3 @@ const override = css`
   border-color: lime;
 `;
 
-SchedulePatient.defaultProps = {
-  color: "light",
-};
-
-SchedulePatient.propTypes = {
-  color: PropTypes.oneOf(["light", "dark"]),
-};
