@@ -189,7 +189,6 @@ class BookingController {
         antrian,
         keluhan
       }
-      console.log(payload)
       const newAppointment = await BookingSchedule.create(payload)
       res.status(201).json(newAppointment)
     } catch (error) {
