@@ -8,10 +8,15 @@ import {
     SET_PATIENT_LOADING_REGISTER, 
     SET_SCHEDULE_DATA,
     SET_SCHEDULE_LOADING,
-    SET_SCHEDULE_ERROR
+    SET_SCHEDULE_ERROR,
+    SET_BOOKING_ERROR,
+    SET_BOOKING_LOADING,
+    SET_BOOKING_DATE,
+    SET_BOOKING_DOCTOR_SCHEDULE_ID
 } from "../keys";
 import http from '../../libs/patients'
 import httpSchedule from '../../libs/schedule'
+import httpBooking from '../../libs/bookings'
 
 function setPatientData(data){
     return {
@@ -138,6 +143,49 @@ function scheduleAsync(poliid, dayid){
     }
 }
 
+function setBookingDate(date){
+    return {
+        type: SET_BOOKING_DATE,
+        payload: date
+    }
+}
+
+function setDoctorScheduleId(id){
+    return {
+        type: SET_BOOKING_DOCTOR_SCHEDULE_ID,
+        payload: id
+    }
+}
+
+function setErrorBooking(error){
+    return {
+        type: SET_BOOKING_ERROR,
+        payload: error
+    }
+}
+
+function setLoadingBooking(isLoading){
+    return {
+        type: SET_BOOKING_LOADING,
+        payload: isLoading
+    }
+}
+
+function createBookingAsync(data){
+    return async function(dispatch){
+        try {
+            dispatch(setLoadingBooking(true))
+            const booking = await httpBooking({
+                method: "post",
+                data
+            })
+            dispatch(setLoadingBooking(false))
+        } catch (err) {
+            dispatch(setErrorBooking( err.response.message))
+        }
+    }
+}
+
 
 export { 
     loginAsync, 
@@ -145,5 +193,8 @@ export {
     setErrorRegister,
     setErrorLogin,
     schedulesAsyncAll,
-    scheduleAsync
+    scheduleAsync,
+    setBookingDate,
+    setDoctorScheduleId,
+    createBookingAsync,
  }
