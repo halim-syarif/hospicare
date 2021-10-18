@@ -16,6 +16,10 @@ const SET_HISTORY_DATA = 'history/setHistoryData'
 const SET_HISTORY_ERROR = 'history/setErrorSchedule'
 const SET_ANTRIAN = 'history/setAntrian'
 const SET_ANTRIAN_LOADING = 'history/setAntrianLoading'
+const SET_BOOKING_ERROR = 'booking/setError'
+const SET_BOOKING_LOADING = 'booking/setLoading'
+const SET_BOOKING_DOCTOR_SCHEDULE_ID = 'booking/setBookingDoctorScheduleId'
+const SET_BOOKING_DATE = 'booking/setBookingDate'
 
 export { 
     LOGIN_PATIENT, 
@@ -32,5 +36,9 @@ export {
     SET_HISTORY_DATA,
     SET_HISTORY_ERROR,
     SET_ANTRIAN,
-    SET_ANTRIAN_LOADING
+    SET_ANTRIAN_LOADING,
+    SET_BOOKING_ERROR,
+    SET_BOOKING_LOADING,
+    SET_BOOKING_DOCTOR_SCHEDULE_ID,
+    SET_BOOKING_DATE
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     View, 
     Text, 
@@ -7,143 +7,148 @@ import {
     TextInput,
     TouchableOpacity,
     StatusBar,
+    ScrollView,
+    FlatList,
+    LogBox,
     ActivityIndicator
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
-import { useFocusEffect } from '@react-navigation/native'
-
 import {LinearGradient} from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { loginAsync, setErrorLogin } from '../store/actions';
-
+import { createBookingAsync, registerAsync, setErrorRegister } from '../store/actions';
 
 export default function SignIn({navigation, route}) {
-    const errorLogin = useSelector(state => state.patients.errorLogin)
-    const loadingLogin = useSelector(state => state.patients.loadingLogin)
+    const errorRegister = useSelector(state => state.patients.errorRegister)
+    const loadingRegister = useSelector(state => state.patients.loadingRegister)
+    const DoctorScheduleId = useSelector(state => state.booking.doctorScheduleId)
+    const booking_date = useSelector(state => state.booking.bookingDate)
+    // const PatientId = useSelector(state => state.patient.id) || 1
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, [])
+
+    useEffect(() => {
+        dispatch(setErrorRegister(''))
+    }, [])
+
     const [data, setData] = useState({
-        email: '',
-        password: '',
-        secureTextEntry: true,
-        check_textInputChange: false
+        keluhan: '',
+        isValidSymptoms: false,
+        
     })
 
-    const textInputChange = (val) => {
-        if(val.length !== 0){
+    const textInputChange = (val, key, validKey) => {
+        if(val.trim().length >= 1 ){
             setData({
                 ...data,
-                email: val,
-                check_textInputChange: true
+                [key]: val,
+                [validKey]: true,
             })
         } else {
             setData({
                 ...data,
-                email: val,
-                check_textInputChange: false
+                [key]: val,
+                [validKey]: false,
             })
         }
     }
 
-    const handlePasswordChange = (val) => {
-        setData({
-            ...data,
-            password: val
-        })
+    const handleBooking = () => {
+        const payload = {
+            PatientId: 1,
+            DoctorScheduleId,
+            booking_date,
+            keluhan: data.keluhan
+        }
+        if(!data.isValidSymptoms){
+            return null
+        } else {
+            dispatch(createBookingAsync(payload))
+        }
     }
 
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        })
-    }
-
-    function handleSignIn() {
-        delete data.secureTextEntry
-        delete data.check_textInputChange
-        setData({
-            ...data,
-            secureTextEntry: true
-        })
-        dispatch(loginAsync(data))
-    }
+    
 
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="#009387" barStyle='light-content'/>
             <View style={styles.header}>
-                <Text style={styles.text_header}>Welcome</Text>
+                <Text style={styles.text_header}>Book Your Appointment</Text>
             </View>
+
             <Animatable.View 
                 style={styles.footer}
                 animation="fadeInUpBig">
-                <Text style={styles.text_footer}>Email</Text>
+                <Text style={styles.text_footer}>Symptoms</Text>
                 <View style={styles.action}>
                         <FontAwesome
-                            name="envelope"
+                            name="medkit"
                             color='#05375a'
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Your email"
+                            placeholder="Enter Any Symptomps That You Might be Having"
                             style={styles.textInput}
+                            value={data.keluhan}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => textInputChange(val, 'keluhan', 'isValidSymptoms')}
                         />
-                </View>
-                <Text style={styles.text_footer_below}>Password</Text>
-                <View style={styles.action}>
-                        <FontAwesome
-                            name="lock"
-                            color='#05375a'
-                            size={20}
-                        /> 
-                        <TextInput
-                            placeholder="Your password"
-                            secureTextEntry={data.secureTextEntry ? true : false}
-                            style={styles.textInput}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handlePasswordChange(val)}
-
-                        />
-                        <TouchableOpacity
-                            onPress={updateSecureTextEntry}
-                        >
-                            {data.secureTextEntry ? 
+                        {data.isValidSymptoms ? 
+                        <Animatable.View
+                            animation="bounceIn"
+                            >
                             <Feather
-                                name="eye-off"
+                                name="check-circle"
                                 size={20}
-                                color="grey"
+                                color="green"
                             />
-                            : <Feather
-                            name="eye"
-                            size={20}
-                            color="grey"
-                        />}
-                        </TouchableOpacity>
+                        </Animatable.View>
+                        : null}
                 </View>
-                {errorLogin ? <Text style={styles.text_footer_error_login}>{errorLogin}</Text> : null }
+                {data.isValidSymptoms ? null :
+                <Animatable.View animation="fadeInLeft" duration={1000}>
+                    <Text style={styles.text_footer_error_register_validation}>Symptoms cannot be empty</Text>
+                </Animatable.View>}
+
+                {errorRegister ? 
+                    <FlatList
+                    numColumns={2}
+                    horizontal={false}
+                    data={errorRegister}
+                    renderItem={({item}) => 
+                        (
+                            <Text style={styles.text_footer_error_register}>{item}</Text>
+                        )
+                    }
+                    keyExtractor={item => item}
+                />
+                : null}
+                
+
                 <View style={styles.button}>
                     <TouchableOpacity
-                        onPress={handleSignIn}
+                        onPress={handleBooking}
                         style={styles.signUp}
                         >
                         <LinearGradient
                             colors={['#08d4c4', '#01ab9d']}
                             style={styles.signIn}
                         >
-                            {loadingLogin ? 
+                            {loadingRegister ? 
                             <ActivityIndicator style={styles.loading} size="small" color="#0000ff"/> :
-                            <Text style={styles.textSign}>Sign In</Text>}
+                            <Text style={styles.textSign}>Create Appointment</Text>}
                         </LinearGradient>
                     </TouchableOpacity>
+
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('SignUpScreen')}
+                        onPress={() => navigation.navigate('SignInScreen')}
                         style={styles.signUp}
                     >
-                        <Text style={styles.textSignUp}>Sign Up</Text>
+                        <Text style={styles.textSignUp}>Sign In</Text>
                     </TouchableOpacity>
                 </View>
             </Animatable.View>
@@ -197,12 +202,19 @@ const styles = StyleSheet.create({
         height: '100%'
     },
 
-    text_footer_error_login: {
+    text_footer_error_register: {
         color: 'red',
         fontSize: 15,
         marginTop: 35,
         paddingLeft: 5
     },
+
+    text_footer_error_register_validation: {
+        color: 'red',
+        fontSize: 15,
+        marginTop: 5,
+        paddingLeft: 5
+    },  
     
     action: {
         flexDirection: 'row',

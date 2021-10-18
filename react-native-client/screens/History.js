@@ -102,7 +102,7 @@ export default function History({ navigation, route }) {
                 <View>
                   {antrian?.map((item) => {
                     return modalData?.DoctorSchedule?.id === item.bookingId ? (
-                      <Text>{item.lastAntrian}</Text>
+                      <Text key={item.id}>{item.lastAntrian}</Text>
                     ) : null;
                   })}
                 </View>
@@ -112,59 +112,73 @@ export default function History({ navigation, route }) {
         </View>
       </Modal>
 
-      {/* Pesanan Aktif */}
-      <View style={styles.active}>
-        <Text>Pesanan Aktif</Text>
-        <View style={styles.active}>
-          {activeBooking?.map((el) => {
-            return (
-              <TouchableOpacity
-                onPress={() => openModal(el)}
-                style={styles.activeCard}
-              >
-                <View style={styles.header}>
-                  <Ionicons name="medkit" size={15} color="green" />
-                  <Text style={styles.poli}>
-                    Poliklinik {el.DoctorSchedule.Employee.Poli.name}
-                  </Text>
-                </View>
-                <Text>
-                  {el.DoctorSchedule.Day.name},{" "}
-                  {new Date(el.booking_date).toLocaleDateString("id-ID")}
-                </Text>
-                <Text>jam {el.DoctorSchedule.start_hour.slice(0,5)} - {el.DoctorSchedule.end_hour.slice(0,5)}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
+      {loading ? (
+        <ActivityIndicator size="small" color="#0000ff" style={{ flex: 1 }} />
+      ) : (
+        <>
+          <View style={styles.active}>
+            <Text>Pesanan Aktif</Text>
+            <View style={styles.active}>
+              {activeBooking?.map((el) => {
+                return (
+                  <TouchableOpacity
+                    key={el.id}
+                    onPress={() => openModal(el)}
+                    style={styles.activeCard}
+                  >
+                    <View style={styles.header}>
+                      <Ionicons name="medkit" size={15} color="green" />
+                      <Text style={styles.poli}>
+                        Poliklinik {el.DoctorSchedule.Employee.Poli.name}
+                      </Text>
+                    </View>
+                    <Text>
+                      {el.DoctorSchedule.Day.name},{" "}
+                      {new Date(el.booking_date).toLocaleDateString("id-ID")}
+                    </Text>
+                    <Text>
+                      jam {el.DoctorSchedule.start_hour.slice(0, 5)} -{" "}
+                      {el.DoctorSchedule.end_hour.slice(0, 5)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
 
-      {/* History Pesanan */}
-      <View style={styles.active}>
-        <Text>History Pesanan</Text>
-        <View style={styles.active}>
-          {historyBooking?.map((el) => {
-            return (
-              <TouchableOpacity
-                onPress={() => openModal(el)}
-                style={styles.activeCard}
-              >
-                <View style={styles.header}>
-                  <Ionicons name="medkit" size={15} color="green" />
-                  <Text style={styles.poli}>
-                    Poliklinik {el.DoctorSchedule.Employee.Poli.name}
-                  </Text>
-                </View>
-                <Text>
-                  {el.DoctorSchedule.Day.name},{" "}
-                  {new Date(el.booking_date).toLocaleDateString("id-ID")}
-                </Text>
-                <Text>jam {el.DoctorSchedule.start_hour.slice(0,5)} - {el.DoctorSchedule.end_hour.slice(0,5)}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
+          {/* History Pesanan */}
+          <View style={styles.active}>
+            <Text>History Pesanan</Text>
+            <View style={styles.active}>
+              {historyBooking?.map((el) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => openModal(el)}
+                    style={styles.activeCard}
+                  >
+                    <View style={styles.header}>
+                      <Ionicons name="medkit" size={15} color="green" />
+                      <Text style={styles.poli}>
+                        Poliklinik {el.DoctorSchedule.Employee.Poli.name}
+                      </Text>
+                    </View>
+                    <Text>
+                      {el.DoctorSchedule.Day.name},{" "}
+                      {new Date(el.booking_date).toLocaleDateString("id-ID")}
+                    </Text>
+                    <Text>
+                      jam {el.DoctorSchedule.start_hour.slice(0, 5)} -{" "}
+                      {el.DoctorSchedule.end_hour.slice(0, 5)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+        </>
+      )}
+      {/* Pesanan Aktif */}
+
       {/* <View style={styles.card} key={el.id}>
               <Text>Dokter : {el.DoctorSchedule.Employee.name}</Text>
               <Text>Biaya Dokter : {el.DoctorSchedule.price}</Text>
