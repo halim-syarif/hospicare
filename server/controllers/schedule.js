@@ -45,6 +45,26 @@ class DoctorScheduleController {
     }
   }
 
+  static async findScheduleByID(req, res, next){
+    try {
+      const { id } = req.params
+      const schedules = await DoctorSchedule.findByPk(id,{
+        attributes: ['id', 'booking_limit', 'start_hour', 'end_hour', 'price'],
+        include: [
+          {
+            model: BookingSchedule,
+            attributes: {
+              exclude: ['createdAt', 'updatedAt']
+            }
+          }
+        ]
+      })
+      res.status(200).json(schedules)
+    } catch (err) {
+      next(err)
+    }
+  }
+
   static async getScheduleByPoliDay(req, res, next) {
     try {
       const { poliid, dayid } = req.params;

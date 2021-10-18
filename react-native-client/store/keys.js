@@ -11,6 +11,11 @@ const SET_SCHEDULE_DATA = 'schedules/setData'
 const SET_SCHEDULE_ERROR = 'schedules/setErrorSchedule'
 const SET_SCHEDULE_LOADING = 'schedules/setErrorSchedule'
 
+const SET_HISTORY_LOADING = 'history/setHistoryLoading'
+const SET_HISTORY_DATA = 'history/setHistoryData'
+const SET_HISTORY_ERROR = 'history/setErrorSchedule'
+const SET_ANTRIAN = 'history/setAntrian'
+const SET_ANTRIAN_LOADING = 'history/setAntrianLoading'
 const SET_BOOKING_ERROR = 'booking/setError'
 const SET_BOOKING_LOADING = 'booking/setLoading'
 const SET_BOOKING_DOCTOR_SCHEDULE_ID = 'booking/setBookingDoctorScheduleId'
@@ -27,6 +32,11 @@ export {
     SET_SCHEDULE_DATA,
     SET_SCHEDULE_ERROR,
     SET_SCHEDULE_LOADING,
+    SET_HISTORY_LOADING,
+    SET_HISTORY_DATA,
+    SET_HISTORY_ERROR,
+    SET_ANTRIAN,
+    SET_ANTRIAN_LOADING,
     SET_BOOKING_ERROR,
     SET_BOOKING_LOADING,
     SET_BOOKING_DOCTOR_SCHEDULE_ID,

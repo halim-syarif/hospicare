@@ -6,6 +6,8 @@ const {
   Patient,
   Medicine,
   Employee,
+  Day,
+  Poli,
   sequelize,
 } = require("../models");
 
@@ -92,28 +94,41 @@ class HistoryController {
         where: {
           PatientId: patientId,
         },
-        attributes: ['id','antrian', 'keluhan', 'status'],
-        include: [{
-          model: MedicationHistory,
-          attributes: ['id','description', 'total_price', 'is_paid'],
-          include: {
-            model: PatientMedicine,
-            attributes: ['id','quantity', 'price'],
+        attributes: ["id", "antrian", "keluhan", "status", "booking_date"],
+        order: [['booking_date', 'ASC']],
+        include: [
+          {
+            model: MedicationHistory,
+            attributes: ["id", "description", "total_price", "is_paid"],
             include: {
-              model: Medicine,
-              attributes: ['id', 'name']
-            }
-          }
-        },{
-          model: DoctorSchedule,
-          attributes: ['id', 'price', 'start_hour', 'end_hour'],
-          include: {
-            model: Employee,
-            attributes: ['id', 'name']
-          }
-        }
-        ]
-      })
+              model: PatientMedicine,
+              attributes: ["id", "quantity", "price"],
+              include: {
+                model: Medicine,
+                attributes: ["id", "name", "description"],
+              },
+            },
+          },
+          {
+            model: DoctorSchedule,
+            attributes: ["id", "price", "start_hour", "end_hour"],
+            include: [
+              {
+                model: Employee,
+                attributes: ["id", "name"],
+                include: {
+                  model: Poli,
+                  attributes: ["id", "name"],
+                },
+              },
+              {
+                model: Day,
+                attributes: ["id", "name"],
+              },
+            ],
+          },
+        ],
+      });
       if (!history) {
         throw { name: "IdNotFound" };
       }
@@ -128,18 +143,23 @@ class HistoryController {
     try {
       const { BookingScheduleId, description, medicine_list } = req.body; //medicine_list = array of {id medicine,price}
       let total_price = 0;
-      const result = await BookingSchedule.findByPk(BookingScheduleId, {
-        include: {
-          model: DoctorSchedule,
+      const result = await BookingSchedule.findByPk(
+        BookingScheduleId,
+        {
+          include: {
+            model: DoctorSchedule,
+          },
         },
-      },{ transaction: t });
+        { transaction: t }
+      );
       total_price += result.DoctorSchedule.price;
       const history = await MedicationHistory.create(
         {
           BookingScheduleId,
           description,
         },
-        { transaction: t })
+        { transaction: t }
+      );
       const patientMedicine = medicine_list.map((el) => {
         total_price += el.price;
         return {
@@ -149,23 +169,29 @@ class HistoryController {
           price: el.price,
         };
       });
-      await PatientMedicine.bulkCreate(
-        patientMedicine,{ transaction: t })
-      await t.commit()
+      await PatientMedicine.bulkCreate(patientMedicine, { transaction: t });
+      await t.commit();
       await MedicationHistory.update(
         { total_price },
         {
-          where: { id: history.id }
-        })
-      await BookingSchedule.update({status: true},{
-        where: { id: BookingScheduleId}
-      })
-      res.status(201).json({message: 'Medication History Patient updated'})
+          where: { id: history.id },
+        }
+      );
+      await BookingSchedule.update(
+        { status: true },
+        {
+          where: { id: BookingScheduleId },
+        }
+      );
+      res.status(201).json({ message: "Medication History Patient updated" });
     } catch (err) {
-      await t.rollback()
+      await t.rollback();
       next(err);
     }
   }
+
 }
+
+
 
 module.exports = HistoryController;
