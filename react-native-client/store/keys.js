@@ -1,7 +1,8 @@
 const LOGIN_PATIENT = 'patients/login'
 const SET_PATIENT_DATA = 'patients/setData'
-const SET_PATIENT_ERROR_LOGIN = 'patient/setErrorLogin'
-const SET_PATIENT_LOADING_LOGIN = 'patient/setLoadingLogin'
+const SET_PATIENT_ERROR_LOGIN = 'patients/setErrorLogin'
+const SET_PATIENT_LOADING_LOGIN = 'patients/setLoadingLogin'
+const DELETE_PATIENT_DATA = 'patients/deletePatientData'
 
 const REGISTER_PATIENT = 'patients/register'
 const SET_PATIENT_ERROR_REGISTER = 'patients/setErrorRegister'
@@ -21,6 +22,7 @@ export {
     SET_PATIENT_DATA, 
     SET_PATIENT_ERROR_LOGIN, 
     SET_PATIENT_LOADING_LOGIN, 
+    DELETE_PATIENT_DATA,
     REGISTER_PATIENT, 
     SET_PATIENT_ERROR_REGISTER, 
     SET_PATIENT_LOADING_REGISTER, 
