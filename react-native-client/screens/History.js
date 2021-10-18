@@ -3,56 +3,193 @@ import {
   View,
   Text,
   StyleSheet,
-  Platform,
-  TextInput,
   TouchableOpacity,
-  StatusBar,
   ActivityIndicator,
+  ScrollView,
+  Button,
 } from "react-native";
-import * as Animatable from "react-native-animatable";
-import { useFocusEffect } from "@react-navigation/native";
-
-import { LinearGradient } from "expo-linear-gradient";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { Feather } from "@expo/vector-icons";
+import Modal from "react-native-modal";
+import { Ionicons } from "react-native-vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAsync, setErrorLogin } from "../store/actions";
+import {
+  fetchHistoryPatient,
+  getAntrian,
+  setAntrian,
+} from "../store/actions/history";
 
 export default function History({ navigation, route }) {
-  histories = [
-    {
-      name: "tes",
-    },
-    {
-      name: "tes",
-    },
-    {
-      name: "tes",
-    },
-    {
-      name: "tes",
-    },
-  ];
+  const dispatch = useDispatch();
+  const { id } = useSelector((state) => state.patients);
+  const { histories, antrian, loading, antrianLoading } = useSelector(
+    (state) => state.histories
+  );
+  const [activeBooking, setActiveBooking] = useState([]);
+  const [historyBooking, setHistoryBooking] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalData, setModalData] = useState({});
+
+  useEffect(() => {
+    dispatch(fetchHistoryPatient(id));
+  }, []);
+
+  useEffect(() => {
+    let active = [];
+    let history = [];
+    histories.forEach((el) => {
+      if (el.MedicationHistory) {
+        history.push(el);
+      } else {
+        active.push(el);
+      }
+      setActiveBooking(active), setHistoryBooking(history);
+    });
+  }, [histories]);
+
+  function getLastAntrian(bookingId) {
+    dispatch(getAntrian(bookingId));
+  }
+
+  function openModal(data) {
+    setModalData(data);
+    setModalVisible(true);
+  }
+
+  function closeModal() {
+    setModalData({});
+    setModalVisible(false);
+    dispatch(setAntrian([]));
+  }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      {/* Modal */}
+      <Modal
+        animationIn="fadeIn"
+        isVisible={modalVisible}
+        onBackdropPress={() => closeModal()}
+      >
+        <View style={styles.position}>
+          <View style={styles.modalView}>
+            <View style={styles.modalHeader}>
+              <Text>Detail Pesanan</Text>
+              <Button title="X" onPress={() => closeModal()} />
+            </View>
+            <View style={{ flex: 1, height: 4, backgroundColor: "gray" }} />
+            <View style={styles.modalContent}>
+              <Text>
+                Poliklinik {modalData?.DoctorSchedule?.Employee?.Poli.name}
+              </Text>
+              <Text>Dokter : {modalData?.DoctorSchedule?.Employee?.name}</Text>
+              <Text>Antrian : {modalData?.antrian}</Text>
+              <Text>Keluhan : {modalData?.keluhan}</Text>
+              <Text>Tanggal : {modalData?.booking_date}</Text>
+              <Text>Hari : {modalData?.DoctorSchedule?.Day?.name}</Text>
+              <Text>
+                Jam : {modalData?.DoctorSchedule?.start_hour} -{" "}
+                {modalData?.DoctorSchedule?.end_hour}
+              </Text>
+              <Button
+                title="get antrian"
+                onPress={() => getLastAntrian(modalData?.DoctorSchedule?.id)}
+              ></Button>
+              {antrianLoading ? (
+                <ActivityIndicator
+                  size="small"
+                  color="#0000ff"
+                  style={{ flex: 1 }}
+                />
+              ) : (
+                <View>
+                  {antrian?.map((item) => {
+                    return modalData?.DoctorSchedule?.id === item.bookingId ? (
+                      <Text>{item.lastAntrian}</Text>
+                    ) : null;
+                  })}
+                </View>
+              )}
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Pesanan Aktif */}
       <View style={styles.active}>
         <Text>Pesanan Aktif</Text>
-        {histories.map((el) => {
-          return (
-            <View style={styles.card}>
-              <Text>Pesanan Aktif</Text>
-            </View>
-          );
-        })}
-      </View>
-      <View>
-        <Text>History Pesanan</Text>
-        <View style={styles.card}>
-          <Text>Pesanan Aktif</Text>
+        <View style={styles.active}>
+          {activeBooking?.map((el) => {
+            return (
+              <TouchableOpacity
+                onPress={() => openModal(el)}
+                style={styles.activeCard}
+              >
+                <View style={styles.header}>
+                  <Ionicons name="medkit" size={15} color="green" />
+                  <Text style={styles.poli}>
+                    Poliklinik {el.DoctorSchedule.Employee.Poli.name}
+                  </Text>
+                </View>
+                <Text>
+                  {el.DoctorSchedule.Day.name},{" "}
+                  {new Date(el.booking_date).toLocaleDateString("id-ID")}
+                </Text>
+                <Text>jam {el.DoctorSchedule.start_hour.slice(0,5)} - {el.DoctorSchedule.end_hour.slice(0,5)}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </View>
-    </View>
+
+      {/* History Pesanan */}
+      <View style={styles.active}>
+        <Text>History Pesanan</Text>
+        <View style={styles.active}>
+          {historyBooking?.map((el) => {
+            return (
+              <TouchableOpacity
+                onPress={() => openModal(el)}
+                style={styles.activeCard}
+              >
+                <View style={styles.header}>
+                  <Ionicons name="medkit" size={15} color="green" />
+                  <Text style={styles.poli}>
+                    Poliklinik {el.DoctorSchedule.Employee.Poli.name}
+                  </Text>
+                </View>
+                <Text>
+                  {el.DoctorSchedule.Day.name},{" "}
+                  {new Date(el.booking_date).toLocaleDateString("id-ID")}
+                </Text>
+                <Text>jam {el.DoctorSchedule.start_hour.slice(0,5)} - {el.DoctorSchedule.end_hour.slice(0,5)}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+      {/* <View style={styles.card} key={el.id}>
+              <Text>Dokter : {el.DoctorSchedule.Employee.name}</Text>
+              <Text>Biaya Dokter : {el.DoctorSchedule.price}</Text>
+              <Text>Tanggal : {el.booking_date}</Text>
+              <Text>Keluhan : {el.keluhan}</Text>
+              <Text>
+                Diagnosa penyakit : {el.MedicationHistory.description}
+              </Text>
+              <Text>Total Price: {el.MedicationHistory.total_price}</Text>
+              <Text>
+                is paid: {el.MedicationHistory.is_paid ? "Lunas" : "ngutang"}
+              </Text>
+              <Text>Obat: </Text>
+              {el.MedicationHistory.PatientMedicines.map((el) => {
+                return (
+                  <View key={el.id}>
+                    <Text>Nama: {el.Medicine.name}</Text>
+                    <Text>Price: {el.price}</Text>
+                    <Text>Ket: {el.Medicine.description}</Text>
+                    <Text>Dosis: 2 x sehari sebelum makan</Text>
+                  </View>
+                );
+              })}
+            </View> */}
+    </ScrollView>
   );
 }
 
@@ -60,15 +197,70 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    marginBottom: 30,
   },
   active: {
-    marginBottom: 30
-  },  
+    marginBottom: 30,
+  },
   card: {
     marginTop: 10,
     backgroundColor: "gray",
     padding: 10,
     borderRadius: 10,
     marginBottom: 5,
+  },
+  activeCard: {
+    marginTop: 10,
+    marginHorizontal: 3,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  header: {
+    flexDirection: "row",
+  },
+  poli: {
+    paddingHorizontal: 5,
+  },
+  position: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    width: "100%",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 30,
+  },
+  modalContent: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    width: "100%",
   },
 });

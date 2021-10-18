@@ -24,7 +24,7 @@ export default function Auth(){
         // <View style={{flex: 1}}>
         //     {access_token ? 
             <Tab.Navigator 
-                initialRouteName="History"
+                initialRouteName="Home"
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                       let iconName;
