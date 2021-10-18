@@ -5,7 +5,6 @@ import {
 import { useSelector } from 'react-redux'
 import DrawerNavigator from './DrawerNavigator';
 import StackNavigator from './StackNavigator';
-import TabNavigator from './TabNavigator';
 
 
 export default function Auth(){
@@ -14,8 +13,8 @@ export default function Auth(){
         // <View style={{flex: 1}}>
         //     {access_token ? 
             <DrawerNavigator/>
-            // : 
-            // <StackNavigator/>
+        //     : 
+        //     <StackNavigator/>
         //     }
         // </View>
     )
