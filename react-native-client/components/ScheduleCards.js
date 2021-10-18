@@ -99,7 +99,6 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
 			isLoading ? 
                 <ActivityIndicator style={styles.loading} size="small" color="#0000ff"/> :  
                     <FlatList
-                        // numColumns={2}
                         horizontal={false}
                         data={schedules}
                         renderItem={({item}) => 
@@ -112,33 +111,58 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
                                     <View style={styles.footer_container}>
                                         <View style={styles.card_top}>
                                             <View>
-                                                <Text>Saturday</Text>
+                                                <Text style={styles.card_top_title}>{item?.Day?.name}</Text>
                                                 <Text>Day</Text>
                                             </View>
                                             <View>
-                                                <Text>Kebidanan</Text>
-                                                <Text>Poli Name</Text>
+                                                <Text style={styles.card_top_title}>{item?.Employee?.Poli?.name}</Text>
+                                                <Text style={styles.card_top_poli_name}>Poli Name</Text>
                                             </View>
                                         </View>
                                         <View style={styles.card_bottom}>
                                             <View style={styles.card_bottom_top}>
-                                                <View>
-                                                    <Text>Employee Name</Text>
-                                                    <Text>Nama Lengkap</Text>
+                                                <View style={styles.card_bottom_employee}> 
+                                                    <View style={styles.card_wrapper}>
+                                                        <Text style={styles.inner_card_wrapper}>Employee Name</Text>
+                                                    </View>
+                                                    <View style={styles.card__bottom_employee_name}>
+                                                        <Text style={styles.card_bottom_employee_name_text}>{item?.Employee?.name}</Text>
+                                                    </View>
                                                 </View>
-                                                <View>
-                                                    <Text>Booking Limit</Text>
-                                                    <Text>5/10</Text>
+                                                <View style={styles.card_bottom_booking_limit}>
+                                                    <View style={styles.card_wrapper}>
+                                                        <Text style={styles.inner_card_wrapper}>Booking Limit</Text>
+                                                    </View>
+                                                    <Text>5/{item?.booking_limit}</Text>
                                                 </View>
                                             </View>
-                                            <View>
-                                                <Text>Operational Hours</Text>
-                                                <Text>Start</Text>
-                                                <Text>End</Text>
-                                            </View>
-                                            <View>
-                                                <Text>Price</Text>
-                                                <Text>Rp 70.000</Text>
+                                            <View style={{flex:1, flexDirection: 'row'}}>
+                                                <View>
+                                                    <View>
+                                                        <View style={styles.card_wrapper}>
+                                                            <Text style={styles.inner_card_wrapper}>Operational Hours</Text>
+                                                        </View>
+                                                        <View style={styles.card_bottom_content}>
+                                                            <Text>Start {item?.start_hour}</Text>
+                                                            <Text>End {item?.end_hour}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View>
+                                                        <View style={styles.card_wrapper}>
+                                                            <Text style={styles.inner_card_wrapper}>Price</Text>
+                                                        </View>
+                                                        <View style={styles.card_bottom_content}>
+                                                            <Text>{priceFormat(item?.price)}</Text>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                                <View style={styles.card_bottom_booking}>
+                                                    <TouchableOpacity 
+                                                        style={styles.card_bottom_booking_button}
+                                                        onPress={() => bookAppointment(item.id, item.Employee.name)}>
+                                                        <Text style={styles.card_bottom_booking_text}>Book appointment</Text>
+                                                    </TouchableOpacity>
+                                                </View>
                                             </View>
                                         </View>
                                     </View>
@@ -153,19 +177,21 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
 }
 
 const styles = StyleSheet.create({
-    // loading: {
-    //     flex: 1,
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     height: '100%'
-    // },
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+    },
 
     footer_container: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 7
+        paddingVertical: 7,
+        elevation: 10
+        // shadowRadius: 20
     },
 
     card_top: {
@@ -173,7 +199,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        paddingBottom: 5
+        paddingBottom: 10
+    },
+
+    card_top_title: {
+        fontSize: 25,
+        fontWeight: '900'
+    },
+
+    card_top_poli_name: {
+        textAlign: 'right'
     },
 
     card_bottom: {
@@ -190,30 +225,70 @@ const styles = StyleSheet.create({
         paddingBottom: 5
     },
 
+    card_wrapper: {
+        backgroundColor: '#009387',
+        marginTop: 15,
+        width: 130,
+        height: 38,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 40
+    },
+
+    inner_card_wrapper: {
+        fontSize: 13,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+
+    card_bottom_content: {
+        flex: 1, 
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    card_bottom_employee: {
+        flex: 1,
+        width: 20,
+        paddingRight: 10
+    },
+
+    card__bottom_employee_name: {
+        flex: 1, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 10
+    },
+
+    card_bottom_employee_name_text: {
+        fontWeight: 'bold'
+    },
+
+    card_bottom_booking_limit: {
+        alignItems: 'center'
+    },
+
+    card_bottom_booking: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    card_bottom_booking_button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#009387',
+        height: 50,
+        width: 150,
+        borderRadius: 30
+    },
+
+    card_bottom_booking_text: {
+        color: '#fff'
+    },
+
     container: {
         width: '100%',
         height: '100%',
     },
 });
-
-
-{/* <View style={styles.containers}>
-                                        <View style={styles.box}>
-                                            <View style={{paddingVertical: 5}}>
-                                                <Text>Day {item?.Day?.name}</Text>
-                                                <Text>Poli Name {item?.Employee?.Poli?.name}</Text>
-                                                <Text>Employee Name {item?.Employee?.name}</Text>
-                                                <Text>Booking Limit {item?.booking_limit}</Text>
-                                                <Text>Start Hour {item?.start_hour}</Text>
-                                                <Text>End Hour {item?.end_hour}</Text>
-                                                <Text>Price {priceFormat(item?.price)}</Text>
-                                                <Button
-                                                    title="Book Appointment"
-                                                    type="outline"
-                                                    raised="true"
-                                                    titleStyle={{color: '#0F430E'}}
-                                                    onPress={() => bookAppointment(item.id, item.Employee.name)}
-                                                />
-                                            </View>
-                                        </View>
-                                    </View> */}
