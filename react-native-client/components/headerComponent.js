@@ -15,7 +15,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Feather } from '@expo/vector-icons'
-import { scheduleAsync } from '../store/actions'
+import { scheduleAsync, setBookingDate } from '../store/actions'
 
 export default function HeaderComponent(){
     const dispatch = useDispatch()
@@ -46,12 +46,13 @@ export default function HeaderComponent(){
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || data.date;
+        dispatch(setBookingDate(currentDate))
         setData({
             ...data, 
             date: currentDate,
             show: Platform.OS === 'ios',
             dayid: currentDate.getDay(),
-            fullDate: `${dateFormat(selectedDate.getDate())}/${dateFormat(selectedDate.getMonth())}/${dateFormat(selectedDate.getFullYear())}`
+            fullDate: `${dateFormat(currentDate.getDate())}/${dateFormat(currentDate.getMonth())}/${dateFormat(currentDate.getFullYear())}`
         })
     };
 

@@ -7,6 +7,8 @@ import {
     FlatList, 
     TouchableOpacity,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { setDoctorScheduleId } from '../store/actions';
 
 //Drop down untuk tanggal poli 
 //Poli id dan name di hardcode
@@ -14,7 +16,9 @@ import {
 //setelah book appointment ada detail nomor antrian 
 
 export default function ScheduleCards({schedules, isLoading, error, navigation}){
+    const dispatch = useDispatch()
     async function bookAppointment(id, name){
+        dispatch(setDoctorScheduleId(id))
         navigation.navigate('ScheduleBooking', {
             id, name
         })
