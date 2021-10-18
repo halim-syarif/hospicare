@@ -19,21 +19,6 @@ import { scheduleAsync, setBookingDate } from '../store/actions'
 
 export default function HeaderComponent(){
     const dispatch = useDispatch()
-    const [data, setData] = useState({
-        poliid: 1,
-        dayid: 0,
-        date: new Date(1598051730000),
-        show: false,
-        fullDate: '00/00/00'
-    })
-    const [mode, setMode] = useState(data.date)
-
-    const handleChange = (itemValue) => {
-        setData({
-            ...data,
-            poliid : itemValue
-        })
-    }
 
     const dateFormat = (value) => {
         value = value.toString()
@@ -42,6 +27,23 @@ export default function HeaderComponent(){
         } else {
             return value
         }
+    }
+    
+    const date = new Date()
+    const [data, setData] = useState({
+        poliid: 1,
+        dayid: 0,
+        date: new Date(1598051730000),
+        show: false,
+        fullDate: `${dateFormat(date.getDate())}/${dateFormat(date.getMonth())}/${dateFormat(date.getFullYear())}`
+    })
+    const [mode, setMode] = useState(data.date)
+
+    const handleChange = (itemValue) => {
+        setData({
+            ...data,
+            poliid : itemValue
+        })
     }
 
     const onChange = (event, selectedDate) => {
