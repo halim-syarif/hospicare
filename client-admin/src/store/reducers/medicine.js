@@ -2,7 +2,9 @@ const initialState = {
     medicines: [],
     isLoading: false,
     errorMessage: "",
-    selectedMedicines: []
+    selectedMedicines: [],
+    medicine: {},
+    successMessage: ""
 }
 
 export default function reducer(state = initialState, action) {
@@ -27,6 +29,10 @@ export default function reducer(state = initialState, action) {
             return {...state, medicines: [action.payload]}
         case 'medicine/setSelectedMedicines':
             return {...state, selectedMedicines:  action.payload}
+        case "medicine/fetchOneMedicine" :
+            return {...state, medicine: action.payload}
+        case "medicine/setEditMessage":
+            return {...state, successMessage: action.payload}
         default:
             return state
     }
