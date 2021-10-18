@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import HeaderComponent from '../components/headerComponent';
 import ScheduleCards from '../components/ScheduleCards';
+import { schedulesAsyncAll } from '../store/actions';
 export default function ScheduleFilter({navigation, route}) {
     const schedules = useSelector(state => state.schedules.data)
     const isLoading = useSelector(state => state.schedules.loadingSchedule)
     const error = useSelector(state => state.schedules.errorSchedule)
+    const dispatch = useDispatch()
+    // useEffect(() => {
+    //   dispatch(schedulesAsyncAll())
+    // })
 
     return (
       <View style={styles.container}>
