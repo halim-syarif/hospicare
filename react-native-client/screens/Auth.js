@@ -33,6 +33,11 @@ export default function Auth(){
                           ? 'home-sharp'
                           : 'home-outline';
                       } 
+                      else if(route.name === 'Schedule'){
+                        iconName = focused 
+                        ? 'calendar' 
+                        : 'calendar-outline'
+                      }
                       else if (route.name === 'About') {
                         iconName = focused 
                         ? 'ios-information-circle' 
@@ -56,7 +61,7 @@ export default function Auth(){
                   })}
                 >
                 <Tab.Screen name="Home" component={Home}/>
-                <Tab.Screen name="Schedule" component={Schedule}/>
+                <Tab.Screen name="Schedule" options={{headerShown: false}} component={Schedule}/>
                 <Tab.Screen name="History" component={History}/>
                 <Tab.Screen name="About" component={About}/>
             </Tab.Navigator> 
