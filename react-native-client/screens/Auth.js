@@ -44,7 +44,7 @@ export default function Auth(){
                         : 'ios-information-circle-outline';
                       } 
 
-                      else if (route.name === 'History') {
+                      else if (route.name === 'HistoryRoute') {
                         iconName = focused 
                         ? 'ios-clipboard' 
                         : 'ios-clipboard-outline';
@@ -62,7 +62,7 @@ export default function Auth(){
                 >
                 <Tab.Screen name="Home" component={Home}/>
                 <Tab.Screen name="Schedule" options={{headerShown: false}} component={Schedule}/>
-                <Tab.Screen name="History" component={History}/>
+                <Tab.Screen name="HistoryRoute" options={{ headerShown: false }} component={History}/>
                 <Tab.Screen name="About" component={About}/>
             </Tab.Navigator> 
             // : 
