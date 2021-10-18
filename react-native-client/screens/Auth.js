@@ -60,7 +60,7 @@ export default function Auth(){
                     tabBarInactiveTintColor: 'gray',
                   })}
                 >
-                <Tab.Screen name="Home" component={Home}/>
+                <Tab.Screen name="Home" options={{headerShown: false}} component={Home}/>
                 <Tab.Screen name="Schedule" options={{headerShown: false}} component={Schedule}/>
                 <Tab.Screen name="HistoryRoute" options={{ headerShown: false }} component={History}/>
                 <Tab.Screen name="About" component={About}/>
