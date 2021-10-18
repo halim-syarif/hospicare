@@ -106,6 +106,22 @@ function setLoadingSchedule(isLoading){
     }
 }
 
+
+function schedulesAsyncAll(){
+    return async function(dispatch){
+        try {
+            dispatch(setLoadingSchedule(true))
+            const schedule = await httpSchedule({
+                method: 'get',
+            })
+            dispatch(setDataSchedule(schedule.data))
+            dispatch(setLoadingSchedule(false))
+        } catch (err) {
+            dispatch(setErrorSchedule(err.response.data))
+        }
+    }
+}
+
 function scheduleAsync(poliid, dayid){
     return async function(dispatch){
         try {
@@ -117,16 +133,17 @@ function scheduleAsync(poliid, dayid){
             dispatch(setDataSchedule(schedule.data))
             dispatch(setLoadingSchedule(false))
         } catch (err) {
-            console.log(err.response.data, '======================================')
             dispatch(setErrorSchedule(err.response.data))
         }
     }
 }
+
 
 export { 
     loginAsync, 
     registerAsync,
     setErrorRegister,
     setErrorLogin,
+    schedulesAsyncAll,
     scheduleAsync
  }

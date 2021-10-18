@@ -1,87 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { 
     ActivityIndicator, 
-    Button, 
     View, 
     Text, 
     StyleSheet, 
     FlatList, 
-    TextInput, 
     TouchableOpacity,
-    Dimensions
 } from 'react-native';
-import HeaderComponent from './headerComponent';
-import * as Animatable from 'react-native-animatable'
-// import { Button, } from 'react-native-elements';
-
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { Feather } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { loginAsync, setErrorLogin } from '../store/actions';
-import {LinearGradient} from 'expo-linear-gradient'
-
 
 //Drop down untuk tanggal poli 
 //Poli id dan name di hardcode
 
-
 //setelah book appointment ada detail nomor antrian 
 
-
-const { height } = Dimensions.get("screen")
 export default function ScheduleCards({schedules, isLoading, error, navigation}){
-    const errorLogin = useSelector(state => state.patients.errorLogin)
-    const loadingLogin = useSelector(state => state.patients.loadingLogin)
-    const dispatch = useDispatch()
-    const [data, setData] = useState({
-        email: '',
-        password: '',
-        secureTextEntry: true,
-        check_textInputChange: false
-    })
-
-    const textInputChange = (val) => {
-        if(val.length !== 0){
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: true
-            })
-        } else {
-            setData({
-                ...data,
-                email: val,
-                check_textInputChange: false
-            })
-        }
-    }
-
-    const handlePasswordChange = (val) => {
-        setData({
-            ...data,
-            password: val
-        })
-    }
-
-    const updateSecureTextEntry = () => {
-        setData({
-            ...data,
-            secureTextEntry: !data.secureTextEntry
-        })
-    }
-
-    function handleSignIn() {
-        delete data.secureTextEntry
-        delete data.check_textInputChange
-        setData({
-            ...data,
-            secureTextEntry: true
-        })
-        dispatch(loginAsync(data))
-    }
-
-
-
     async function bookAppointment(id, name){
         navigation.navigate('ScheduleBooking', {
             id, name
