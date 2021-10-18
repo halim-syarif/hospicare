@@ -79,8 +79,7 @@ export function deleteMed(payload) {
                 dispatch(deleteMedicine(payload));
             })
             .catch((err) => {
-                console.log(err);
-                // dispatch(setErrorMessage(err.reponse.data))
+               dispatch(setErrorMessage(err?.response?.data))
             });
     };
 }
@@ -96,7 +95,7 @@ export function editMedicine(id, payload) {
                 dispatch(editMed(data));
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setErrorMessage(err?.response?.data))
             });
     };
 }
@@ -112,7 +111,7 @@ export function fetchMedicineById(id) {
                 dispatch(fetchOneMedicine(data));
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setErrorMessage(err?.response?.data))
             });
     };
 }
@@ -131,7 +130,7 @@ export function editMedicineData(payload, id) {
                 dispatch(fetchMedicines())
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setErrorMessage(err?.response?.data))
             });
     };
 }
