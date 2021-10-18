@@ -126,7 +126,7 @@ export default function SignIn({navigation, route}) {
                 </View>
                 {errorLogin ? <Text style={styles.text_footer_error_login}>{errorLogin}</Text> : null }
                 <View style={styles.button}>
-                <TouchableOpacity
+                    <TouchableOpacity
                         onPress={handleSignIn}
                         style={styles.signUp}
                         >
