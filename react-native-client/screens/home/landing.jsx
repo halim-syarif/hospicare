@@ -84,6 +84,7 @@ export default function Landing({ navigation }) {
               size={20}
               color="black"
               style={{ marginRight: 15 }}
+              onPress={() => {navigation.openDrawer()}}
             />
           </View>
         )}
