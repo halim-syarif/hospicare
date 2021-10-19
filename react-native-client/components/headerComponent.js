@@ -20,24 +20,14 @@ import { scheduleAsync, setBookingDate } from '../store/actions'
 export default function HeaderComponent(){
     const dispatch = useDispatch()
 
-    const dateFormat = (value) => {
-        value = value.toString()
-        if(value.length < 2){
-            return `0${value}`
-        } else {
-            return value
-        }
-    }
-    
     const date = new Date()
     const [data, setData] = useState({
         poliid: 1,
         dayid: 0,
         date: new Date(1598051730000),
         show: false,
-        fullDate: `${dateFormat(date.getDate())}/${dateFormat(date.getMonth())}/${dateFormat(date.getFullYear())}`
+        fullDate: `${date.toLocaleDateString("id-ID")}`
     })
-    const [mode, setMode] = useState(data.date)
 
     const handleChange = (itemValue) => {
         setData({
@@ -54,21 +44,14 @@ export default function HeaderComponent(){
             date: currentDate,
             show: Platform.OS === 'ios',
             dayid: currentDate.getDay(),
-            fullDate: `${dateFormat(currentDate.getDate())}/${dateFormat(currentDate.getMonth())}/${dateFormat(currentDate.getFullYear())}`
+            fullDate: `${currentDate.toLocaleDateString("id-ID")}`
         })
     };
 
     const search = () => {
-        dispatch(scheduleAsync(data.poliid, data.dayid))
+        const chosenDate = data.dayid || date.getDay()
+        dispatch(scheduleAsync(data.poliid, chosenDate))
     }
-    
-    const showMode = (currentMode) => {
-        setData({
-            ...data,
-            show: true
-        });
-        setMode({currentMode});
-    };
 
     const showDateTimePicker = () => {
         setData({

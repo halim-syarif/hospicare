@@ -10,7 +10,7 @@ const SET_PATIENT_LOADING_REGISTER = 'patients/setLoadingRegister'
 
 const SET_SCHEDULE_DATA = 'schedules/setData'
 const SET_SCHEDULE_ERROR = 'schedules/setErrorSchedule'
-const SET_SCHEDULE_LOADING = 'schedules/setErrorSchedule'
+const SET_SCHEDULE_LOADING = 'schedules/setLoadingSchedule'
 
 const SET_HISTORY_LOADING = 'history/setHistoryLoading'
 const SET_HISTORY_DATA = 'history/setHistoryData'
