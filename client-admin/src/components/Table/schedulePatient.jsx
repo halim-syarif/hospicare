@@ -28,7 +28,9 @@ export default function SchedulePatient() {
   const { successMessage, isLoading: historyLoading } = useSelector(
     (state) => state.historyState
   );
-
+  const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+  const [selectedDay, setSelectedDay] = useState(new Date().getDay());
+  
   function openModal() {
     setIsOpen(true);
     setSelectedMedicines([]);
@@ -40,10 +42,15 @@ export default function SchedulePatient() {
     setSelectedMedicines([]);
     setdiagnosa('')
   }
+  useEffect(() => {
+    dispatch(
+      getPatients(selectedDay)
+    );
+  }, [selectedDay]);
 
   useEffect(() => {
+    dispatch(getPatients(selectedDay));
     dispatch(fetchMedicines());
-    dispatch(getPatients());
   }, []);
 
   function selectHandle(target) {
@@ -129,6 +136,32 @@ export default function SchedulePatient() {
 
   return (
     <>
+    <div
+        className="flex flex-row"
+        style={{
+          marginTop: -32,
+          maxWidth: "10%",
+          marginLeft: 16,
+          marginBottom: 10,
+        }}
+      >
+        {days.map((el, index) => {
+          return (
+            <div
+              key={index}
+              onClick={() => setSelectedDay(index+1)}
+              className={
+                "cursor-pointer text-white text-xs font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 " +
+                  (selectedDay === index + 1
+                  ? "bg-green-500"
+                  : "bg-gray-500")
+              }
+            >
+              {el}
+            </div>
+          );
+        })}
+      </div>
       <ToastContainer />
       <div className="flex flex-wrap">
         <div className="w-full px-4 mb-6">
