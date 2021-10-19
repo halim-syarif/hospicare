@@ -203,6 +203,7 @@ export {
     schedulesAsyncAll,
     scheduleAsync,
     setBookingDate,
+    setErrorBooking,
     setDoctorScheduleId,
     createBookingAsync,
  }
