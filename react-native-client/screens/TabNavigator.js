@@ -1,8 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from 'react-native-vector-icons';
-import Icon from 'react-native-vector-icons/Ionicons'
-
 import Home from './Home';
 import About from './About'
 import Schedule from './Schedule';
@@ -54,17 +52,6 @@ export default function TabNavigator({navigation}){
                     name="Schedule" 
                     options={{
                         headerShown: false
-                        // headerLeft: () => (
-                        //     <Icon.Button 
-                        //         name="ios-menu" 
-                        //         size={25}
-                        //         backgroundColor="#009387"
-                        //         onPress={() => {navigation.openDrawer()}}/>
-                        // ),
-                        // headerStyle: {
-                        //     backgroundColor: "#009387",
-                        // },
-                        // headerTintColor: '#fff'
                     }}
                     component={Schedule}/>
                 <Tab.Screen name="History" options={{headerShown: false}} component={History}/>

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import Modal from "react-native-modal";
+import StatusBarLight from "../../components/StatusBarLight";
 
 export default function DetailHistory({ navigation, route }) {
   const { data } = route.params;
@@ -27,6 +28,7 @@ export default function DetailHistory({ navigation, route }) {
 
   return (
     <ScrollView style={styles.container}>
+      <StatusBarLight/>
       <View style={styles.active}>
         <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
         <View style={styles.header}>
