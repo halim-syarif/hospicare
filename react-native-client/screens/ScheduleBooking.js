@@ -7,24 +7,25 @@ import {
     TextInput,
     TouchableOpacity,
     StatusBar,
-    ScrollView,
     FlatList,
     LogBox,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
 import {LinearGradient} from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
-import { createBookingAsync, registerAsync, setErrorRegister } from '../store/actions';
+import Modal from "react-native-modal";
+import { createBookingAsync, setErrorBooking } from '../store/actions';
+import { StackActions, } from '@react-navigation/native';
 
 export default function SignIn({navigation, route}) {
-    const errorRegister = useSelector(state => state.patients.errorRegister)
-    const loadingRegister = useSelector(state => state.patients.loadingRegister)
+    const errorBooking = useSelector(state => state.booking.errorBooking)
+    const loadingBooking = useSelector(state => state.booking.loadingBooking)
     const DoctorScheduleId = useSelector(state => state.booking.doctorScheduleId)
     const booking_date = useSelector(state => state.booking.bookingDate)
-    // const PatientId = useSelector(state => state.patient.id) || 1
+    const PatientId = useSelector(state => state.patient?.id) || 1
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -32,12 +33,14 @@ export default function SignIn({navigation, route}) {
     }, [])
 
     useEffect(() => {
-        dispatch(setErrorRegister(''))
+        dispatch(setErrorBooking(''))
     }, [])
 
     const [data, setData] = useState({
         keluhan: '',
         isValidSymptoms: false,
+        modalData: '',
+        isModalVisible: false
         
     })
 
@@ -57,9 +60,9 @@ export default function SignIn({navigation, route}) {
         }
     }
 
-    const handleBooking = () => {
+    const handleBooking = async () => {
         const payload = {
-            PatientId: 1,
+            PatientId,
             DoctorScheduleId,
             booking_date,
             keluhan: data.keluhan
@@ -69,12 +72,53 @@ export default function SignIn({navigation, route}) {
         } else {
             dispatch(createBookingAsync(payload))
         }
+        openModal()
     }
+
+    function openModal(value) {
+        setData({
+            ...data,
+            isModalVisible: true,
+            modalData: value
+
+        });
+      }
+
+      function goToHistory(){
+        navigation.dispatch(
+            StackActions.popToTop()
+        )
+        navigation.navigate("History")
+      }
 
     
 
     return (
         <View style={styles.container}>
+            <Modal
+                animationIn="fadeIn"
+                isVisible={data.isModalVisible}
+                animationType="slide"
+                animationInTiming={1000}
+                animationOutTiming={1000}
+
+            >
+                <View style={styles.modalView}>
+                    <View style={styles.modalHeader}>
+                        <Text style={styles.modalHeaderText}>Information</Text>
+                    </View> 
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalContentText}>You have successfully bookeed your appointment click the button belom to see your booking history </Text>
+                        <TouchableOpacity 
+                            onPress={() => goToHistory()}
+                            style={styles.closeModal}
+                        >
+                            <Text>History</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
             <StatusBar backgroundColor="#009387" barStyle='light-content'/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>Book Your Appointment</Text>
@@ -91,7 +135,7 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Enter Any Symptomps That You Might be Having"
+                            placeholder="Enter any symptomps that you might be having"
                             style={styles.textInput}
                             value={data.keluhan}
                             autoCapitalize="none"
@@ -111,17 +155,17 @@ export default function SignIn({navigation, route}) {
                 </View>
                 {data.isValidSymptoms ? null :
                 <Animatable.View animation="fadeInLeft" duration={1000}>
-                    <Text style={styles.text_footer_error_register_validation}>Symptoms cannot be empty</Text>
+                    <Text style={styles.text_footer_error_booking_validation}>Symptoms cannot be empty</Text>
                 </Animatable.View>}
 
-                {errorRegister ? 
+                {errorBooking ? 
                     <FlatList
                     numColumns={2}
                     horizontal={false}
                     data={errorRegister}
                     renderItem={({item}) => 
                         (
-                            <Text style={styles.text_footer_error_register}>{item}</Text>
+                            <Text style={styles.text_footer_error_booking}>{item}</Text>
                         )
                     }
                     keyExtractor={item => item}
@@ -132,23 +176,16 @@ export default function SignIn({navigation, route}) {
                 <View style={styles.button}>
                     <TouchableOpacity
                         onPress={handleBooking}
-                        style={styles.signUp}
+                        style={styles.createAppointment}
                         >
                         <LinearGradient
                             colors={['#08d4c4', '#01ab9d']}
                             style={styles.signIn}
                         >
-                            {loadingRegister ? 
+                            {loadingBooking ? 
                             <ActivityIndicator style={styles.loading} size="small" color="#0000ff"/> :
-                            <Text style={styles.textSign}>Create Appointment</Text>}
+                            <Text style={styles.textCreateAppointment}>Create Appointment</Text>}
                         </LinearGradient>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('SignInScreen')}
-                        style={styles.signUp}
-                    >
-                        <Text style={styles.textSignUp}>Sign In</Text>
                     </TouchableOpacity>
                 </View>
             </Animatable.View>
@@ -160,6 +197,46 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#009387'
+    },
+
+    modalView: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        padding: 20,
+        width: "100%",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+
+    modalHeader: {
+        flexDirection: "row",
+        justifyContent: "center",
+        width: "100%",
+        marginBottom: 30,
+      },
+
+    modalHeaderText: {
+        fontSize: 25,
+        fontWeight: 'bold'
+    },
+
+    modalContent: {
+        flexDirection: "column",
+        justifyContent: "center",
+        width: "100%",
+      },
+
+    modalContentText: {
+        flexDirection: "column",
+        justifyContent: "center",
+        width: "100%",
     },
 
     header: {
@@ -202,14 +279,14 @@ const styles = StyleSheet.create({
         height: '100%'
     },
 
-    text_footer_error_register: {
+    text_footer_error_booking: {
         color: 'red',
         fontSize: 15,
         marginTop: 35,
         paddingLeft: 5
     },
 
-    text_footer_error_register_validation: {
+    text_footer_error_booking_validation: {
         color: 'red',
         fontSize: 15,
         marginTop: 5,
@@ -244,7 +321,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
 
-    signUp: {
+    createAppointment: {
         borderColor: '#009387',
         borderWidth: 1,
         marginTop: 15,
@@ -255,15 +332,20 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
 
-    textSign: {
+    closeModal: {
+        borderColor: '#009387',
+        borderWidth: 1,
+        marginTop: 15,
+        width: '100%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
+
+    textCreateAppointment: {
         fontSize: 18,
         fontWeight: 'bold',
         color: '#fff'
     },
-
-    textSignUp: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#009387',
-    }
 })
