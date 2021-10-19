@@ -1,14 +1,14 @@
 {
     "development": {
       "username": "postgres",
-      "password": "halim249",
+      "password": "postgres",
       "database": "Hospicare",
       "host": "127.0.0.1",
       "dialect": "postgres"
     },
     "test": {
       "username": "postgres",
-      "password": "halim249",
+      "password": "postgres",
       "database": "HospicareTesting",
       "host": "127.0.0.1",
       "dialect": "postgres"
