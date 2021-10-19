@@ -11,6 +11,9 @@ class EmployeeController {
       }
       let result = await Employee.findOne({
         where: { email },
+        include: {
+          model: Poli
+        }
       });
       if (!result || !checkPassword(password, result.password)) {
         throw { name: "UserNotFound" };
@@ -22,14 +25,15 @@ class EmployeeController {
         email: result.email,
         role: result.role,
       };
+
+      if(payload.role === 'Doctor'){
+        payload.poli = result.Poli.id
+      }
       
       let access_token = signToken(payload);
+      payload.access_token = access_token
 
-      res.status(200).json({
-        access_token,
-        name: result.name,
-        role: result.role,
-      });
+      res.status(200).json(payload);
     } catch (err) {
       next(err);
     }
