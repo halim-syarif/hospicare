@@ -20,6 +20,7 @@ import {
   FontAwesome,
   Entypo,
 } from "@expo/vector-icons";
+import StatusBarLight from "../../components/StatusBarLight";
 
 export default function Landing({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -235,7 +236,7 @@ export default function Landing({ navigation }) {
         </ScrollView>
       )}
 
-      <StatusBar style="auto" />
+      <StatusBarLight/>
     </SafeAreaView>
   );
 }
