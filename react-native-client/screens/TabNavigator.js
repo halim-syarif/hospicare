@@ -49,7 +49,7 @@ export default function TabNavigator({navigation}){
                 tabBarInactiveTintColor: 'gray',
                 })}
             >
-                <Tab.Screen name="Home" component={Home}/>
+                <Tab.Screen name="Home" options={{headerShown: false}} component={Home}/>
                 <Tab.Screen 
                     name="Schedule" 
                     options={{
@@ -67,7 +67,7 @@ export default function TabNavigator({navigation}){
                         // headerTintColor: '#fff'
                     }}
                     component={Schedule}/>
-                <Tab.Screen name="History" component={History}/>
+                <Tab.Screen name="History" options={{headerShown: false}} component={History}/>
                 <Tab.Screen name="About" component={About}/>
             </Tab.Navigator>
     )

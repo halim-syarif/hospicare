@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   active: {
-    marginBottom: 30,
+    marginBottom: 20,
   },
   card: {
     marginTop: 10,

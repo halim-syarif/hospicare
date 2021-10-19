@@ -9,9 +9,9 @@ export default function History() {
 
   return (
     <>
-      <Stack.Navigator initialRouteName="MainHistory">
+      <Stack.Navigator initialRouteName="Riwayat Pemesanan">
         <Stack.Screen
-          name="History"
+          name="Riwayat Pemesanan"
           component={MainHistory}
         />
         <Stack.Screen
