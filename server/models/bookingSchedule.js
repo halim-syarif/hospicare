@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
     },
     keluhan: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
     status: DataTypes.BOOLEAN
   }, {
