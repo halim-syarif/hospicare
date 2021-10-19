@@ -83,19 +83,12 @@ export default function SignIn({navigation, route}) {
 
         });
       }
-    
-      function closeModal() {
-        setData({
-            ...data,
-            isModalVisible: false,
-        });
-      }
 
-      function goToHome(){
+      function goToHistory(){
         navigation.dispatch(
             StackActions.popToTop()
         )
-        navigation.navigate("Home")
+        navigation.navigate("History")
       }
 
     
@@ -105,22 +98,22 @@ export default function SignIn({navigation, route}) {
             <Modal
                 animationIn="fadeIn"
                 isVisible={data.isModalVisible}
-                onBackdropPress={() => closeModal()}
                 animationType="slide"
                 animationInTiming={1000}
                 animationOutTiming={1000}
+
             >
                 <View style={styles.modalView}>
                     <View style={styles.modalHeader}>
                         <Text style={styles.modalHeaderText}>Information</Text>
                     </View> 
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalContentText}>You have successfully bookeed your appointment click the button belom to go to home </Text>
+                        <Text style={styles.modalContentText}>You have successfully bookeed your appointment click the button belom to see your booking history </Text>
                         <TouchableOpacity 
-                            onPress={() => goToHome()}
+                            onPress={() => goToHistory()}
                             style={styles.closeModal}
                         >
-                            <Text>Home</Text>
+                            <Text>History</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

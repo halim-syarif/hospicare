@@ -1,4 +1,4 @@
-import React, { useState  } from 'react'
+import React, { useEffect, useState  } from 'react'
 import { useDispatch } from 'react-redux';
 import { 
     ActivityIndicator,
@@ -21,6 +21,9 @@ export default function HeaderComponent(){
     const dispatch = useDispatch()
 
     const date = new Date()
+    useEffect(() => {
+        dispatch(setBookingDate(date))
+    })
     const [data, setData] = useState({
         poliid: 1,
         dayid: 0,
@@ -37,7 +40,7 @@ export default function HeaderComponent(){
     }
 
     const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || data.date;
+        const currentDate = selectedDate || date;
         dispatch(setBookingDate(currentDate))
         setData({
             ...data, 
