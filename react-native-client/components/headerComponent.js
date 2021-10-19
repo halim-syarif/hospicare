@@ -102,7 +102,6 @@ export default function HeaderComponent(){
                     ? <DateTimePicker
                         testID="dateTimePicker"
                         value={data.date}
-                        mode={mode}
                         is24Hour={true}
                         display="default"
                         onChange={onChange}
