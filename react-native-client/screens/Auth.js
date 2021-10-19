@@ -57,5 +57,9 @@ export default function Auth(){
             </Tab.Navigator>  */}
             <DrawerNavigator/>
         </>
+        //     : 
+        //     <StackNavigator/>
+        //     }
+        // </View>
     )
 }
