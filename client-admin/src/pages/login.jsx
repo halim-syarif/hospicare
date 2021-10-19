@@ -17,7 +17,7 @@ export default function Login() {
 
   useEffect(() => {
     if(isLogin || localStorage.getItem('access_token')){ 
-      history.push('/home')
+      history.push('/schedule')
     }
     // eslint-disable-next-line
   }, [isLogin])
