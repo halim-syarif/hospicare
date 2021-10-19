@@ -10,12 +10,12 @@ import StackNavigator from './StackNavigator';
 export default function Auth(){
     const access_token = useSelector(state => state.patients.access_token)
     return (
-        // <View style={{flex: 1}}>
-        //     {access_token ? 
+        <View style={{flex: 1}}>
+            {access_token ? 
             <DrawerNavigator/>
-        //     : 
-        //     <StackNavigator/>
-        //     }
-        // </View>
+            : 
+            <StackNavigator/>
+            }
+        </View>
     )
 }
