@@ -26,12 +26,17 @@ export default function Landing({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const [searchActive, setSearchActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('')
   const searchArea = useRef(null)
 
   function hideSearch(){
     searchArea.current.blur()
     setSearchActive(false);
   }
+
+  const updateSearch = (search) => {
+    setSearchQuery(search);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,6 +55,8 @@ export default function Landing({ navigation }) {
               borderBottomWidth: 0,
             }}
             placeholder="type docter name"
+            onChangeText={updateSearch}
+            value={searchQuery}
             onFocus={() => setSearchActive(true)}
           />
         </View>
@@ -84,6 +91,7 @@ export default function Landing({ navigation }) {
               size={20}
               color="black"
               style={{ marginRight: 15 }}
+              onPress={() => {navigation.openDrawer()}}
             />
           </View>
         )}
