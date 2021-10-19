@@ -7,8 +7,19 @@ export default function Schedule() {
 
     return (
       <Stack.Navigator initialRouteName="ScheduleFilter">
-        <Stack.Screen name="ScheduleFilter" options={{headerShown: false}} component={ScheduleFilter}/>
-        <Stack.Screen name="ScheduleBooking" options={({ route }) => ({title : route.params.name})} component={ScheduleBooking}/>
+            <Stack.Screen name="ScheduleFilter" options={{headerShown: false}} component={ScheduleFilter}/>
+            <Stack.Screen name="ScheduleBooking" 
+                options={({ route }) => ({
+                    title : route.params.name,
+                    headerStyle: {
+                        backgroundColor: '#009387'
+                    },
+                    headerTitleStyle: {
+                        color: '#fff',
+                        fontWeight: 'bold'
+                    }
+                })} 
+                    component={ScheduleBooking}/>
       </Stack.Navigator>
     );
 }
