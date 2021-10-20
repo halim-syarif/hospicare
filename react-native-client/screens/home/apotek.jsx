@@ -1,13 +1,32 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import StatusBarLight from '../../components/StatusBarLight';
+import React, { useEffect } from 'react';
+import { StyleSheet, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMedicines } from '../../store/actions/medicine';
+import MedicineCard from "../../components/MedicineCard"
 
 export default function Apotek({navigation, route}) {
+  const medicines = useSelector(state => state.medicines.medicines)
+  const dispatch = useDispatch()
 
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <StatusBarLight/>
-        <Text>Apotek</Text>
-      </View>
-    );
+  useEffect(() => {
+    dispatch(fetchMedicines())
+  }, [])
+
+  return (
+    <ScrollView style={styles.container}>
+      {medicines?.rows?.map((el, index) => {
+        return (
+          <MedicineCard key={index} data={el}/>
+        )
+      })}
+    </ScrollView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    marginBottom: 15
+  }
+});
