@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { setDoctorScheduleId } from '../store/actions';
 import { Feather } from '@expo/vector-icons'
+import { priceFormat } from '../helpers/priceFormat';
 
 
 //Drop down untuk tanggal poli 
@@ -31,12 +32,6 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
         navigation.navigate('ScheduleBooking', {
             id, name
         })
-    }
-
-
-    const priceFormat = (price) => {
-        const formattedPrice = `Rp ${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
-        return formattedPrice
     }
 
     return (
