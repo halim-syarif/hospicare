@@ -11,13 +11,10 @@ import {
     Avatar,
     Title,
     Caption,
-    Paragraph,
     Drawer,
-    Text,
-    TouchableRipple,
-    Switch
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Foundation } from 'react-native-vector-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deletePatientData } from '../store/actions'
  
@@ -27,11 +24,6 @@ export default function DrawerContent(props){
     const name = useSelector(state => state.patients.name) || "Patient_Name"
     const email = useSelector(state => state.patients.email) || "Patient_Email"
     
-    function handleFilter(genreId){
-        const { navigation } = props
-        navigation.navigate('FilteredMovies', {genreId})
-    }
-
     const signOut = () => {
         dispatch(deletePatientData())
     }
@@ -64,29 +56,29 @@ export default function DrawerContent(props){
                                 />
                             )}
                             label="Home"
-                            onPress={() => {}}
+                            onPress={() => {props.navigation.navigate('Home')}}
                         />
                         <DrawerItem
                             icon={({color, size}) => (
                                 <Icon
-                                    name="account-outline"
+                                    name="calendar"
                                     color={color}
                                     size={size}
                                 />
                             )}
-                            label="Profile"
-                            onPress={() => {}}
+                            label="Schedules"
+                            onPress={() => {props.navigation.navigate('Schedule')}}
                         />
                         <DrawerItem
                             icon={({color, size}) => (
-                                <Icon
-                                    name="bookmark-outline"
+                                <Foundation
+                                    name="clipboard-notes"
                                     color={color}
                                     size={size}
                                 />
                             )}
-                            label="Bookmark"
-                            onPress={() => {}}
+                            label="History"
+                            onPress={() => {props.navigation.navigate('History')}}
                         />
                     </Drawer.Section>
                 </View>

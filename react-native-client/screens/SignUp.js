@@ -6,7 +6,6 @@ import {
     Platform,
     TextInput,
     TouchableOpacity,
-    StatusBar,
     ScrollView,
     FlatList,
     LogBox,
@@ -14,10 +13,11 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import * as Animatable from 'react-native-animatable'
-import {LinearGradient} from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
 import { registerAsync, setErrorRegister } from '../store/actions';
+import StatusBarLight from '../components/StatusBarLight';
 
 export default function SignIn({navigation, route}) {
     const errorRegister = useSelector(state => state.patients.errorRegister)
@@ -210,7 +210,7 @@ export default function SignIn({navigation, route}) {
 
     return (
         <ScrollView style={styles.container}>
-            <StatusBar backgroundColor="#009387" barStyle='light-content'/>
+            <StatusBarLight/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>Register Now</Text>
             </View>

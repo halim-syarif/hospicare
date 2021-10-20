@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { 
     View, 
     Text, 
@@ -6,17 +6,15 @@ import {
     Platform,
     TextInput,
     TouchableOpacity,
-    StatusBar,
     ActivityIndicator
 } from 'react-native';
 import * as Animatable from 'react-native-animatable'
-import { useFocusEffect } from '@react-navigation/native'
-
-import {LinearGradient} from 'expo-linear-gradient'
+import { LinearGradient } from 'expo-linear-gradient'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Feather } from '@expo/vector-icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginAsync, setErrorLogin } from '../store/actions';
+import StatusBarLight from '../components/StatusBarLight';
 
 
 export default function SignIn({navigation, route}) {
@@ -68,11 +66,12 @@ export default function SignIn({navigation, route}) {
             secureTextEntry: true
         })
         dispatch(loginAsync(data))
+        dispatch(setErrorLogin(''))
     }
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor="#009387" barStyle='light-content'/>
+            <StatusBarLight/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>Welcome</Text>
             </View>

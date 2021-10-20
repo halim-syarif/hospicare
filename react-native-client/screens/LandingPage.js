@@ -9,6 +9,7 @@ import {
 import * as Animatable from 'react-native-animatable'
 import {LinearGradient} from 'expo-linear-gradient'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import StatusBarLight from '../components/StatusBarLight'
 
 const { height } = Dimensions.get("screen")
 const height_logo = height * 0.28
@@ -16,6 +17,7 @@ const height_logo = height * 0.28
 export default function LandingPage({navigation}){
  return (
     <View style={styles.container}>
+        <StatusBarLight/>
         <View style={styles.header}>
             <Animatable.Image
                 animation="bounceIn"

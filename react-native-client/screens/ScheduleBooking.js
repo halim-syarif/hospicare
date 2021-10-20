@@ -6,7 +6,6 @@ import {
     Platform,
     TextInput,
     TouchableOpacity,
-    StatusBar,
     FlatList,
     LogBox,
     ActivityIndicator,
@@ -19,6 +18,7 @@ import { Feather } from '@expo/vector-icons'
 import Modal from "react-native-modal";
 import { createBookingAsync, setErrorBooking } from '../store/actions';
 import { StackActions, } from '@react-navigation/native';
+import StatusBarLight from '../components/StatusBarLight';
 
 export default function SignIn({navigation, route}) {
     const errorBooking = useSelector(state => state.booking.errorBooking)
@@ -108,7 +108,7 @@ export default function SignIn({navigation, route}) {
                         <Text style={styles.modalHeaderText}>Information</Text>
                     </View> 
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalContentText}>You have successfully bookeed your appointment click the button belom to see your booking history </Text>
+                        <Text style={styles.modalContentText}>You have successfully booked your appointment click the button below to see your booking history </Text>
                         <TouchableOpacity 
                             onPress={() => goToHistory()}
                             style={styles.closeModal}
@@ -119,7 +119,7 @@ export default function SignIn({navigation, route}) {
                 </View>
             </Modal>
 
-            <StatusBar backgroundColor="#009387" barStyle='light-content'/>
+            <StatusBarLight/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>Book Your Appointment</Text>
             </View>
