@@ -1,5 +1,5 @@
 const app = require("../app.js");
-const { MedicationHistory, Employee, Patient, BookingSchedule,  sequelize } = require("../models");
+const { MedicationHistory, Employee,Day, Medicine, Patient,DoctorSchedule, BookingSchedule,  sequelize } = require("../models");
 const request = require("supertest");
 const { hashPassword } = require("../helpers/bcrypt.js");
 const { set } = require("../app.js");
@@ -80,7 +80,7 @@ describe("History Routes Test", () => {
             updatedAt: new Date()
           }
     ]
-    const doctorScheduleId = [
+    const doctorSchedules = [
         {
             EmployeeId: "1",
             DayId: "1",
@@ -101,6 +101,15 @@ describe("History Routes Test", () => {
             createdAt: new Date(),
             updatedAt: new Date()
           }
+    ]
+    const medicines = [
+        {
+          name: "Parasetamol (asetaminofen)",
+          price: 20000,
+          description: 'menurunkan panas (antipiretik) dan meredakan nyeri otot atau sendi',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
     ]
     const bookingData = [
         {
@@ -167,7 +176,31 @@ describe("History Routes Test", () => {
                 })
             })
             .then(() => {
+                return Medicine.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
                 return Patient.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return Day.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return DoctorSchedule.destroy({
                     where: {},
                     truncate: true,
                     cascade: true,
@@ -188,11 +221,15 @@ describe("History Routes Test", () => {
             .then(() => {
                 return queryInterface.bulkInsert("Patients", patientId)
             })
+
+            .then(() => {
+                return queryInterface.bulkInsert("Medicines", medicines)
+            })
             .then(() => {
                 return queryInterface.bulkInsert("Days", dayId)
             })
             .then(() => {
-                return queryInterface.bulkInsert("DoctorSchedules", doctorScheduleId)
+                return queryInterface.bulkInsert("DoctorSchedules", doctorSchedules)
             })
             
             .then(() => {

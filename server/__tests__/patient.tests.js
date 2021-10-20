@@ -145,8 +145,9 @@ describe("Patient Routes Test", () => {
         name: "Kartika Usamah",
         age: 30,
         gender: "female",
+        password: 'password',
         address: "Jl Melasti 18 A, Dki Jakarta",
-        email: "adriansyah2.laila@yahoo.com",
+        email: "adriansyah55.laila@yahoo.com",
         imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -155,7 +156,7 @@ describe("Patient Routes Test", () => {
         const { body, status } = response;
         expect(status).toBe(201);
         expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('email', "adriansyah2.laila@yahoo.com")
+        expect(body).toHaveProperty('email', "adriansyah55.laila@yahoo.com")
         expect(body).toHaveProperty('address', "Jl Melasti 18 A, Dki Jakarta")
         done();
       })

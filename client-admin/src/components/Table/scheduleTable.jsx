@@ -64,8 +64,8 @@ export default function ScheduleTable({ poliid }) {
               className={
                 "cursor-pointer text-white text-xs font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 " +
                   (selectedDay === index + 1
-                  ? "bg-green-500"
-                  : "bg-gray-500")
+                  ? "bg-emerald-500"
+                  : "bg-gray-400")
               }
             >
               {el}
@@ -83,7 +83,7 @@ export default function ScheduleTable({ poliid }) {
             <>
             {schedulesList?.map((el) => {
               return (
-                <div key={el.id} className="w-full lg:w-6/12 xl:w-2/12 px-4 mb-6">
+                <div key={el.id} className="w-full lg:w-6/12 xl:w-2/12 px-2 mb-6">
                   <div
                     style={{ minHeight: 300, maxHeight: 300 }}
                     className="overflow-y-auto relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
@@ -92,8 +92,8 @@ export default function ScheduleTable({ poliid }) {
                       <div className="flex flex-row justify-between">
                         <div className="relative ">
                           <h3 className="font-semibold text-base text-blueGray-700">
-                            {el.Employee.name.length > 35
-                              ? el.Employee.name.slice(0, 30) + " ..."
+                            {el.Employee.name.length > 25
+                              ? el.Employee.name.slice(0, 20) + " ..."
                               : el.Employee.name}
                           </h3>
                         </div>
@@ -128,7 +128,7 @@ export default function ScheduleTable({ poliid }) {
                             <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
                               Status
                             </th>
-                            <th className="px-6 bg-blueGray-50 max-w-20 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
+                            <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
                               Action
                             </th>
                           </tr>
@@ -143,18 +143,24 @@ export default function ScheduleTable({ poliid }) {
                                 <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                   {patients.Patient.name}
                                 </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  {patients.status ? "checked" : "unchecked"}
-                                </td>
-                                <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                  <div className="flex flex-row justify-between ">
-                                    <div className="cursor-pointer">
-                                      <i className="fas fa-minus-circle"></i>
+                                <td className="border-t-0 px-6 align-middle text-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                  {patients.status ? (
+                                    <div className="bg-green-400 justify-end active:bg-indigo-600 text-xs px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+
+                                      Checked
                                     </div>
+                                  ):( 
+                                    <div className="bg-yellow-400 justify-end active:bg-indigo-600 text-xs px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+
+                                      Unchecked
+                                    </div>
+                                  )}
+                                </td>
+                                <td className="border-t-0 px-6 align-middle text-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                  
                                     <div className="cursor-pointer">
                                       <i className="fas fa-paper-plane"></i>
                                     </div>
-                                  </div>
                                 </td>
                               </tr>
                             );

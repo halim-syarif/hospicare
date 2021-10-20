@@ -1,7 +1,8 @@
 const initialState = {
     isLogin: false,
     isLoading: false,
-    errorMessage: ''
+    errorMessage: '',
+    patients: []
 }
 
 export default function reducer(state = initialState, action){
@@ -12,6 +13,8 @@ export default function reducer(state = initialState, action){
             return {...state, isLoading: action.payload}
         case 'users/setErrorMessage':
             return {...state, errorMessage: action.payload}
+        case 'patient/setPatient':
+            return {...state, patients: action.payload}
         default: 
             return state
     }
