@@ -4,6 +4,7 @@ import {
   SET_HISTORY_ERROR,
   SET_ANTRIAN,
   SET_ANTRIAN_LOADING,
+  SET_MIDTRANS
 } from "../keys";
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   histories: [],
   antrian: [],
   antrianLoading: false,
+  midtransUrl: ''
 };
 
 function reducer(state = initialState, action) {
@@ -30,6 +32,8 @@ function reducer(state = initialState, action) {
       });
       newAntrian.push(action.payload);
       return { ...state, antrian: newAntrian };
+    case SET_MIDTRANS:
+      return { ...state, midtransUrl: action.payload };
     default:
       return state;
   }

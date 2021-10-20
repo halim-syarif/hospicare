@@ -44,6 +44,8 @@ export default function MainHistory({ navigation, route }) {
     let history = [];
     histories.forEach((el) => {
       if (el.MedicationHistory) {
+        const paymentId = el.Patient.name.split(' ')[0] + el.MedicationHistory.id
+        el.paymentId = paymentId
         history.push(el);
       } else {
         active.push(el);
