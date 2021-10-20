@@ -1,6 +1,7 @@
 const app = require("../app.js");
 const { Poli, Employee,  sequelize } = require("../models");
 const request = require("supertest");
+const {hashPassword} = require('../helpers/bcrypt')
 
 const { queryInterface } = sequelize;
 
