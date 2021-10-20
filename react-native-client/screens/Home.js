@@ -1,11 +1,40 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Landing from './home/landing';
+import Lab from './home/lab';
+import Apotek from './home/apotek';
+import Dokter from './home/dokter';
+import Poliklinik from './home/poliklinik';
 
-export default function Home({navigation, route}) {
+const Stack = createNativeStackNavigator()
 
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home</Text>
-      </View>
-    );
+export default function Home() {
+
+  return (
+    <>
+      <Stack.Navigator initialRouteName="Landing">
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="Landing"
+          component={Landing}
+        />
+        <Stack.Screen
+          name="Poliklinik"
+          component={Poliklinik}
+        />
+        <Stack.Screen
+          name="Lab"
+          component={Lab}
+        />
+        <Stack.Screen
+          name="Apotek"
+          component={Apotek}
+        />
+        <Stack.Screen
+          name="Dokter"
+          component={Dokter}
+        />
+      </Stack.Navigator>
+    </>
+  );
 }

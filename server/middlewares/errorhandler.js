@@ -74,6 +74,10 @@ const errorHandler = (err, req, res, next) => {
       code = err.code
       message = err.message
       break;
+    case 'MidtransError':
+      code = err.ApiResponse.status_code
+      message = err.ApiResponse.status_message
+      break;
     case 'bookinglimitreached':
       code = 400
       message = 'booking limit reached'

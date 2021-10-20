@@ -27,6 +27,7 @@ class PatientController {
         id: result.id,
         name: result.name,
         email: result.email,
+        imgUrl: result.imgUrl
       };
       let access_token = signToken(payload);
 

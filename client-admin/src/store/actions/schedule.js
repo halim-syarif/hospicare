@@ -70,10 +70,12 @@ export function getSchedules({poliid, dayid }) {
   }
 }
 
-export function getPatients() {
+export function getPatients(day) {
   return (dispatch) => {
+    const id = localStorage.getItem('id')
+    const poli = localStorage.getItem('poli')
     dispatch(setLoading(true))
-    appApi.get(`/bookings/10/3/37`)
+    appApi.get(`/bookings/${poli}/${day}/${id}`)
     .then(response => {
       dispatch(setPatients(response.data))
     })

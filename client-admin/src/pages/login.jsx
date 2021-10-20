@@ -17,7 +17,7 @@ export default function Login() {
 
   useEffect(() => {
     if(isLogin || localStorage.getItem('access_token')){ 
-      history.push('/home')
+      history.push('/schedule')
     }
     // eslint-disable-next-line
   }, [isLogin])
@@ -53,13 +53,13 @@ export default function Login() {
   return (
     <>
       <ToastContainer />
-      <div className="container mx-auto mt-24 px-4 h-full">
+      <div style={styles.main}>
         <div className="flex content-center items-center justify-center h-full">
-          <div className="w-full lg:w-4/12 px-4">
-            <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
-              <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
+          <div className="w-full lg:w-4/12 px-4 ">
+            <div className="relative flex flex-col bg-gray-300 bg-opacity-70 min-w-0 break-words w-full rounded-2xl mb-6 shadow-2xl  border-0">
+              <div className="flex-auto px-4 lg:px-10 py-10 pt-0 shadow-2xl ">
                 <div className="text-blueGray-400 text-center mb-3 mt-10 font-bold">
-                  <div>Sign in with credentials</div>
+                  <img className="w-40 flex mx-auto" src={require("../assets/img/hospicare-logos.png").default} />
                 </div>
                 <form onSubmit={(e) => loginHandle(e)}>
                   <div className="relative w-full mb-3">
@@ -122,4 +122,17 @@ export default function Login() {
       </div>
     </>
   );
+}
+
+const styles = {
+  main: {
+    backgroundImage: `url("https://t3.ftcdn.net/jpg/02/16/47/22/360_F_216472247_cT66WDoS0fp1s3wC7eaykMJNDGVbOBPq.jpg")`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'white',
+    opacity: 0.7
+  }
 }

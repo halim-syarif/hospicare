@@ -149,13 +149,30 @@ describe("DoctorSchedule routes test", () => {
 
     test("200 Success get all schedules - should return all schedule data", (done) => {
         request(app)
+            .get("/schedules?limit=10")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                expect(body).toHaveProperty("count", expect.any(Number));
+                expect(Array.isArray(body.rows)).toBeTruthy();
+                // expect(Array.isArray(body)).toBeTruthy();
+                // expect(body.length).toBeGreaterThan(0);
+                return done();
+            });
+    });
+
+    test("200 Success get all schedules without limit - should return all schedule data", (done) => {
+        request(app)
             .get("/schedules")
             .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response;
                 expect(status).toBe(200);
-                expect(Array.isArray(body)).toBeTruthy();
-                expect(body.length).toBeGreaterThan(0);
+                expect(body).toHaveProperty("count", expect.any(Number));
+                expect(Array.isArray(body.rows)).toBeTruthy();
+                // expect(Array.isArray(body)).toBeTruthy();
+                // expect(body.length).toBeGreaterThan(0);
                 return done();
             });
     });

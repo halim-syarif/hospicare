@@ -1,29 +1,67 @@
-import React, {useEffect} from "react";
-import PropTypes from "prop-types"
-import {useDispatch, useSelector} from "react-redux"
-import { fetchMedicines, deleteMed } from "../../store/actions/medicineAction";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchMedicines,
+  deleteMed,
+  fetchMedicineById,
+  editMedicineData,
+} from "../../store/actions/medicineAction";
 import Modal from "react-modal";
+import Pagination from "../Pagination/pagination";
 // import ReactPaginate from "react-paginate"
-
-
 
 // components
 Modal.setAppElement("#root");
 export default function MedicineTable({ color }) {
-  const medicineData = useSelector(state => state.medicineState.medicines)
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  const dispatch = useDispatch()
+  const medicineData = useSelector((state) => state.medicineState.medicines);
+  const [medicineId, setMedicineId] = useState(null);
+  const [inputForm, setInputForm] = useState({
+    name: "",
+    price: "",
+    description: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const medicine = useSelector((state) => state.medicineState.medicine);
+  const dispatch = useDispatch();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [loading, setLoading] = useState(false)
+  const [medicinesPerPage] = useState(20);
+
+  // Get current medicines
+  // const indexOfLastMedicine = currentPage * medicinesPerPage;
+  // const indexOfFirstMedicine = indexOfLastMedicine - medicinesPerPage;
+  // const currentMedicines = medicineData.rows?.slice(indexOfFirstMedicine, indexOfLastMedicine)
+  // console.log(currentMedicines, "??????");
+
+  // Change page
+  const paginateFront = () => setCurrentPage(currentPage + 1);
+  const paginateBack = () => setCurrentPage(currentPage - 1);
 
   useEffect(() => {
-      dispatch(fetchMedicines())
-  }, [])
+    dispatch(fetchMedicines());
+  }, []);
 
-  function handleEdit(id) {
-      //redirect / tampilkan form edit
-      console.log(id);
-  }
+  useEffect(() => {
+    if (!medicineId) {
+      console.log("Invalid ID");
+    } else {
+      dispatch(fetchMedicineById(medicineId));
+    }
+  }, [medicineId]);
 
-  function openModal() {
+  useEffect(() => {
+    console.log(medicine, "currentMedicine");
+    if (medicine) {
+      setInputForm({ ...medicine });
+    }
+  }, [medicine]);
+
+  function openModal(id) {
+    setMedicineId(id);
     setIsOpen(true);
   }
 
@@ -31,164 +69,217 @@ export default function MedicineTable({ color }) {
     setIsOpen(false);
   }
 
-  
+  function editMedicine() {
+    if (!inputForm.name || !inputForm.price || !inputForm.description) {
+      setErrorMessage("Please input all field");
+    } else {
+      dispatch(editMedicineData(inputForm, medicineId));
+      setIsOpen(false);
+    }
+  }
+
   return (
     <>
-      <div
-        className={
-          "relative flex flex-col min-w-0 break-words w-full mb-2 shadow-lg rounded " +
-          (color === "light" ? "bg-white" : "bg-lightBlue-900 text-white")
-        }
-      >
-        <div className="rounded-t mb-0 px-4 py-3 border-0">
-          <div className="flex flex-wrap w-full items-center">
-            <div className="flex flex-row w-full justify-between">
-              <div className=" px-2 ">
-                <h3
-                  className={
-                    "font-semibold text-lg " +
-                    (color === "light" ? "text-blueGray-700" : "text-white")
-                  }
-                >
-                  Medicine List
-                </h3>
-              </div>
-              <div>
-                Pagination
-              {/* <ReactPaginate 
-                containerClassName={"pagination"}
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                activeClassName={"active"}
-                >
-                </ReactPaginate> */}
-              </div>
-             
+      <div class="flex flex-col text-left">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-semibold font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      No
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-semibold font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-semibold font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Price
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-semibold font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Description
+                    </th>
+                    {localStorage.getItem("role") === "Admin" ? (
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-left text-xs font-semibold font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Action
+                      </th>
+                    ) : null}
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  {medicineData.rows?.map((el, index) => {
+                    return (
+                      <tr key={el.id}>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                            <div class="text-sm font-bold text-gray-900">
+                              {index + 1}
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="text-sm text-gray-500">{el.name}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="text-sm text-gray-500">{el.price}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="text-sm text-gray-500">
+                            {el.description}
+                          </div>
+                        </td>
+                        {localStorage.getItem("role") === "Admin" ? (
+                          <td class="px-6 py-4 whitespace-nowrap flex flex-row">
+                            <div
+                              className="cursor-pointer"
+                              onClick={() => openModal(el.id)}
+                            >
+                              <i
+                                class="fas fa-edit "
+                                style={{ color: "#059669", fontSize: 15 }}
+                              ></i>
+                            </div>
+                            <div
+                              className="cursor-pointer ml-5"
+                              onClick={() => dispatch(deleteMed(el.id))}
+                            >
+                              <i
+                                class="fas fa-trash-alt "
+                                style={{ color: "#EF4444", fontSize: 15 }}
+                              ></i>
+                            </div>
+                          </td>
+                        ) : null}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-        <div className="block w-full overflow-x-auto">
-          {/* Projects table */}
-          <table className="items-center w-full bg-transparent border-collapse">
-            <thead>
-              <tr>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  No
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Name
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Price
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Description
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                >
-                  Action
-                </th>
-                <th
-                  className={
-                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
-                    (color === "light"
-                      ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
-                      : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
-                  }
-                ></th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {
-                  <tr>
-                    <td>{console.log(medicineData, "~~~~~~~~~~")}</td>
-                  </tr>
-              } */}
-
-              {medicineData.rows?.map((el, index) => {
-                return (
-                  <tr key={index}>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {index + 1}
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {el.name}
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      Rp{" "}
-                      {el.price.toLocaleString("id-ID")},-
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      {el.description.length > 30
-                        ? el.description.slice(0, 30) + "..."
-                        : el.description}
-                    </td>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      <div>
-                        <button className="bg-gray-500 hover:bg-blue-700 text-blue font-bold py-2 px-4 rounded" onClick={() => handleEdit(el.id)}>Edit</button>
-                      </div>
-                      <div
-                        onClick={openModal}
-                        className="cursor-pointer bg-indigo-500 w-20 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        >
-                          EditForm
-                        </div>
-                      <div>
-                        <button onClick={() => dispatch(deleteMed(el.id))}>Delete</button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
       </div>
+
       <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-        >
-          <div>testForm</div>
-        </Modal>
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+      >
+        <div className="rounded-t border-0">
+          <div className="flex flex-wrap items-center">
+            <div className="relative w-full max-w-full flex-grow flex-1"></div>
+            <div className="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-blueGray-100 border-0">
+              <div className="rounded-t bg-white mb-0 px-6 py-3">
+                <div className="text-center flex justify-between">
+                  <h6 className="text-blueGray-700 text-xl font-bold">
+                    Edit Medicine Data
+                  </h6>
+
+                  <button
+                    onClick={editMedicine}
+                    className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                    type="button"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+              <div className="flex-auto w-full px-4 lg:px-10 py-10 pt-0">
+                <form>
+                  <h6 className="text-blueGray-400 text-sm mt-3 mb-3 font-bold uppercase">
+                    Name
+                  </h6>
+                  <div className="flex flex-wrap">
+                    <div className="w-full">
+                      <div className="relative w-full mb-3">
+                        <input
+                          type="text"
+                          id="name"
+                          onChange={(e) =>
+                            setInputForm({ ...inputForm, name: e.target.value })
+                          }
+                          value={inputForm.name || ""}
+                          placeholder="Medicine name"
+                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr className="mt-2 border-b-1 border-blueGray-300" />
+
+                  <h6 className="text-blueGray-400 text-sm mt-3 mb-3 font-bold uppercase">
+                    Price
+                  </h6>
+                  <div className="flex flex-wrap">
+                    <div className="w-full">
+                      <div className="relative w-full mb-6">
+                        <div className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap text-right">
+                          <input
+                            type="number"
+                            id="price"
+                            value={inputForm.price || ""}
+                            onChange={(e) =>
+                              setInputForm({
+                                ...inputForm,
+                                price: e.target.value,
+                              })
+                            }
+                            placeholder="Set medicine price"
+                            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr className="mt-2 border-b-1 border-blueGray-300" />
+
+                  <h6 className="text-blueGray-400 text-sm mt-3 mb-3 font-bold uppercase">
+                    Description
+                  </h6>
+                  <div className="flex flex-wrap">
+                    <div className="w-full">
+                      <div className="relative w-full mb-6">
+                        <div className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap text-right">
+                          <input
+                            onChange={(e) =>
+                              setInputForm({
+                                ...inputForm,
+                                description: e.target.value,
+                              })
+                            }
+                            type="text"
+                            value={inputForm.description || ""}
+                            id="description"
+                            placeholder="Set medicine detail"
+                            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }

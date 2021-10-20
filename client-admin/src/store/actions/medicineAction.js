@@ -1,73 +1,90 @@
-import appApi from "../config/instanceAxios"
+import appApi from "../config/instanceAxios";
 
 export function setMedicineData(payload) {
     return {
         type: "medicine/setMedicineData",
-        payload
-    }
+        payload,
+    };
 }
 
 export function setIsLoading(payload) {
     return {
         type: "medicine/setLoading",
-        payload
-    }
+        payload,
+    };
 }
 
 export function setErrorMessage(payload) {
     return {
         type: "medicine/setErrorMessage",
-        payload
-    }
+        payload,
+    };
 }
 
 export function deleteMedicine(payload) {
     return {
         type: "medicine/deleteMedicine",
-        payload
-    }
+        payload,
+    };
 }
 
 export function editMed(payload) {
     return {
         type: "medicine/editMedicine",
+        payload,
+    };
+}
+
+export function fetchOneMedicine(payload) {
+    return {
+        type: "medicine/fetchOneMedicine",
+        payload,
+    };
+}
+
+export function setEditMessage(payload) {
+    return {
+        type: "medicine/setEditMessage",
         payload
     }
 }
 
 export function fetchMedicines() {
     return (dispatch) => {
-        dispatch(setIsLoading(true))
+        dispatch(setIsLoading(true));
         appApi({
             method: "GET",
-            url: "/medicines"
+            url: "/medicines",
         })
-            .then(({data}) => {
-                dispatch(setMedicineData(data))
+            .then(({ data }) => {
+                dispatch(setMedicineData(data));
             })
-            .catch(err => {
-                setErrorMessage(err.response.data)
+            .catch((err) => {
+                console.log(err);
+                setErrorMessage(err.response.data);
             })
             .finally(() => {
-                dispatch(setIsLoading(false))
-            })
-    }
+                dispatch(setIsLoading(false));
+            });
+    };
 }
 
 export function deleteMed(payload) {
     return (dispatch) => {
         appApi({
             method: "DELETE",
-            url: `/medicines/${payload}`
+            url: `/medicines/${payload}`,
+            headers: {
+                access_token: localStorage.getItem('access_token')
+            }
         })
             .then(() => {
-                dispatch(deleteMedicine(payload))
+                dispatch(deleteMedicine(payload));
             })
-            .catch(err => {
-                console.log(err);
-                // dispatch(setErrorMessage(err.reponse.data))
-            })
-    }
+            .catch((err) => {
+               dispatch(setErrorMessage(err?.response?.data))
+            });
+    };
 }
 
 export function editMedicine(id, payload) {
@@ -75,13 +92,48 @@ export function editMedicine(id, payload) {
         appApi({
             method: "PUT",
             url: `/medicines/${id}`,
-            data: payload
+            data: payload,
         })
             .then(({ data }) => {
-                dispatch(editMed(data))
+                dispatch(editMed(data));
             })
-            .catch(err => {
-                console.log(err);
+            .catch((err) => {
+                dispatch(setErrorMessage(err?.response?.data))
+            });
+    };
+}
+
+export function fetchMedicineById(id) {
+    return (dispatch) => {
+        dispatch(setIsLoading(true));
+        appApi({
+            method: "GET",
+            url: `/medicines/${id}`,
+        })
+            .then(({ data }) => {
+                dispatch(fetchOneMedicine(data));
             })
-    }
+            .catch((err) => {
+                dispatch(setErrorMessage(err?.response?.data))
+            });
+    };
+}
+
+export function editMedicineData(payload, id) {
+    return (dispatch) => {
+        appApi({
+            method: "PUT",
+            url: `/medicines/${id}`,
+            data: payload,
+        })
+            .then(({data}) => {
+                dispatch(setEditMessage(data))
+            })
+            .then(() => {
+                dispatch(fetchMedicines())
+            })
+            .catch((err) => {
+                dispatch(setErrorMessage(err?.response?.data))
+            });
+    };
 }

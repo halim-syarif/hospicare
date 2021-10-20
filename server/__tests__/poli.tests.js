@@ -1,7 +1,7 @@
 const app = require("../app.js");
 const { Poli, Employee,  sequelize } = require("../models");
 const request = require("supertest");
-const {hashPassword} = require('../helpers/bcrypt')
+const { hashPassword } = require("../helpers/bcrypt.js");
 
 const { queryInterface } = sequelize;
 
@@ -95,5 +95,19 @@ describe('Poli Routes Test', () => {
           return done();
         })
   });
+
+  test('500 Get All Poli error - Should handle error', async () => {
+    Poli.findAll = jest.fn().mockRejectedValue('Error')
+
+    return request(app)
+      .get('/poli')
+      .then((res) => {
+        expect(res.status).toBe(500)
+        expect(res.body.err).toBe(undefined)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
   
 });
