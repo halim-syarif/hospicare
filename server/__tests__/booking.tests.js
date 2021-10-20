@@ -32,17 +32,9 @@ describe("History Routes Test", () => {
           }
     ]
 
-    const random = 'zzowipsopasidpoiqeiweus'
-    let randomName = ''
-    for (let i = 0; i < 20; i++){
-       randomName += random[Math.floor(Math.random(15))]
-    }
-
-    console.log(randomName);
-
     const patientId = [
         {
-            name: randomName,
+            name: 'jamil',
             age: 25,
             gender: "male",
             address: "Jl Biduri Bulan Bl N/10, Dki Jakarta",
@@ -90,7 +82,7 @@ describe("History Routes Test", () => {
           {
             EmployeeId: "2",
             DayId: "2",
-            booking_limit: 20,
+            booking_limit: 1,
             price: 50000,
             start_hour: "08:00:00",
             end_hour: "12:00:00",
@@ -150,19 +142,22 @@ describe("History Routes Test", () => {
         },
     ];
 
-    const newHistory = {
-        BookingScheduleId: 2,
-        description: 'history medicine desc',
-        medicine_list: [{id: 1,name: 'Ambroxol', price: 200000}]
+    const newBooking = {
+        PatientId: 1,
+        DoctorScheduleId: 1,
+        booking_date: new Date(),
+        keluhan: 'sakit pala',
     }
 
-    const newHistory2 = {
-        BookingScheduleId: 2,
-        description: 'history medicine desc',
-        medicine_list: [{id: 200,name: 'Ambroxol', price: 200000}]
+    const newBooking2 = {
+        PatientId: 1,
+        DoctorScheduleId: 2,
+        booking_date: new Date(),
+        keluhan: 'sakit pala',
     }
 
     let access_token = "";
+    let access_token_dokter = ""
 
     beforeAll((done) => {
         MedicationHistory.destroy({
@@ -253,6 +248,13 @@ describe("History Routes Test", () => {
             })
             .then((data) => {
                 access_token = data.body.access_token;
+                return request(app).post("/employees/login").send({
+                    email: "indira.mandiri@gmail.com",
+                    password: "password",
+                });
+            })
+            .then((data) => {
+                access_token_dokter = data.body.access_token;
                 done();
             })
             .catch((err) => {
@@ -285,204 +287,122 @@ describe("History Routes Test", () => {
       })
 
     //test here
-    test("200 Success get all histories - should return all histories data", (done) => {
+    test("200 Success get all Bookings - should return all bookings data", (done) => {
         request(app)
-            .get("/history")
+            .get("/bookings/1/1/1")
             .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response;
                 expect(status).toBe(200);
                 expect(Array.isArray(body)).toBeTruthy();
-                expect(body.length).toBeGreaterThan(0);
                 return done();
             });
     });
 
 
-    // failed to get all history data, no access_token granted
-    // test("failed to  get all histories - should error message", (done) => {
-    //     History
-    //     request(app)
-    //         .get("/history")
-    //         .then((response) => {
-    //             const { body, status } = response;
-    //             expect(status).toBe(expect.any(Number))
-    //             expect(body).toHaveProperty("message", expect.any(String))
-    //             return done();
-    //         });
-    // });
 
-    // findHistoryByBookingId
-    test("200 Success get data history by BookingScheduleId", (done) => {
+    test("200 Success get data Booking by PatientId - should return array of data", (done) => {
         request(app)
-            .get("/history/1")
+            .get("/bookings/1/patients")
             .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response
-                expect(status).toBe(200)
-                expect(body).toHaveProperty("BookingScheduleId", expect.any(Number))
-                expect(body).toHaveProperty("description", expect.any(String))
-                expect(body).toHaveProperty("total_price", expect.any(Number))
-                expect(body).toHaveProperty("is_paid", expect.any(Boolean))
+                expect(status).toBe(200);
+                expect(Array.isArray(body)).toBeTruthy();
                 return done()
             })
             .catch((err) => {
                 done(err)
             })
-    })
-
-    test("200 Succes post transaction midtrans - should return success message", (done) => {
-        request(app)
-            .post("/history/transaction/1")
-            .then((response) => {
-                const { body, status } = response
-                expect(status).toBe(201)
-                expect(body).toHaveProperty("token", expect.any(String))
-                expect(body).toHaveProperty("redirect_url", expect.any(String))
-                expect(body).toHaveProperty("orderId", expect.any(Number))
-                return done()
-            })
-            .catch((err) => {
-                done(err)
-            })
-    })
-
-    test("500 Error post transaction midtrans - should return error message", (done) => {
-        request(app)
-            .post("/history/transaction/aaaa")
-            .then((response) => {
-                const { body, status } = response
-                expect(status).toBe(500)
-                return done()
-            })
-            .catch((err) => {
-                done(err)
-            })
-    })
-
-    test("200 Success get status transaction midtrans - should return trx detail", (done) => {
-        request(app)
-            .get("/history/transaction/2")
-            .then((response) => {
-                const { body, status } = response
-                expect(status).toBe(201)
-                expect(body).toHaveProperty("transaction_status", expect.any(String))
-                expect(body).toHaveProperty("transaction_id", expect.any(String))
-                expect(body).toHaveProperty("payment_type", expect.any(String))
-                return done()
-            })
-            .catch((err) => {
-                done(err)
-            })
-    })
-
-    test("500 Failed get status transaction midtrans - should return error", (done) => {
-        request(app)
-            .get("/history/transaction/5")
-            .then((response) => {
-                const { status, body } = response
-                expect(status).toBe(404)
-                expect(body).toHaveProperty("message", "Transaction doesn't exist.")
-                return done()
-            })
-            .catch((err) => {
-                done(err)
-            })
-    })
-
-    // editStatus success
-    test("200 Success updated - should return message data updated", (done) => {
-        request(app)
-            .patch("/history/1")
-            .set("access_token", access_token)
-            .send({
-                is_paid: false
-            })
-            .then((response) => {
-                const { body, status }= response
-                expect(status).toBe(200)
-                expect(body).toHaveProperty("message", "Data has been updated")
-                done()
-            })
-    })
-
-    // editStatus failed
-    test("400 Failed updated - should return array of error massage", (done) => {
-        request(app)
-            .patch("/history/1")
-                .set("access_token", access_token)
-                .send({
-                    is_paid: ""
-                })
-                .then((response) => {
-                    const { body, status }= response
-                    expect(status).toBe(500)
-                    expect(body).toHaveProperty("message", expect.any(String))
-                    done()
-                })
     })
 
     
-    test("404 Failed to get history by BookingScheduleId - should return error message", (done) => {
+
+    test("404 failed get data with invalid id - should return error message", (done) => {
         request(app)
-            .get("/history/99")
+            .get("/bookings/45/patients")
             .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response
-                expect(status).toBe(404)
-                expect(body).toHaveProperty("message", "Id not found")
-                done()
+                expect(status).toBe(404);
+                expect(body).toHaveProperty('message', 'found no patient with id = 45')
+                return done()
+            })
+            .catch((err) => {
+                done(err)
             })
     })
 
-    test("404 Failed to edit history - should return error message", (done) => {
+    test("404 failed get data with no booking by patient - should return error message", (done) => {
         request(app)
-            .patch("/history/99")
-            .set("access_token", access_token)
+            .get("/bookings/2/patients")
+            // .set("access_token", access_token)
             .then((response) => {
                 const { body, status } = response
-                expect(status).toBe(404)
-
-                expect(body).toHaveProperty("message", "Id not found")
-
-                done()
+                expect(status).toBe(404);
+                expect(body).toHaveProperty('message', 'no appointment data found for Karen Uyainah ')
+                return done()
+            })
+            .catch((err) => {
+                done(err)
             })
     })
 
-    test("200 Success to get history by patientId - should return array of object", (done) => {
+    test("200 Success get data Booking by DoctorId - should return array of data", (done) => {
         request(app)
-            .get("/history/patient/1")
-            .set("access_token", access_token)
+            .get("/bookings/2/doctors")
+            // .set("access_token", access_token_dokter)
             .then((response) => {
                 const { body, status } = response
-                expect(status).toBe(200)
-                expect(body[0]).toHaveProperty("antrian", expect.any(Number))
-                expect(body[0]).toHaveProperty("keluhan", expect.any(String))
-                expect(body[0]).toHaveProperty("DoctorSchedule", expect.any(Object))
-                done()
+                expect(status).toBe(200);
+                expect(Array.isArray(body)).toBeTruthy();
+                return done()
+            })
+            .catch((err) => {
+                done(err)
             })
     })
 
-    test("404 Failed to get history by PatientId - should return error message", (done) => {
+    test("404 Failed get data by invalid DoctorId - should return not found message", (done) => {
         request(app)
-            .get("/history/patient/99")
-            .set("access_token", access_token)
+            .get("/bookings/5/doctors")
+            // .set("access_token", access_token_dokter)
             .then((response) => {
                 const { body, status } = response
-                expect(status).toBe(404)
-                expect(body).toHaveProperty("message", "Id not found")
-                done()
+                expect(status).toBe(404);
+                expect(body).toHaveProperty('message', 'pls join us and bring healt to our world, doc')
+                return done()
+            })
+            .catch((err) => {
+                done(err)
             })
     })
 
-    test("201 Success create new medicine history - shoul return error message", (done) => {
+    test("404 Failed get data by DoctorId - should return not found message", (done) => {
         request(app)
-            .post("/history")
+            .get("/bookings/1/doctors")
+            // .set("access_token", access_token_dokter)
+            .then((response) => {
+                const { body, status } = response
+                expect(status).toBe(404);
+                expect(body).toHaveProperty('message', 'jangan ngadi-ngadi lu bukan dokter juga')
+                return done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("201 Success create new booking - should return booking data created", (done) => {
+        request(app)
+            .post("/bookings")
             .set("access_token", access_token)
-            .send(newHistory)
+            .send(newBooking)
             .then(({body, status}) => {
                 expect(status).toBe(201)
-                expect(body).toHaveProperty("message", "Medication History Patient updated")
+                expect(body).toHaveProperty('DoctorScheduleId', 1)
+                expect(body).toHaveProperty('PatientId', 1)
+                expect(body).toHaveProperty('keluhan', "sakit pala")
                 done()
             })
             .catch(err => {
@@ -490,26 +410,112 @@ describe("History Routes Test", () => {
             })
     })
 
-    test("500 Failed create history - should return error message", (done) => {
+    test("401 Failed create new booking reach limit - should return error message", (done) => {
         request(app)
-            .post("/history")
+            .post("/bookings")
             .set("access_token", access_token)
-            .send(newHistory2)
+            .send(newBooking2)
+            .then(({body, status}) => {
+                expect(status).toBe(400)
+                expect(body).toHaveProperty('message', 'booking limit reached')
+                done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("200 Success edit new booking - should return success message", (done) => {
+        request(app)
+            .patch("/bookings/1")
+            .set("access_token", access_token)
+            .send(newBooking)
+            .then(({body, status}) => {
+                expect(status).toBe(200)
+                expect(body).toHaveProperty('message', 'succes update appointment status with id = 1')
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("404 failed edit new booking id not found - should return error message", (done) => {
+        request(app)
+            .patch("/bookings/10")
+            .set("access_token", access_token)
+            .send(newBooking)
+            .then(({body, status}) => {
+                expect(status).toBe(404)
+                expect(body).toHaveProperty('message', "There's no appointment with id = 10")
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("500 failed edit new booking - should return error message", (done) => {
+        request(app)
+            .patch("/bookings/eeeeee")
+            .set("access_token", access_token)
+            .send(newBooking)
             .then(({body, status}) => {
                 expect(status).toBe(500)
-                expect(body).toHaveProperty("message", expect.any(String))
-                done()
+               done()
             })
             .catch(err => {
                 console.log(err);
             })
     })
 
-    test('500 Failed Get All Medication Histories - Should handle error', async () => {
-        MedicationHistory.findAll = jest.fn().mockRejectedValue('Error')
+    test("200 Success delete booking - should return success message", (done) => {
+        request(app)
+            .delete("/bookings/1")
+            .set("access_token", access_token)
+            .then(({body, status}) => {
+                expect(status).toBe(200)
+                expect(body).toHaveProperty('message', 'Delete Appointment with id = 1 has been succeed')
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("404 Failed delete booking - should return error message", (done) => {
+        request(app)
+            .delete("/bookings/10")
+            .set("access_token", access_token)
+            .then(({body, status}) => {
+                expect(status).toBe(404)
+                expect(body).toHaveProperty('message', "There's no appointment with id = 10")
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("500 Failed delete booking - should return error message", (done) => {
+        request(app)
+            .delete("/bookings/eeee")
+            .set("access_token", access_token)
+            .then(({body, status}) => {
+                expect(status).toBe(500)
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+
+    test('500 Failed Get All Bookings - Should handle error', async () => {
+        BookingSchedule.findAll = jest.fn().mockRejectedValue('Error')
     
         return request(app)
-          .get('/history')
+          .get('/bookings/5/5/5')
           .set('access_token', access_token)
           .then((res) => {
             expect(res.status).toBe(500)

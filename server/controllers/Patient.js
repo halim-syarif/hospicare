@@ -14,6 +14,7 @@ class PatientController {
   static async loginPatient(req, res, next) {
     try {
       let { email, password } = req.body;
+      console.log(email, password);
       if (!email || !password) {
         throw { name: "emailPasswordRequired" };
       }
