@@ -47,7 +47,7 @@ class DoctorScheduleController {
           },
         ],
       });
-      if (!foundSchedule) {
+      if (foundSchedule.length === 0) {
         throw { name: "IdNotFound" };
       }
       res.status(200).json(foundSchedule);
