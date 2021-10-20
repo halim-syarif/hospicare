@@ -16,7 +16,10 @@ import {
     DELETE_PATIENT_DATA,
     SET_LOADING_DOCTOR_NAMES,
     SET_ERROR_DOCTOR_NAMES,
-    SET_DOCTORS_NAMES
+    SET_DOCTORS_NAMES,
+    SET_LOADING_ALL_DOCTORS,
+    SET_ERROR_ALL_DOCTORS,
+    SET_ALL_DOCTORS
 } from "../keys";
 import http from '../../libs/patients'
 import httpSchedule from '../../libs/schedule'
@@ -137,7 +140,44 @@ function doctorNamesAsync(){
             dispatch(setDoctorNames(names))
             dispatch(setLoadingDoctorNames(false))
         } catch (err) {
-            dispatch(setErrorDoctorsName(err))
+            dispatch(setErrorDoctorsName(err.response.data))
+        }
+    }
+}
+
+function setLoadingAllDoctors(isLoading){
+    return {
+        type: SET_LOADING_ALL_DOCTORS,
+        payload: isLoading
+    }
+}
+
+function setErrorAllDoctors(error){
+    return {
+        type: SET_ERROR_ALL_DOCTORS,
+        payload: error
+    }
+}
+
+function setAllDoctors(doctors){
+    return {
+        type: SET_ALL_DOCTORS,
+        payload: doctors
+    }
+}
+
+function allDoctorsAsync(){
+    return async function(dispatch){
+        try {
+            dispatch(setLoadingAllDoctors(true))
+            const doctors = await httpEmployee({
+                method: 'get',
+                url: 'doctors'
+            })
+            dispatch(setAllDoctors(doctors.data.rows))
+            dispatch(setLoadingAllDoctors(false))
+        } catch (err) {
+            dispatch(setErrorAllDoctors(err.response.data))
         }
     }
 }
@@ -261,6 +301,7 @@ export {
     setErrorRegister,
     setErrorLogin,
     doctorNamesAsync,
+    allDoctorsAsync,
     schedulesAsyncAll,
     scheduleAsync,
     scheduleByDoctorName,
