@@ -10,6 +10,7 @@ import {
   Dimensions,
   Pressable,
   FlatList,
+  Linking
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchBar } from "react-native-elements";
@@ -65,6 +66,11 @@ export default function Landing({ navigation }) {
   const searchByName = (name) => {
     dispatch(scheduleByDoctorName(name))
     navigation.navigate('Schedule')
+  }
+
+  function emergencyCall(){
+    const phoneNumber = 'tel:${085555555555}'
+    Linking.openURL(phoneNumber)
   }
 
   return (
@@ -192,7 +198,7 @@ export default function Landing({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.iconitem}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={emergencyCall}>
                 <Feather
                   name="phone-call"
                   size={35}
