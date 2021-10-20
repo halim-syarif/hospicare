@@ -229,7 +229,7 @@ describe("Patient Routes Test", () => {
     request(app)
       .post('/patients/login')
       .send({
-        email: 'adriansyah.laila@yahoo.com',
+        email: 'novitasari.ayu@kuswandari.asia',
         password: 'password'
       })
       .then(response => {

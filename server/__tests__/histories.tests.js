@@ -290,17 +290,17 @@ describe("History Routes Test", () => {
     });
 
     // failed to get all history data, no access_token granted
-    // test("failed to  get all histories - should error message", (done) => {
-    //     request(app)
-    //         .get("/history")
-    //         // .set("access_token", access_token)
-    //         .then((response) => {
-    //             const { body, status } = response;
-    //             expect(status).toBe(expect.any(Number))
-    //             expect(body).toHaveProperty("message", expect.any(String))
-    //             return done();
-    //         });
-    // });
+    test("failed to  get all histories - should error message", (done) => {
+        request(app)
+            .get("/history")
+            // .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(expect.any(Number))
+                expect(body).toHaveProperty("message", expect.any(String))
+                return done();
+            });
+    });
 
     // findHistoryByBookingId
     test("200 Success get data history by BookingScheduleId", (done) => {
