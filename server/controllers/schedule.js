@@ -65,6 +65,45 @@ class DoctorScheduleController {
     }
   }
 
+  static async findScheduleByDoctorName(req, res, next){
+    const { doctorName } = req.params 
+    try {
+      const schedules = await DoctorSchedule.findAll({
+        attributes: ['id', 'booking_limit', 'start_hour', 'end_hour', 'price'],
+        include: [
+          {
+              model: Day,
+              attributes: ["name"],
+          },
+          {
+              model: Employee,
+              attributes: ["name"],
+              where: {
+                name: {
+                  [Op.iLike]: `%${doctorName}%`
+                }
+              },
+              include: {
+                  model: Poli,
+                  attributes: ['name']
+              },
+          },
+          {
+              model: BookingSchedule,
+              attributes: ["id","antrian","keluhan","status"],
+              include: {
+                  model: Patient,
+                  attributes: ["name"]
+              },
+          },
+      ],
+      })
+      res.status(200).json(schedules)
+    } catch (err) {
+      res.status(500).json(err)
+    }
+  }
+
   static async getScheduleByPoliDay(req, res, next) {
     try {
       const { poliid, dayid } = req.params;

@@ -13,11 +13,15 @@ import {
     SET_BOOKING_LOADING,
     SET_BOOKING_DATE,
     SET_BOOKING_DOCTOR_SCHEDULE_ID,
-    DELETE_PATIENT_DATA
+    DELETE_PATIENT_DATA,
+    SET_LOADING_DOCTOR_NAMES,
+    SET_ERROR_DOCTOR_NAMES,
+    SET_DOCTORS_NAMES
 } from "../keys";
 import http from '../../libs/patients'
 import httpSchedule from '../../libs/schedule'
 import httpBooking from '../../libs/bookings'
+import httpEmployee from '../../libs/employees'
 
 function setPatientData(data){
     return {
@@ -97,6 +101,47 @@ function registerAsync(data, navigation){
     }
 }
 
+function setLoadingDoctorNames(isLoading){
+    return {
+        type: SET_LOADING_DOCTOR_NAMES,
+        payload: isLoading
+    }
+}
+
+function setErrorDoctorsName(error){
+    return {
+        type: SET_ERROR_DOCTOR_NAMES,
+        payload: error
+    }
+}
+
+function setDoctorNames(doctorNames){
+    return {
+        type: SET_DOCTORS_NAMES,
+        payload: doctorNames
+    }
+}
+
+function doctorNamesAsync(){
+    return async function(dispatch){
+        try {
+            dispatch(setLoadingDoctorNames(true))
+            const doctorNames = await httpEmployee()
+            const arrayOfEmployees = doctorNames.data.rows
+            const names = arrayOfEmployees.filter(el => el.role === 'Doctor').map(el => {
+                return {
+                    name: el.name,
+                    id: el.id
+                }
+            })
+            dispatch(setDoctorNames(names))
+            dispatch(setLoadingDoctorNames(false))
+        } catch (err) {
+            dispatch(setErrorDoctorsName(err))
+        }
+    }
+}
+
 function setDataSchedule(schedule){
     return {
         type: SET_SCHEDULE_DATA,
@@ -117,7 +162,6 @@ function setLoadingSchedule(isLoading){
         payload: isLoading
     }
 }
-
 
 function schedulesAsyncAll(){
     return async function(dispatch){
@@ -141,6 +185,22 @@ function scheduleAsync(poliid, dayid){
             const schedule = await httpSchedule({
                 method: 'get',
                 url: `${poliid}/${dayid}`,
+            })
+            dispatch(setDataSchedule(schedule.data))
+            dispatch(setLoadingSchedule(false))
+        } catch (err) {
+            dispatch(setErrorSchedule(err.response.data))
+        }
+    }
+}
+
+function scheduleByDoctorName(doctorName){
+    return async function(dispatch){
+        try {
+            dispatch(setLoadingSchedule(true))
+            const schedule = await httpSchedule({
+                method: 'get',
+                url: `doctor/${doctorName}`
             })
             dispatch(setDataSchedule(schedule.data))
             dispatch(setLoadingSchedule(false))
@@ -200,8 +260,10 @@ export {
     registerAsync,
     setErrorRegister,
     setErrorLogin,
+    doctorNamesAsync,
     schedulesAsyncAll,
     scheduleAsync,
+    scheduleByDoctorName,
     setBookingDate,
     setErrorBooking,
     setDoctorScheduleId,
