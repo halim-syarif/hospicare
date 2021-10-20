@@ -9,7 +9,7 @@ import {
 
 const initialState = {
     email: '',
-    id: 1,
+    id: '',
     access_token: '',
     errorLogin: '',
     loadingLogin: false,

@@ -9,7 +9,7 @@ routes.get('/:id', MedecineController.getMedincineById)
 routes.post('/', MedecineController.createMedecine)
 routes.put('/:id', MedecineController.editMedicine)
 // routes.delete('/:id', authOnlyAdmin, MedecineController.deleteMedicine)
-routes.delete('/:id', MedecineController.deleteMedicine)
+routes.delete('/:id', authentication, authOnlyAdmin, MedecineController.deleteMedicine)
 
 
 module.exports = routes

@@ -84,7 +84,8 @@ export default function HeaderComponent(){
                         <Picker.Item label='Kulit dan Kelamin' value={6}/>
                         <Picker.Item label='Penyakit Dalam' value={7}/>
                         <Picker.Item label='THT' value={8}/>
-                        <Picker.Item label='Umum' value={9}/>
+                        <Picker.Item label='Saraf' value={9}/>
+                        <Picker.Item label='Umum' value={10}/>
                     </Picker>
                 </View>
                 <View style={styles.date}>
