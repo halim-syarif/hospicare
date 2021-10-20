@@ -61,11 +61,11 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate(employee){
         employee.password = hashPassword(employee.password)
       },
-      beforeBulkUpdate(employee){
-        if(employee.attributes.password){
-          employee.attributes.password = hashPassword(employee.attributes.password)
-        }
-      }
+      // beforeBulkUpdate(employee){
+      //   if(employee.attributes.password){
+      //     employee.attributes.password = hashPassword(employee.attributes.password)
+      //   }
+      // }
     },
     sequelize,
     modelName: 'Employee',

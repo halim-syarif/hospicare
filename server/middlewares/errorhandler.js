@@ -43,7 +43,7 @@ const errorHandler = (err, req, res, next) => {
         message = "You must login first"
       } else if (err.message == "jwt malformed"){
         code = 403;
-        message = "You token is invalid"
+        message = "Your token is invalid"
       } else {
         code = 401;
         message = err.message
@@ -81,10 +81,6 @@ const errorHandler = (err, req, res, next) => {
     case 'bookinglimitreached':
       code = 400
       message = 'booking limit reached'
-      break;
-    case "SequelizeDatabaseError":
-      code = 500
-      message = err.message
       break;
   }
 
