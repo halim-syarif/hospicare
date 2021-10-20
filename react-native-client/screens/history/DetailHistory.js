@@ -153,7 +153,7 @@ export default function DetailHistory({ navigation, route }) {
           </View>
         </View>
       </View>
-      <Modal animationIn="fadeIn" isVisible={modalVisible} onBackdropPress={() => closeModal()}>
+      {/* <Modal animationIn="fadeIn" isVisible={modalVisible} onBackdropPress={() => closeModal()}> */}
         <View style={styles.position}>
           <View style={styles.modalView}>
             <Text> {data.name}</Text>
@@ -295,7 +295,7 @@ export default function DetailHistory({ navigation, route }) {
             </View>
           </View>
         </View>
-        <Modal
+        {/* <Modal
           animationIn="fadeIn"
           isVisible={modalVisible}
           onBackdropPress={() => closeModal()}
@@ -306,7 +306,7 @@ export default function DetailHistory({ navigation, route }) {
               <Text> {data.description}</Text>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
         </View>
       </ScrollView>
     </>
@@ -394,8 +394,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5
-  }
-    elevation: 5,
   },
   button: {
     flex: 1,
