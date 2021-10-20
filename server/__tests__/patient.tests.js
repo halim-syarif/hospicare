@@ -122,6 +122,25 @@ describe("Patient Routes Test", () => {
       .catch((err) => done(err));
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  test("200 Success login - should return access_token", (done) => {
+    request(app)
+      .post("/patients/login")
+      .send({
+        email: "luwar.sinaga@yahoo.com",
+        password: "password",
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("access_token", expect.any(String));
+        done();
+      });
+  });
+
   test("200 Success get all patients - should return all patients data", (done) => {
     request(app)
       .get("/patients")
@@ -131,6 +150,38 @@ describe("Patient Routes Test", () => {
         expect(status).toBe(200);
         expect(body).toHaveProperty("count", 5);
         expect(body).toHaveProperty("rows.length", 5);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("200 Success get all patients with limit - should return all patients data", (done) => {
+    request(app)
+      .get("/patients?limit=20")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 5);
+        expect(body).toHaveProperty("rows.length", 5);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("200 Success get all patients with offset - should return all patients data", (done) => {
+    request(app)
+      .get("/patients?offset=20")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 5);
+        expect(body).toHaveProperty("rows.length", 0);
         done();
       })
       .catch((err) => {
@@ -157,7 +208,7 @@ describe("Patient Routes Test", () => {
         const { body, status } = response;
         expect(status).toBe(201);
         expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('email', "adriansyah55.laila@yahoo.com")
+        expect(body).toHaveProperty('email', "adriansyah2.laila@yahoo.com")
         expect(body).toHaveProperty('address', "Jl Melasti 18 A, Dki Jakarta")
         done();
       })
@@ -226,26 +277,7 @@ describe("Patient Routes Test", () => {
       })
   })
 
-  test('200 Login succes - should return obj with access_token and payload as a key', (done) => {
-    request(app)
-      .post('/patients/login')
-      .send({
-        email: 'novitasari.ayu@kuswandari.asia',
-        password: ''
-      })
-      .then(response => {
-        const { body, status } = response
-        expect(status).toBe(200)
-        expect(body).toHaveProperty('access_token', expect.any(String)),
-        expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('name', expect.any(String))
-        expect(body).toHaveProperty('email', expect.any(String))
-        done()
-      })
-      .catch(err => {
-        console.log(err.name, "maaaakplungggggggggggg😂");
-      })
-  })
+  
 
   test('404 login failed - password/email matched no data should return error message ', (done) => {
     request(app)
@@ -435,5 +467,20 @@ describe("Patient Routes Test", () => {
         done(err);
       });
   });
+
+  test('500 Get All Patient error - Should handle error', async () => {
+    Patient.findAll = jest.fn().mockRejectedValue('Error')
+
+    return request(app)
+      .get('/patients')
+      .set("access_token", access_token)
+      .then((res) => {
+        expect(res.status).toBe(500)
+        expect(res.body.err).toBe(undefined)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
 
 });
