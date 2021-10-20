@@ -1,5 +1,5 @@
 const app = require("../app.js");
-const { DoctorSchedule, sequelize, Employee, Day, Patient } = require("../models");
+const { DoctorSchedule, sequelize, Employee, Day, Patient, Poli } = require("../models");
 const request = require("supertest");
 const { hashPassword } = require("../helpers/bcrypt");
 const { queryInterface } = sequelize;
@@ -14,6 +14,7 @@ describe("DoctorSchedule routes test", () => {
             gender: "female",
             address: "Gg. Pelajar Pejuang 45 No. 943, Bekasi",
             role: "Admin",
+            poliId: 1,
             createdAt: new Date(),
             updatedAt: new Date(),
         },
@@ -25,6 +26,7 @@ describe("DoctorSchedule routes test", () => {
             gender: "female",
             address: "Jl Raden Mataher 70, Jakarta Utara",
             role: "Doctor",
+            poliId: 1,
             createdAt: new Date(),
             updatedAt: new Date(),
         },
@@ -63,6 +65,24 @@ describe("DoctorSchedule routes test", () => {
             updatedAt: new Date(),
         },
     ];
+
+    const poliId = [
+        {
+            name: "Kebidanan",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            name: "Anak",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            name: "Jantung",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+    ]
 
     let access_token = "";
     const invalidIdFormat = "kfajfawfn";
@@ -106,6 +126,17 @@ describe("DoctorSchedule routes test", () => {
                     cascade: true,
                     restartIdentity: true,
                 })
+            })
+            .then(() => {
+                return Poli.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return queryInterface.bulkInsert("Polis", poliId);
             })
             .then(() => {
                 return queryInterface.bulkInsert("Employees", employeeData);
@@ -267,7 +298,7 @@ describe("DoctorSchedule routes test", () => {
             });
     });
 
-   
+
 
     test("401 Failed to update doctorSchedule by invalid id format - should return error", (done) => {
         request(app)
@@ -327,4 +358,68 @@ describe("DoctorSchedule routes test", () => {
     //             done(err)
     //         })
     // })
+
+    test("404 Failed get all schedules by Poli and day - should return error message", (done) => {
+        request(app)
+            .get("/schedules/100/100")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(404);
+                expect(body).toHaveProperty('message', "Id not found")
+                return done();
+            });
+    });
+
+    test("200 Success get all schedules by Poli and day - should return all schedule data", (done) => {
+        request(app)
+            .get("/schedules/1/1")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                // expect(body).toHaveProperty('message', "Id not found")
+                return done();
+            });
+    });
+
+    test("401 failed delete booking schedule  by id - should return error message", (done) => {
+        request(app)
+          .delete("/schedules/ndar")
+          .set("access_token", access_token)
+          .then((response) => {
+            const { body, status } = response;
+            expect(status).toBe(401);
+            expect(body).toHaveProperty("message", "Id Must be a Number");
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          });
+    });
+
+    test("400 Failed add booking schedule - should return array of error message", (done) => {
+        request(app)
+          .post("/schedules")
+          .send(
+            {
+                EmployeeId: 2,
+                booking_limit: 20,
+                price: 50000,
+                start_hour: "08:00:00",
+                end_hour: "12:00:00",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            }
+          )
+          .then((response) => {
+            const { body, status } = response;
+            expect(status).toBe(400);
+            expect(body).toHaveProperty('message', expect.any(Array))
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
 });
