@@ -11,6 +11,9 @@ const SET_PATIENT_LOADING_REGISTER = 'patients/setLoadingRegister'
 const SET_DOCTORS_NAMES = 'doctors/setDoctorNames'
 const SET_LOADING_DOCTOR_NAMES = 'doctors/setLoadingDoctorNames'
 const SET_ERROR_DOCTOR_NAMES = 'doctors/setErrorDoctorNames'
+const SET_ALL_DOCTORS = 'doctors/setAllDoctors'
+const SET_LOADING_ALL_DOCTORS = 'doctors/setLoadingAllDoctors'
+const SET_ERROR_ALL_DOCTORS = 'doctors/setErrorAllDoctors'
 
 const SET_SCHEDULE_DATA = 'schedules/setData'
 const SET_SCHEDULE_ERROR = 'schedules/setErrorSchedule'
@@ -41,6 +44,9 @@ export {
     SET_DOCTORS_NAMES,
     SET_LOADING_DOCTOR_NAMES,
     SET_ERROR_DOCTOR_NAMES,
+    SET_ALL_DOCTORS,
+    SET_ERROR_ALL_DOCTORS,
+    SET_LOADING_ALL_DOCTORS,
     SET_SCHEDULE_DATA,
     SET_SCHEDULE_ERROR,
     SET_SCHEDULE_LOADING,
