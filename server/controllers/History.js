@@ -101,6 +101,21 @@ class HistoryController {
             model: MedicationHistory,
             attributes: ["id", "description", "total_price", "is_paid"],
             include: {
+              model: Medicine,
+              attributes: ['id', 'name']
+            }
+          }
+        },{
+          model: DoctorSchedule,
+          attributes: ['id', 'price', 'start_hour', 'end_hour'],
+          include: {
+            model: Employee,
+            attributes: ['id', 'name']
+          }
+        }
+        ]
+      })
+      if (history.length === 0) {
               model: PatientMedicine,
               attributes: ["id", "quantity", "price"],
               include: {
