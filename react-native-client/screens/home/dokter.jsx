@@ -4,7 +4,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import StatusBarLight from '../../components/StatusBarLight';
-import { allDoctorsAsync } from '../../store/actions';
+import { allDoctorsAsync, scheduleByDoctorName } from '../../store/actions';
 import {
     Avatar,
     Text,
@@ -23,6 +23,11 @@ export default function Dokter({navigation, route}) {
     dispatch(allDoctorsAsync())
   }, [])
 
+  const searchByName = (name) => {
+    dispatch(scheduleByDoctorName(name))
+    navigation.navigate('Schedule')
+  }
+
     return (
         <View style={styles.container}>
             <StatusBarLight/>
@@ -34,17 +39,19 @@ export default function Dokter({navigation, route}) {
                     style={styles.flatList}
                     renderItem={({item}) => 
                     (
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => searchByName(item.name)}
+                        >
                             <View style={styles.flatListItems}>
-                                <View style={styles.card_top}>
+                                <View style={styles.card}>
                                     <Avatar.Image
                                         source={{
                                             uri:imgUrl
                                         }}
                                         size={50}/>
-                                    <View style={styles.card_top_profile}>
-                                        <Text style={styles.card_top_employee_name_text}>{item.name}</Text>
-                                        <View style={styles.card_top_availability}>
+                                    <View style={styles.card_profile}>
+                                        {/* <Text style={styles.card_employee_name_text}>{item.name}</Text> */}
+                                        <View style={styles.card_availability}>
                                             <Feather
                                                 name="check-circle"
                                                 size={20}
@@ -55,18 +62,6 @@ export default function Dokter({navigation, route}) {
                                         </View>
                                     </View>
                                 </View>
-                                {/* <FlatList
-                                    data={item.DoctorSchedules}
-                                    renderItem={({item}) => 
-                                    (
-                                        <View>
-                                            <Text>{item.start_hour}</Text>
-                                            <Text>{item.Day.name}</Text>
-                                        </View>                                    
-                                    )}
-                                    keyExtractor={item => item.id.toString()}
-                                /> */}
-
                             </View>
                         </TouchableOpacity>
                     )
@@ -109,23 +104,23 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#009387"
     },
-    card_top: {
+    card: {
         flex: 1,
         flexDirection: 'row',
         width: '100%',
         paddingBottom: 10
     },
 
-    card_top_employee_name_text: {
+    card_employee_name_text: {
         fontWeight: 'bold',
         width: '90'
     },
 
-    card_top_profile: {
+    card_profile: {
         paddingLeft: 10
     },
 
-    card_top_availability: {
+    card_availability: {
         flexDirection: 'row',
         paddingTop: 5
     },
