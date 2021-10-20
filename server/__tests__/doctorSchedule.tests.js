@@ -162,6 +162,21 @@ describe("DoctorSchedule routes test", () => {
             });
     });
 
+    test("200 Success get all schedules without limit - should return all schedule data", (done) => {
+        request(app)
+            .get("/schedules")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                expect(body).toHaveProperty("count", expect.any(Number));
+                expect(Array.isArray(body.rows)).toBeTruthy();
+                // expect(Array.isArray(body)).toBeTruthy();
+                // expect(body.length).toBeGreaterThan(0);
+                return done();
+            });
+    });
+
     test("201 Success create schedule - should return created schedule", (done) => {
         request(app)
             .post("/schedules")

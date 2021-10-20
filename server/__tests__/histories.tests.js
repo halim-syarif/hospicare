@@ -7,19 +7,6 @@ const { queryInterface } = sequelize;
 
 //describe here
 describe("History Routes Test", () => {
-    // const employeeData = [
-    //     {
-    //         name: "testing",
-    //         email: "testing@mail.com",
-    //         password: hashPassword("12345"),
-    //         age: 25,
-    //         gender: "male",
-    //         address: "testing",
-    //         role: "admin",
-    //         createdAt: new Date(),
-    //         updatedAt: new Date(),
-    //     },
-    // ];
     const employeeId = [
         {
             name: "dr. Ketut Ratna Dewi Wijayanti, Sp. OG",
@@ -44,9 +31,18 @@ describe("History Routes Test", () => {
             updatedAt: new Date()
           }
     ]
+
+    const random = 'zzowipsopasidpoiqeiweus'
+    let randomName = ''
+    for (let i = 0; i < 20; i++){
+       randomName += random[Math.floor(Math.random(15))]
+    }
+
+    console.log(randomName);
+
     const patientId = [
         {
-            name: "Jamil Rajasa",
+            name: randomName,
             age: 25,
             gender: "male",
             address: "Jl Biduri Bulan Bl N/10, Dki Jakarta",
@@ -133,6 +129,8 @@ describe("History Routes Test", () => {
             updatedAt: new Date()
           }
     ]
+
+
     const historyData = [
         {
             BookingScheduleId: 1,
@@ -156,6 +154,12 @@ describe("History Routes Test", () => {
         BookingScheduleId: 2,
         description: 'history medicine desc',
         medicine_list: [{id: 1,name: 'Ambroxol', price: 200000}]
+    }
+
+    const newHistory2 = {
+        BookingScheduleId: 2,
+        description: 'history medicine desc',
+        medicine_list: [{id: 200,name: 'Ambroxol', price: 200000}]
     }
 
     let access_token = "";
@@ -275,6 +279,11 @@ describe("History Routes Test", () => {
             .catch((err) => done(err));
     });
 
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+      })
+
     //test here
     test("200 Success get all histories - should return all histories data", (done) => {
         request(app)
@@ -289,18 +298,19 @@ describe("History Routes Test", () => {
             });
     });
 
+
     // failed to get all history data, no access_token granted
-    test("failed to  get all histories - should error message", (done) => {
-        request(app)
-            .get("/history")
-            // .set("access_token", access_token)
-            .then((response) => {
-                const { body, status } = response;
-                expect(status).toBe(expect.any(Number))
-                expect(body).toHaveProperty("message", expect.any(String))
-                return done();
-            });
-    });
+    // test("failed to  get all histories - should error message", (done) => {
+    //     History
+    //     request(app)
+    //         .get("/history")
+    //         .then((response) => {
+    //             const { body, status } = response;
+    //             expect(status).toBe(expect.any(Number))
+    //             expect(body).toHaveProperty("message", expect.any(String))
+    //             return done();
+    //         });
+    // });
 
     // findHistoryByBookingId
     test("200 Success get data history by BookingScheduleId", (done) => {
@@ -314,6 +324,65 @@ describe("History Routes Test", () => {
                 expect(body).toHaveProperty("description", expect.any(String))
                 expect(body).toHaveProperty("total_price", expect.any(Number))
                 expect(body).toHaveProperty("is_paid", expect.any(Boolean))
+                return done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("200 Succes post transaction midtrans - should return success message", (done) => {
+        request(app)
+            .post("/history/transaction/1")
+            .then((response) => {
+                const { body, status } = response
+                expect(status).toBe(201)
+                expect(body).toHaveProperty("token", expect.any(String))
+                expect(body).toHaveProperty("redirect_url", expect.any(String))
+                expect(body).toHaveProperty("orderId", expect.any(Number))
+                return done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("500 Error post transaction midtrans - should return error message", (done) => {
+        request(app)
+            .post("/history/transaction/aaaa")
+            .then((response) => {
+                const { body, status } = response
+                expect(status).toBe(500)
+                return done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("200 Success get status transaction midtrans - should return trx detail", (done) => {
+        request(app)
+            .get("/history/transaction/2")
+            .then((response) => {
+                const { body, status } = response
+                expect(status).toBe(201)
+                expect(body).toHaveProperty("transaction_status", expect.any(String))
+                expect(body).toHaveProperty("transaction_id", expect.any(String))
+                expect(body).toHaveProperty("payment_type", expect.any(String))
+                return done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("500 Failed get status transaction midtrans - should return error", (done) => {
+        request(app)
+            .get("/history/transaction/5")
+            .then((response) => {
+                const { status, body } = response
+                expect(status).toBe(404)
+                expect(body).toHaveProperty("message", "Transaction doesn't exist.")
                 return done()
             })
             .catch((err) => {
@@ -420,4 +489,34 @@ describe("History Routes Test", () => {
                 console.log(err);
             })
     })
+
+    test("500 Failed create history - should return error message", (done) => {
+        request(app)
+            .post("/history")
+            .set("access_token", access_token)
+            .send(newHistory2)
+            .then(({body, status}) => {
+                expect(status).toBe(500)
+                expect(body).toHaveProperty("message", expect.any(String))
+                done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test('500 Failed Get All Medication Histories - Should handle error', async () => {
+        MedicationHistory.findAll = jest.fn().mockRejectedValue('Error')
+    
+        return request(app)
+          .get('/history')
+          .set('access_token', access_token)
+          .then((res) => {
+            expect(res.status).toBe(500)
+            expect(res.body.err).toBe(undefined)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
 });
