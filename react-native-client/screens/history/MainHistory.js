@@ -17,7 +17,7 @@ import Moment from 'moment';
 
 export default function MainHistory({ navigation, route }) {
   const dispatch = useDispatch();
-  const { id } = useSelector((state) => state.patients);
+  const { id } = useSelector((state) => state.patients)
   const { histories, antrian, loading, antrianLoading } = useSelector((state) => state.histories);
   const [activeBooking, setActiveBooking] = useState([]);
   const [historyBooking, setHistoryBooking] = useState([]);
@@ -77,7 +77,7 @@ export default function MainHistory({ navigation, route }) {
           <View style={styles.position}>
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
-                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Detail Pesanan</Text>
+                <Text style={{ fontWeight: "bold", fontSize: 25 }}>Detail Pesanan</Text>
                 {/* <Button title="X" onPress={() => closeModal()} /> */}
                 {antrianLoading ? (
                   <ActivityIndicator size="small" color="#0000ff" style={{ flex: 1 }} />
@@ -109,16 +109,33 @@ export default function MainHistory({ navigation, route }) {
                   Poliklinik {modalData?.DoctorSchedule?.Employee?.Poli.name}
                 </Text>
                 <View>
-                  <Text style={{fontSize: 15}}>Dokter : {modalData?.DoctorSchedule?.Employee?.name}</Text>
-                  <Text style={{fontSize: 15}}>Keluhan : {modalData?.keluhan}</Text>
-                  <Text style={{fontSize: 15}}>Tanggal : {Moment(newDate).format('D MMMM YYYY')}</Text>
-                  <Text style={{fontSize: 15}}>Hari : {modalData?.DoctorSchedule?.Day?.name}</Text>
-                  <Text style={{fontSize: 15}}>
-                    Jam : {modalData?.DoctorSchedule?.start_hour} -{" "}
-                    {modalData?.DoctorSchedule?.end_hour}
-                  </Text>
-                  <Text style={{ fontSize: 15, marginBottom: 20}}>Antrian : {modalData?.antrian}</Text>
-  
+                  <View style={{flexDirection: 'row', paddingBottom: 15}}>
+                    <View style={{flexDirection: "column"}}>
+                      <Text>Dokter</Text>
+                      <Text>Keluhan</Text>
+                      <Text>Tanggal</Text>
+                      <Text>Hari</Text>
+                      <Text>Jam</Text>
+                      <Text>Antrian</Text>
+                    </View>
+                    <View style={{flexDirection: "column", paddingLeft: 15}}>
+                      <Text>:</Text>
+                      <Text>:</Text>
+                      <Text>:</Text>
+                      <Text>:</Text>
+                      <Text>:</Text>
+                      <Text>:</Text>
+                    </View>
+                    <View style={{flexDirection: "column", paddingLeft: 15}}>
+                      <Text>{modalData?.DoctorSchedule?.Employee?.name}</Text>
+                      <Text>{modalData?.keluhan}</Text>
+                      <Text>{Moment(newDate).format('D MMMM YYYY')}</Text>
+                      <Text>{modalData?.DoctorSchedule?.Day?.name}</Text>
+                      <Text>{modalData?.DoctorSchedule?.start_hour} -{" "}
+                      {modalData?.DoctorSchedule?.end_hour}</Text>
+                      <Text>{modalData?.antrian}</Text>
+                    </View>
+                  </View>
                   <Button
                     title="get antrian"
                     onPress={() => getLastAntrian(modalData?.DoctorSchedule?.id)}
