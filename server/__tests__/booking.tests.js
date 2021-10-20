@@ -438,6 +438,35 @@ describe("History Routes Test", () => {
             })
     })
 
+    test("404 failed edit new booking id not found - should return error message", (done) => {
+        request(app)
+            .patch("/bookings/10")
+            .set("access_token", access_token)
+            .send(newBooking)
+            .then(({body, status}) => {
+                expect(status).toBe(404)
+                expect(body).toHaveProperty('message', "There's no appointment with id = 10")
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("500 failed edit new booking - should return error message", (done) => {
+        request(app)
+            .patch("/bookings/eeeeee")
+            .set("access_token", access_token)
+            .send(newBooking)
+            .then(({body, status}) => {
+                expect(status).toBe(500)
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
     test("200 Success delete booking - should return success message", (done) => {
         request(app)
             .delete("/bookings/1")
@@ -445,6 +474,33 @@ describe("History Routes Test", () => {
             .then(({body, status}) => {
                 expect(status).toBe(200)
                 expect(body).toHaveProperty('message', 'Delete Appointment with id = 1 has been succeed')
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("404 Failed delete booking - should return error message", (done) => {
+        request(app)
+            .delete("/bookings/10")
+            .set("access_token", access_token)
+            .then(({body, status}) => {
+                expect(status).toBe(404)
+                expect(body).toHaveProperty('message', "There's no appointment with id = 10")
+               done()
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    })
+
+    test("500 Failed delete booking - should return error message", (done) => {
+        request(app)
+            .delete("/bookings/eeee")
+            .set("access_token", access_token)
+            .then(({body, status}) => {
+                expect(status).toBe(500)
                done()
             })
             .catch(err => {
