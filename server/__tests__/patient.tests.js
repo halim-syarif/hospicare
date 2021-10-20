@@ -25,6 +25,7 @@ describe("Patient Routes Test", () => {
       gender: "male",
       address: "Jl Biduri Bulan Bl N/10, Dki Jakarta",
       email: "jamilrsa@yahoo.com",
+      password: hashPassword('password'),
       imgUrl:
         "https://www.random-name-generator.com/images/faces/male-asia/19.jpg",
       createdAt: new Date(),
@@ -36,6 +37,7 @@ describe("Patient Routes Test", () => {
       gender: "female",
       address: "Jl Suci 11, Dki Jakarta",
       email: "novitasari.ayu@kuswandari.asia",
+      password: hashPassword('password'),
       imgUrl:
         "https://www.random-name-generator.com/images/faces/female-asia/13.jpg",
       createdAt: new Date(),
@@ -47,6 +49,7 @@ describe("Patient Routes Test", () => {
       gender: "female",
       address: "Jl Jend Sudirman 45, Jakarta Timur",
       email: "ratih.mulyani@wulandari.in",
+      password: hashPassword('password'),
       imgUrl:
         "https://www.random-name-generator.com/images/faces/female-asia/04.jpg",
       createdAt: new Date(),
@@ -58,6 +61,7 @@ describe("Patient Routes Test", () => {
       gender: "male",
       address: "Proy Senen Bl IV/4, Dki Jakarta",
       email: "luwar.sinaga@yahoo.com",
+      password: hashPassword('password'),
       imgUrl:
         "https://www.random-name-generator.com/images/faces/male-asia/22.jpg",
       createdAt: new Date(),
@@ -69,6 +73,7 @@ describe("Patient Routes Test", () => {
       gender: "female",
       address: "Jl Melasti 18 A, Dki Jakarta",
       email: "adriansyah.laila@yahoo.com",
+      password: hashPassword('password'),
       imgUrl:
         "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
       createdAt: new Date(),
@@ -140,8 +145,9 @@ describe("Patient Routes Test", () => {
         name: "Kartika Usamah",
         age: 30,
         gender: "female",
+        password: 'password',
         address: "Jl Melasti 18 A, Dki Jakarta",
-        email: "adriansyah2.laila@yahoo.com",
+        email: "adriansyah55.laila@yahoo.com",
         imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -150,7 +156,7 @@ describe("Patient Routes Test", () => {
         const { body, status } = response;
         expect(status).toBe(201);
         expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('email', "adriansyah2.laila@yahoo.com")
+        expect(body).toHaveProperty('email', "adriansyah55.laila@yahoo.com")
         expect(body).toHaveProperty('address', "Jl Melasti 18 A, Dki Jakarta")
         done();
       })
@@ -218,4 +224,27 @@ describe("Patient Routes Test", () => {
         done()
       })
   })
+
+  test('200 Login succes - should return obj with access_token and payload as a key', (done) => {
+    request(app)
+      .post('/patients/login')
+      .send({
+        email: 'novitasari.ayu@kuswandari.asia',
+        password: 'password'
+      })
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(200)
+        expect(body).toHaveProperty('access_token', expect.any(String)),
+        expect(body).toHaveProperty('id', expect.any(Number))
+        expect(body).toHaveProperty('name', expect.any(String))
+        expect(body).toHaveProperty('email', expect.any(String))
+        done()
+      })
+      .catch(err => {
+        console.log(err.name, "maaaakplungggggggggggg😂");
+      })
+  })
+
+  
 });

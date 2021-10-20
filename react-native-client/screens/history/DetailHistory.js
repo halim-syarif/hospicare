@@ -1,13 +1,28 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Button } from "react-native";
+
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import Modal from "react-native-modal";
+import { useDispatch, useSelector } from "react-redux";
+import { transaction, getStatusTransaction } from "../../store/actions/history";
 import StatusBarLight from "../../components/StatusBarLight";
 
 export default function DetailHistory({ navigation, route }) {
   const { data } = route.params;
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState({});
+  const { midtransUrl } = useSelector((state) => state.histories);
+  const [paymentStatus, setStatusPayment] = useState("");
+  const [statusLoading, setStatusLoading] = useState(false);
 
   function openModal(data) {
     setModalData(data);
@@ -19,7 +34,42 @@ export default function DetailHistory({ navigation, route }) {
     setModalVisible(false);
   }
 
+  function paynow() {
+    dispatch(transaction(data.MedicationHistory.id));
+  }
+
+  useEffect(() => {
+    const { paymentId } = data;
+    setStatusLoading(true);
+    getStatusTransaction(paymentId)
+      .then((response) => {
+        setStatusLoading(false);
+        setStatusPayment(response.data);
+        // console.log(response.data);
+        // console.log(response.data.transaction_status);//capture,pending
+        // console.log(response.data.approval_code); //=> credit_card success
+        // console.log(response.data.payment_type);//bank_transfer//cstore//credit_card
+        // console.log(response.data.store); //nama store => alfamart, indomart
+        // console.log(response.data.payment_code); // code pmbayaran csstore
+        // console.log(response.data.va_number); //{bank,va_number}
+      })
+      .catch((err) => {
+        setStatusPayment(err.response.data.message);
+        setStatusLoading(false);
+        // console.log(err.response.data.message);//Transaction doesn't exist.
+      });
+  }, [data]);
+
+  useEffect(() => {
+    if (midtransUrl) {
+      navigation.navigate("Payment", {
+        midtransUrl,
+      });
+    }
+  }, [midtransUrl]);
+
   return (
+    <>
     <ScrollView style={styles.container}>
       <StatusBarLight/>
       <View style={styles.active}>
@@ -108,10 +158,158 @@ export default function DetailHistory({ navigation, route }) {
           <View style={styles.modalView}>
             <Text> {data.name}</Text>
             <Text> {data.description}</Text>
+          <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
+          <View style={styles.card}>
+            <Text>Keluhan</Text>
+            <View style={styles.activeCard}>
+              <Text>{data.keluhan}</Text>
+            </View>
+          </View>
+          <View style={styles.card}>
+            <Text>Diagnosa Penyakit</Text>
+            <View style={styles.activeCard}>
+              <Text>{data.MedicationHistory.description}</Text>
+            </View>
+          </View>
+          <View style={styles.card}>
+            <Text>Obat</Text>
+            <View style={styles.activeCard}>
+              {data.MedicationHistory.PatientMedicines.map((el) => {
+                return (
+                  <>
+                    <View key={el.id} style={styles.wrap}>
+                      <Text>{el.Medicine.name}</Text>
+                      <Text>2 x sehari</Text>
+                      <Text>sebelum makan</Text>
+                      <Pressable
+                        onPress={() =>
+                          openModal({
+                            name: el.Medicine.name,
+                            description: el.Medicine.description,
+                          })
+                        }
+                      >
+                        <Ionicons
+                          name="information-circle-outline"
+                          size={15}
+                          color="gray"
+                        />
+                      </Pressable>
+                    </View>
+                  </>
+                );
+              })}
+            </View>
+          </View>
+          <View style={styles.card}>
+            <Text>Biaya</Text>
+            <View style={styles.activeCard}>
+              <View style={styles.wrap}>
+                <Text>Biaya Dokter</Text>
+                <Text>:</Text>
+                <Text>
+                  Rp {data.DoctorSchedule.price.toLocaleString("id-ID")}
+                </Text>
+              </View>
+              <Text>Obat :</Text>
+              {data.MedicationHistory.PatientMedicines.map((el, index) => {
+                return (
+                  <View key={el.id} style={styles.wrap}>
+                    <Text style={{ paddingLeft: 10 }}>
+                      {index + 1}. {el.Medicine.name}
+                    </Text>
+                    <Text>:</Text>
+                    <Text>Rp {el.price.toLocaleString("id-ID")}</Text>
+                  </View>
+                );
+              })}
+
+              <View style={styles.wrap}>
+                <Text>Total Price</Text>
+                <Text>:</Text>
+                <Text>
+                  Rp{" "}
+                  {data.MedicationHistory.total_price.toLocaleString("id-ID")}
+                </Text>
+              </View>
+              <View style={{ marginTop: 10, width: "100%" }}>
+                {statusLoading ? (
+                  <ActivityIndicator
+                    size="small"
+                    color="#0000ff"
+                    style={styles.button}
+                  />
+                ) : (
+                  <>
+                    {paymentStatus === "Transaction doesn't exist." ? (
+                      <Pressable onPress={paynow}>
+                        <Text style={styles.buttonless}>Bayar Sekarang</Text>
+                      </Pressable>
+                    ) : (
+                      <>
+                        {paymentStatus?.transaction_status === "pending" ? (
+                          <Pressable onPress={paynow}>
+                            <Text style={styles.buttonPending}>
+                              Selesaikan Pembayaran
+                            </Text>
+                            <View>
+                              <Text>
+                                Metode pembayaran : {paymentStatus.payment_type}
+                              </Text>
+                              {paymentStatus.payment_type === "cstore" ? (
+                                <>
+                                  <Text>Merchant : {paymentStatus.store}</Text>
+                                  <Text>
+                                    Kode Pembayaran :{" "}
+                                    {paymentStatus.payment_code}
+                                  </Text>
+                                </>
+                              ) : (
+                                <>
+                                  {paymentStatus.payment_type ===
+                                  "bank_transfer" ? (
+                                    <>
+                                      <Text>
+                                        Bank tujuan :{" "}
+                                        {paymentStatus.va_numbers[0].bank}
+                                      </Text>
+                                      <Text>
+                                        VA number :{" "}
+                                        {paymentStatus.va_numbers[0].va_number}
+                                      </Text>
+                                    </>
+                                  ) : null}
+                                </>
+                              )}
+                            </View>
+                            {/* <Text>{JSON.stringify(paymentStatus)}</Text> */}
+                          </Pressable>
+                        ) : (
+                          <Text style={styles.button}>Pembayaran Berhasil</Text>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </View>
+            </View>
           </View>
         </View>
-      </Modal>
-    </ScrollView>
+        <Modal
+          animationIn="fadeIn"
+          isVisible={modalVisible}
+          onBackdropPress={() => closeModal()}
+        >
+          <View style={styles.position}>
+            <View style={styles.modalView}>
+              <Text> {data.name}</Text>
+              <Text> {data.description}</Text>
+            </View>
+          </View>
+        </Modal>
+        </View>
+      </ScrollView>
+    </>
   );
 }
 
@@ -197,4 +395,38 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5
   }
+    elevation: 5,
+  },
+  button: {
+    flex: 1,
+    width: "100%",
+    color: "white",
+    backgroundColor: "#059669",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 3,
+  },
+  buttonless: {
+    width: "100%",
+    color: "white",
+    backgroundColor: "#60A5FA",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 3,
+  },
+
+  buttonPending: {
+    width: "100%",
+    color: "white",
+    backgroundColor: "#FBBF24",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 3,
+  },
 });

@@ -25,9 +25,9 @@ function App() {
 
   return (
     <>
+
       <Sidebar />
-      <div className="relative md:ml-64 bg-blueGray-100">
-        <Navbar />
+      <div className="relative md:ml-64">
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/doctor" component={Doctor} />
@@ -41,5 +41,6 @@ function App() {
     </>
   );
 }
+
 
 export default App;

@@ -25,7 +25,7 @@ export default function SignIn({navigation, route}) {
     const loadingBooking = useSelector(state => state.booking.loadingBooking)
     const DoctorScheduleId = useSelector(state => state.booking.doctorScheduleId)
     const booking_date = useSelector(state => state.booking.bookingDate)
-    const PatientId = useSelector(state => state.patient?.id) || 1
+    const PatientId = useSelector(state => state.patients?.id) || 1
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -108,7 +108,7 @@ export default function SignIn({navigation, route}) {
                         <Text style={styles.modalHeaderText}>Information</Text>
                     </View> 
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalContentText}>You have successfully bookeed your appointment click the button belom to see your booking history </Text>
+                        <Text style={styles.modalContentText}>You have successfully booked your appointment click the button below to see your booking history </Text>
                         <TouchableOpacity 
                             onPress={() => goToHistory()}
                             style={styles.closeModal}

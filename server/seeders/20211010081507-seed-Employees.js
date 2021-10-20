@@ -28,7 +28,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Ketut Ratna Dewi Wijayanti, Sp. OG",
+        name: "Dr. Ratna Dewi Wijayanti, Sp. OG",
         email: "ratna.wijayanti@gmail.com",
         password: hashPassword('password'),
         age: 41,
@@ -40,7 +40,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Ida Ayu Indira Mandini Manuaba, M.Biomed., Sp. OG",
+        name: "Dr. Ida Ayu Indira, Sp. OG",
         email: "indira.mandiri@gmail.com",
         password: hashPassword('password'),
         age: 38,
@@ -52,7 +52,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Oka Rahmatika Noviyanti., Sp. OG",
+        name: "Dr. Oka Rahmatika, Sp. OG",
         email: "oka.noviyanti@gmail.com",
         password: hashPassword('password'),
         age: 38,
@@ -64,7 +64,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. M. Adya F. Dilmy, Sp.OG",
+        name: "Dr. Adya Dilmy, Sp.OG",
         email: "adya.dilmi@gmail.com",
         password: hashPassword('password'),
         age: 35,
@@ -76,7 +76,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Nia Kurniati, Sp.A(K)",
+        name: "Dr. Nia Kurniati, Sp.A(K)",
         email: "nia.kurniati@gmail.com",
         password: hashPassword('password'),
         age: 39,
@@ -88,7 +88,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Ludi Dhyani Rahmartani, Sp.A",
+        name: "Dr. Ludi Dhyani, Sp.A",
         email: "dhyani.rahma@gmail.com",
         password: hashPassword('password'),
         age: 41,
@@ -100,7 +100,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "Dr. dr. Murti Andriastuti, Sp.A(K)",
+        name: "Dr. Murti Andriastuti, Sp.A(K)",
         email: "murti.andria@gmail.com",
         password: hashPassword('password'),
         age: 33,
@@ -112,7 +112,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Yoga Devaera, Sp.A(K)",
+        name: "Dr. Yoga Devaera, Sp.A(K)",
         email: "yoga.deveara@gmail.com",
         password: hashPassword('password'),
         age: 32,
@@ -124,7 +124,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Prima Almazini, Sp.JP(K)",
+        name: "Dr. Prima Almazini, Sp.JP(K)",
         email: "prima.almazini@gmail.com",
         password: hashPassword('password'),
         age: 40,
@@ -136,7 +136,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Dian Zamroni, Sp.JP(K)",
+        name: "Dr. Dian Zamroni Sp.JP(K)",
         email: "dian.zamroni@gmail.com",
         password: hashPassword('password'),
         age: 45,
@@ -148,7 +148,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Hary Sakti Muliawan, PhD, Sp.JP",
+        name: "Dr. Hary Sakti, Sp.JP",
         email: "hary.muliawan@gmail.com",
         password: hashPassword('password'),
         age: 40,
@@ -160,7 +160,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Siska Suridanda Danny, Sp.JP",
+        name: "Dr. Siska Suridanda, Sp.JP",
         email: "siska.suridanda@gmail.com",
         password: hashPassword('password'),
         age: 32,
@@ -172,7 +172,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Johannes Paulus Fernandez, Sp.JP",
+        name: "Dr. Johannes Paulus, Sp.JP",
         email: "johanes.paulus@gmail.com",
         password: hashPassword('password'),
         age: 35,
@@ -184,7 +184,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Tri Hening Rahayatri, Sp.B, Sp.BA",
+        name: "Dr. Tri Hening Rahayatri, Sp.BA",
         email: "hening.rahayati@gmail.com",
         password: hashPassword('password'),
         age: 33,
@@ -196,7 +196,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Rizky Amaliah, Sp.B(K)",
+        name: "Dr. Rizky Amaliah Sp.B(K)",
         email: "rizky.amaliah@gmail.com",
         password: hashPassword('password'),
         age: 37,
@@ -208,7 +208,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Ridho Ardhi Syaiful, Sp.B-KBD",
+        name: "Dr. Ridho Ardhi Sp.B-KBD",
         email: "ridho.ardhi@gmail.com",
         password: hashPassword('password'),
         age: 42,
@@ -220,7 +220,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Anissa N. Witjaksono, BMedSc(Hons)., Sp.M",
+        name: "Dr. Anissa N. Sp.M",
         email: "annisa.witjaksono@gmail.com",
         password: hashPassword('password'),
         age: 38,
@@ -232,7 +232,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Rina La Distia Nora, Ph.D, Sp.M(K)",
+        name: "Dr. Rina LaDistia, Sp.M(K)",
         email: "rina.ladistia@gmail.com",
         password: hashPassword('password'),
         age: 35,
@@ -244,7 +244,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Syska Widyawati, Sp.M(K), M.Pd.Ked",
+        name: "Dr. Syska Widyawati, M.Pd.Ked",
         email: "syska.widyawati@gmail.com",
         password: hashPassword('password'),
         age: 32,
@@ -256,7 +256,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Muthia Syarifa Yani SpKK",
+        name: "Dr. Muthia Syarifa, SpKK",
         email: "muthia.syarifa@gmail.com",
         password: hashPassword('password'),
         age: 37,
@@ -268,7 +268,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Ika Julianti SpKK",
+        name: "Dr. Ika Julianti, SpKK",
         email: "ika.julianti@gmail.com",
         password: hashPassword('password'),
         age: 33,
@@ -280,7 +280,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Muhammad Reza Nasution SpKK",
+        name: "Dr. Muhammad Reza, SpKK",
         email: "reza.nasution@gmail.com",
         password: hashPassword('password'),
         age: 45,
@@ -292,7 +292,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Mita Hafsah Saraswati, Sp.PD",
+        name: "Dr. Mita Hafsah, Sp.PD",
         email: "mita.hafsah@gmail.com",
         password: hashPassword('password'),
         age: 36,
@@ -304,7 +304,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Muhammad Hafiz Aini, MD",
+        name: "Dr. Muhammad Hafiz, MD",
         email: "hafiz.aini@gmail.com",
         password: hashPassword('password'),
         age: 48,
@@ -316,7 +316,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Hasan Maulahela, Sp.PD-KGEH",
+        name: "Dr. Hasan Maulahela, Sp.PD-KGEH",
         email: "hasan.maulahela@gmail.com",
         password: hashPassword('password'),
         age: 42,
@@ -328,7 +328,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Adi Wijaya, Sp.PD",
+        name: "Dr. Adi Wijaya, Sp.PD",
         email: "adi.wijaya@gmail.com",
         password: hashPassword('password'),
         age: 36,
@@ -340,7 +340,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Febriani Endiyarti, Sp.THT-KL",
+        name: "Dr. Febriani Endiyarti Sp.THT-KL",
         email: "febriani.endiyarti@gmail.com",
         password: hashPassword('password'),
         age: 34,
@@ -352,7 +352,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Dumasari Siregar, Sp.THT-KL",
+        name: "Dr. Dumasari Siregar Sp.THT-KL",
         email: "dumasari.siregar@gmail.com",
         password: hashPassword('password'),
         age: 44,
@@ -364,7 +364,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "Dr. dr. Mirta Hediyati Reksodiputro, Sp.THT-KL(K)",
+        name: "Dr. Mirta Hediyati, Sp.THT-KL",
         email: "mirta.hediyati@gmail.com",
         password: hashPassword('password'),
         age: 36,
@@ -376,7 +376,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Abdi Reza, Sp.BS",
+        name: "Dr. Abdi Reza, Sp.BS",
         email: "abdi.reza@gmail.com",
         password: hashPassword('password'),
         age: 37,
@@ -388,7 +388,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Wildan Latief, Sp.BS",
+        name: "Dr. Wildan Latief Sp.BS",
         email: "wildan.latief@gmail.com",
         password: hashPassword('password'),
         age: 50,
@@ -400,7 +400,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Mohammad Triadi Wijaya, Sp.BS",
+        name: "Dr. Mohammad Triadi Wijaya, Sp.BS",
         email: "triadi.wijaya@gmail.com",
         password: hashPassword('password'),
         age: 46,
@@ -412,7 +412,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Auliya Husen",
+        name: "Dr. Auliya Husen",
         email: "auliya.husen@gmail.com",
         password: hashPassword('password'),
         age: 41,
@@ -424,7 +424,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Annisa Ramadhianita",
+        name: "Dr. Annisa Ramadhianita",
         email: "annisa.ramadhianita@gmail.com",
         password: hashPassword('password'),
         age: 38,
@@ -436,7 +436,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Raditya Dewangga",
+        name: "Dr. Raditya Dewangga",
         email: "raditya.dewangga@gmail.com",
         password: hashPassword('password'),
         age: 45,
@@ -448,7 +448,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        name: "dr. Cikariska Arifin",
+        name: "Dr. Cikariska Arifin",
         email: "cikarika.arifin@gmail.com",
         password: hashPassword('password'),
         age: 46,

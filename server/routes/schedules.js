@@ -3,6 +3,7 @@ const doctorSchedule = require("../controllers/schedule")
 
 routes.get('/', doctorSchedule.showAll)
 routes.get('/:id', doctorSchedule.findScheduleByID)
+routes.get('/doctor/:doctorName', doctorSchedule.findScheduleByDoctorName)
 routes.get('/:poliid/:dayid', doctorSchedule.getScheduleByPoliDay)
 // router.get('/:dayId', doctorSchedule.findScheduleByDayId)
 routes.post('/', doctorSchedule.addSchedule)

@@ -21,6 +21,13 @@ export function setLoading(payload) {
   }
 }
 
+export function setPatient(payload) {
+  return {
+    type: 'patient/setPatient',
+    payload
+  }
+}
+
 
 export function userLogin(payload){
   return (dispatch) => {
@@ -34,6 +41,22 @@ export function userLogin(payload){
         localStorage.setItem('id', id)
         localStorage.setItem('poli', poli)
         dispatch(setIsLogin(true))
+    })
+    .catch(err => dispatch(setErrorMessage(err.response.data.message)))
+    .finally(() => dispatch(setLoading(false)))
+  }
+}
+
+export function getPatient(){
+  return (dispatch) => {
+    dispatch(setLoading(true))
+    appApi.get('/patients', {
+      headers: {
+        access_token: localStorage.getItem('access_token')
+      }
+    })
+    .then(response => {
+      dispatch(setPatient(response.data.rows))
     })
     .catch(err => dispatch(setErrorMessage(err.response.data.message)))
     .finally(() => dispatch(setLoading(false)))

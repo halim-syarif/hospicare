@@ -25,6 +25,7 @@ const errorHandler = (err, req, res, next) => {
 
     case "SequelizeValidationError":
     case "SequelizeUniqueConstraintError":
+    
       code = 400;
       message = err.errors.map((err) => {
         return err.message;
@@ -73,9 +74,17 @@ const errorHandler = (err, req, res, next) => {
       code = err.code
       message = err.message
       break;
+    case 'MidtransError':
+      code = err.ApiResponse.status_code
+      message = err.ApiResponse.status_message
+      break;
     case 'bookinglimitreached':
       code = 400
       message = 'booking limit reached'
+      break;
+    case "SequelizeDatabaseError":
+      code = 500
+      message = err.message
       break;
   }
 
