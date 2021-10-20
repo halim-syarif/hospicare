@@ -86,7 +86,7 @@ export default function DetailHistory({ navigation, route }) {
               return (
                 <View key={el.id} style={styles.wrap}>
                   <Text style={{ paddingLeft: 10 }}>
-                    {index + 1}. {el.Medicine.name} :
+                    {index + 1}. {el.Medicine.name}
                   </Text>
                   <Text>Rp {el.price.toLocaleString("id-ID")}</Text>
                 </View>

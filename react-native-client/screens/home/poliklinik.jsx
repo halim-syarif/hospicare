@@ -35,9 +35,9 @@ export default function Poliklinik({ navigation, route }) {
 
   return (
     <ScrollView style={styles.container}>
-      {content.map((el) => {
+      {content.map((el, index) => {
         return (
-          <PoliCard data={el}/>
+          <PoliCard key={index} data={el}/>
         )
       })}
     </ScrollView>
