@@ -166,11 +166,6 @@ export default function MainHistory({ navigation, route }) {
                         <Text style={styles.poli}>
                           Poliklinik {el.DoctorSchedule.Employee.Poli.name}                         
                         </Text>
-                        <View>
-                          <Text style={{fontWeight: "bold", marginLeft: 200, fontSize: 13}}>
-                            # {el.antrian}                         
-                          </Text>
-                        </View> 
                       </View>
                       <Text>
                         {el.DoctorSchedule.Day.name},{" "}
