@@ -147,7 +147,8 @@ describe("Patient Routes Test", () => {
         gender: "female",
         password: 'password',
         address: "Jl Melasti 18 A, Dki Jakarta",
-        email: "adriansyah55.laila@yahoo.com",
+        email: "adriansyah2.laila@yahoo.com",
+        password: 'mantapmantap',
         imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -230,7 +231,7 @@ describe("Patient Routes Test", () => {
       .post('/patients/login')
       .send({
         email: 'novitasari.ayu@kuswandari.asia',
-        password: 'password'
+        password: ''
       })
       .then(response => {
         const { body, status } = response
@@ -246,5 +247,193 @@ describe("Patient Routes Test", () => {
       })
   })
 
+  test('404 login failed - password/email matched no data should return error message ', (done) => {
+    request(app)
+      .post('/patients/login')
+      .send({
+        email: 'wrongmail@maill.com',
+        password: 'wrongpass'
+      })
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Invalid Email/Password')
+        done()
+      })
+      .catch(err => {
+        console.log(err.name, "maaaakplungggggggggggg😂");
+      })
+  });
   
+  test('404 login failed - gave no email/password should return message User', (done) => {
+    request(app)
+      .post('/patients/login')
+      .send({
+        email: '',
+        password: ''
+      })
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Email or password can\'t be empty')
+        done()
+      })
+      .catch(err => {
+        console.log(err);
+        console.log(err.name, "maaaakplungggggggggggg😂");
+      })
+  });
+
+  test("401 failed get data patients by id - should return error message", (done) => {
+    request(app)
+      .get("/patients/ndar")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Id Must be a Number");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+  
+  test("401 failed get data patients by id - should return error message", (done) => {
+    request(app)
+      .get("/patients/99")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Id not found");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("400 Failed to register or add patient - should return array of error message", (done) => {
+    request(app)
+      .post("/patients")
+      .send({
+        name: "Kartika Usamah",
+        age: 30,
+        gender: "female",
+        address: "Jl Melasti 18 A, Dki Jakarta",
+        email: "adriansyah2.laila@yahoo.com",
+        imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(400);
+        expect(body).toHaveProperty('message', expect.any(Array))
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("401 failed edit data patients by id - should return error message", (done) => {
+      request(app)
+        .put("/patients/ndar")
+        .set("access_token", access_token)
+        .then((response) => {
+          const { body, status } = response;
+          expect(status).toBe(401);
+          expect(body).toHaveProperty("message", "Id Must be a Number");
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+  test("401 failed edit data patients by id - should return error message", (done) => {
+    request(app)
+      .put("/patients/99")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Id not found");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("400 Failed edit register or add patient - should return array of error message", (done) => {
+    request(app)
+      .put("/patients/1")
+      .send({
+        name: "Kartika Usamah",
+        age: 30,
+        gender: "female",
+        address: "Jl Melasti 18 A, Dki Jakarta",
+        email: "adriansyah2.laila@yahoo.com",
+        imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty('message', "You must login first")
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("401 failed delete data patients by id - should return error message", (done) => {
+    request(app)
+      .delete("/patients/ndar")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Id Must be a Number");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("404 failed delete data patients by id - should return error message", (done) => {
+    request(app)
+      .delete("/patients/99")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Id not found");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("401 failed to  get all patients - should return error message", (done) => {
+    request(app)
+      .get("/patients")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty('message', "You must login first")
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
 });
