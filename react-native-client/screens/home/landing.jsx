@@ -163,13 +163,13 @@ export default function Landing({ navigation }) {
                   color="#10B981"
                   style={{ paddingLeft: 5 }}
                 />
-                <Text style={styles.icontext}>Poliklinik</Text>
+                <Text style={styles.icontext}>Polyclinics</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.iconitem}>
               <TouchableOpacity onPress={() => navigation.navigate("Dokter")}>
                 <Fontisto name="doctor" size={35} color="#10B981" />
-                <Text style={styles.icontext}>Dokter</Text>
+                <Text style={styles.icontext}>Doctors</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.iconitem}>
@@ -181,7 +181,7 @@ export default function Landing({ navigation }) {
             <View style={styles.iconitem}>
               <TouchableOpacity onPress={() => navigation.navigate("Apotek")}>
                 <FontAwesome name="medkit" size={35} color="#10B981" />
-                <Text style={styles.icontext}>Apotek</Text>
+                <Text style={styles.icontext}>Medicines</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.iconitem}>
@@ -395,6 +395,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     maxWidth: 60,
     textAlign: "center",
+    alignItems: "center",
     color: "#9CA3AF",
     justifyContent: "center",
   },
