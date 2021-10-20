@@ -12,6 +12,7 @@ import { Ionicons } from "react-native-vector-icons";
 import Modal from "react-native-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { transaction, getStatusTransaction } from "../../store/actions/history";
+import StatusBarLight from "../../components/StatusBarLight";
 
 export default function DetailHistory({ navigation, route }) {
   const { data } = route.params;
@@ -67,17 +68,23 @@ export default function DetailHistory({ navigation, route }) {
   }, [midtransUrl]);
 
   return (
-    <>
-      <ScrollView style={styles.container}>
-        <View style={styles.active}>
-          <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
-          <View style={styles.header}>
-            <Text>Poliklinik {data.DoctorSchedule.Employee.Poli.name}</Text>
-            <Text>Dokter : {data.DoctorSchedule.Employee.name}</Text>
-            <Text>
-              Tanggal Pemeriksaan :{" "}
-              {new Date(data.booking_date).toUTCString().slice(0, 16)}
-            </Text>
+    <ScrollView style={styles.container}>
+      <StatusBarLight/>
+      <View style={styles.active}>
+        <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
+        <View style={styles.header}>
+          <Text>Poliklinik {data.DoctorSchedule.Employee.Poli.name}</Text>
+          <Text>Dokter : {data.DoctorSchedule.Employee.name}</Text>
+          <Text>
+            Tanggal Pemeriksaan :{" "}
+            {new Date(data.booking_date).toUTCString().slice(0, 16)}
+          </Text>
+        </View>
+        <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
+        <View style={styles.card}>
+          <Text>Keluhan</Text>
+          <View style={styles.activeCard}>
+            <Text>{data.keluhan}</Text>
           </View>
           <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
           <View style={styles.card}>
@@ -228,8 +235,8 @@ export default function DetailHistory({ navigation, route }) {
             </View>
           </View>
         </Modal>
+        </View>
       </ScrollView>
-    </>
   );
 }
 

@@ -1,14 +1,10 @@
 import React, { useEffect, useState  } from 'react'
 import { useDispatch } from 'react-redux';
 import { 
-    ActivityIndicator,
-    Button, 
     View, 
     Text, 
     StyleSheet, 
-    FlatList, 
     Picker, 
-    ImageBackground,
     Platform,
     StatusBar
 } from 'react-native';
@@ -107,7 +103,6 @@ export default function HeaderComponent(){
                     ? <DateTimePicker
                         testID="dateTimePicker"
                         value={data.date}
-                        // mode={mode}
                         is24Hour={true}
                         display="default"
                         onChange={onChange}

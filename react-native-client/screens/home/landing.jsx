@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
   ScrollView,
   Dimensions,
   Pressable,
+  FlatList,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchBar } from "react-native-elements";
@@ -20,16 +21,43 @@ import {
   FontAwesome,
   Entypo,
 } from "@expo/vector-icons";
+import StatusBarLight from "../../components/StatusBarLight";
+import { useDispatch } from "react-redux";
+import { doctorNamesAsync, scheduleByDoctorName } from "../../store/actions";
+import { useSelector } from "react-redux";
 
 export default function Landing({ navigation }) {
+  const dispatch = useDispatch()
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const [searchActive, setSearchActive] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('')
   const searchArea = useRef(null)
+  const doctorNames = useSelector(state => state.doctors.doctorNames)
+
+  useEffect(() => {
+    dispatch(doctorNamesAsync())
+  }, [])
+
 
   function hideSearch(){
     searchArea.current.blur()
     setSearchActive(false);
+  }
+
+  const updateSearch = (search) => {
+    setSearchQuery(search);
+  };
+
+  const searchSchedule = () => {
+    const doctorName = searchQuery
+    dispatch(scheduleByDoctorName(doctorName))
+    navigation.navigate('Schedule')
+  }
+
+  const searchByName = (name) => {
+    dispatch(scheduleByDoctorName(name))
+    navigation.navigate('Schedule')
   }
 
   return (
@@ -48,22 +76,37 @@ export default function Landing({ navigation }) {
               borderTopWidth: 0,
               borderBottomWidth: 0,
             }}
-            placeholder="type docter name"
+            placeholder="type doctor name or pick one"
+            onChangeText={updateSearch}
+            value={searchQuery}
             onFocus={() => setSearchActive(true)}
           />
         </View>
         {searchActive ? (
-          <Pressable
-            onPress={hideSearch}
-            style={styles.iconlist}
-          >
-            <Ionicons
-              name="close-circle-outline"
-              size={25}
-              color="#9CA3AF"
-              style={{ marginRight: 20 }}
-            />
-          </Pressable>
+          <View style={styles.activeButtons}>
+            <Pressable
+              onPress={searchSchedule}
+              style={styles.iconlist}
+            >
+              <Ionicons
+                name="ios-search-sharp"
+                size={25}
+                color="#9CA3AF"
+                style={{ marginRight: 20 }}
+              />
+            </Pressable>
+            <Pressable
+              onPress={hideSearch}
+              style={styles.iconlist}
+            >
+              <Ionicons
+                name="close-circle-outline"
+                size={25}
+                color="#9CA3AF"
+                style={{ marginRight: 20 }}
+              />
+            </Pressable>
+          </View>
         ) : (
           <View style={styles.iconlist}>
             <AntDesign
@@ -83,16 +126,23 @@ export default function Landing({ navigation }) {
               size={20}
               color="black"
               style={{ marginRight: 15 }}
+              onPress={() => {navigation.openDrawer()}}
             />
           </View>
         )}
       </View>
       {searchActive ? (
-        <ScrollView style={styles.scrollView}>
-          <Text>tes</Text>
-          <Text>tes</Text>
-          <Text>tes</Text>
-        </ScrollView>
+        <FlatList
+          data={doctorNames}
+          renderItem={({item}) => (
+            <TouchableOpacity style={styles.scrollViewDoctorNames}
+              onPress={() => searchByName(item.name)}>
+              <Text>{item.name}</Text>
+            </TouchableOpacity>
+          )
+          }
+          keyExtractor={item => item.id.toString()}
+        />
       ) : (
         <ScrollView style={styles.scrollView}>
           <Image
@@ -235,7 +285,7 @@ export default function Landing({ navigation }) {
         </ScrollView>
       )}
 
-      <StatusBar style="auto" />
+      <StatusBarLight/>
     </SafeAreaView>
   );
 }
@@ -254,7 +304,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   searchBar: {
-    width: "60%",
+    width: "70%",
   },
   iconlist: {
     display: "flex",
@@ -275,6 +325,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  activeButtons: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  }, 
   banner: {
     width: "100%",
     height: 200,
@@ -283,6 +337,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: "white",
+  },
+  scrollViewDoctorNames: {
+    backgroundColor: "white",
+    paddingVertical: 4,
+    paddingLeft: 10,
+    marginVertical: 10
   },
   slider: {
     width: 390,
