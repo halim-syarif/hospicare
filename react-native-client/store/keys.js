@@ -21,6 +21,8 @@ const SET_BOOKING_ERROR = 'booking/setError'
 const SET_BOOKING_LOADING = 'booking/setLoading'
 const SET_BOOKING_DOCTOR_SCHEDULE_ID = 'booking/setBookingDoctorScheduleId'
 const SET_BOOKING_DATE = 'booking/setBookingDate'
+const SET_MIDTRANS = 'history/setMidtransUrl'
+
 
 export { 
     LOGIN_PATIENT, 
@@ -42,5 +44,6 @@ export {
     SET_BOOKING_ERROR,
     SET_BOOKING_LOADING,
     SET_BOOKING_DOCTOR_SCHEDULE_ID,
-    SET_BOOKING_DATE
+    SET_BOOKING_DATE,
+    SET_MIDTRANS
 }

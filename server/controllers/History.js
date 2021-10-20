@@ -1,3 +1,4 @@
+const midtransClient = require('midtrans-client')
 const {
   DoctorSchedule,
   MedicationHistory,
@@ -127,6 +128,10 @@ class HistoryController {
               },
             ],
           },
+          {
+            model: Patient,
+            attributes: ['id','name','email']
+          }
         ],
       });
       if (!history) {
@@ -190,6 +195,71 @@ class HistoryController {
     }
   }
 
+  static async transaction(req, res, next) {
+    try {
+        const {id} = req.params 
+        const userId = 1
+        const { amount } = req.body
+
+        const history = await MedicationHistory.findByPk(id, {
+          include: {
+            model: BookingSchedule,
+            include: Patient
+          }
+        })
+
+        const Name = history.BookingSchedule.Patient.name.split(' ')
+        const firstName = Name[0]
+        const lastName = Name[Name.length]
+        console.log(history.BookingSchedule.Patient);
+        
+            let snap = new midtransClient.Snap({
+                // Set to true if you want Production Environment (accept real transaction).
+                isProduction: false,
+                serverKey: 'SB-Mid-server-14H8tPf4AFyw7ih5uxqG-Qvd'
+            });
+
+            let parameter = {
+                "transaction_details": {
+                    "order_id": firstName + history.id,
+                    "gross_amount": history.total_price
+                },
+                "credit_card": {
+                    "secure": true
+                },
+                "customer_details": {
+
+                    "first_name": firstName,
+                    "last_name": lastName,
+                    "email": history.BookingSchedule.Patient.email
+                }
+            };
+
+            let trx = await snap.createTransaction(parameter)
+            trx.orderId = 1
+            res.status(201).json(trx)
+            
+    } catch (err) {
+        console.log(err);
+        next(err)
+    }
+
+}
+
+  static async getStatus(req, res, next){
+    try {
+      let snap = new midtransClient.Snap({
+        // Set to true if you want Production Environment (accept real transaction).
+        isProduction: false,
+        serverKey: 'SB-Mid-server-14H8tPf4AFyw7ih5uxqG-Qvd'
+    });
+    const { id } = req.params
+    let trx = await snap.transaction.status(id)
+    res.status(201).json(trx)
+    } catch (err) {
+      next(err)
+    }
+  }
 }
 
 
