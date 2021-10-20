@@ -45,7 +45,7 @@ module.exports = {
       },
       {
         MedicationId: 2,
-        MedicineId: 41,
+        MedicineId: 2,
         quantity: 1,
         price: 52000,
         createdAt: new Date(),
