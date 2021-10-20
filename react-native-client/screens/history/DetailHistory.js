@@ -99,7 +99,7 @@ export default function DetailHistory({ navigation, route }) {
           <View style={styles.activeCardMedicines}>
             {data.MedicationHistory.PatientMedicines.map((el) => {
               return (
-                <>
+                <React.Fragment key={el.id}>
                   <View key={el.id} style={styles.wrap}>
                     <View style={{width: 155, height:  80}}>
                       <Text style={{ fontWeight: "bold", fontSize: 18}}>
@@ -119,7 +119,7 @@ export default function DetailHistory({ navigation, route }) {
                       <Text>sebelum makan</Text>
                     </View>
                   </View>
-                </>
+                </React.Fragment>
               );
             })}
           </View>

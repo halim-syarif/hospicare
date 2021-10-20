@@ -78,7 +78,7 @@ export default function MainHistory({ navigation, route }) {
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
                 <Text style={{ fontWeight: "bold", fontSize: 25 }}>Detail Pesanan</Text>
-                {/* <Button title="X" onPress={() => closeModal()} /> */}
+                
                 {antrianLoading ? (
                   <ActivityIndicator size="small" color="#0000ff" style={{ flex: 1 }} />
                 ) : (
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   active: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   card: {
     marginTop: 10,

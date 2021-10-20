@@ -34,15 +34,22 @@ export default function Landing({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('')
   const searchArea = useRef(null)
   const doctorNames = useSelector(state => state.doctors.doctorNames)
+  const [doctorFilter, setDoctorFilter] = useState([])
 
   useEffect(() => {
     dispatch(doctorNamesAsync())
   }, [])
 
+  useEffect(() => {
+    const newList = doctorNames.filter(el => el.name.slice(4).toLowerCase().startsWith(searchQuery.toLowerCase()))
+    setDoctorFilter(newList)
+  }, [searchQuery, doctorNames])
+
 
   function hideSearch(){
     searchArea.current.blur()
     setSearchActive(false);
+    setSearchQuery('')
   }
 
   const updateSearch = (search) => {
@@ -133,7 +140,7 @@ export default function Landing({ navigation }) {
       </View>
       {searchActive ? (
         <FlatList
-          data={doctorNames}
+          data={doctorFilter}
           renderItem={({item}) => (
             <TouchableOpacity style={styles.scrollViewDoctorNames}
               onPress={() => searchByName(item.name)}>
@@ -345,8 +352,8 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   slider: {
-    width: 390,
-    height: 200,
+    width: 430,
+    height: 220,
     borderColor: "white",
     borderWidth: 5,
   },
