@@ -222,6 +222,7 @@ class HistoryController {
             let parameter = {
                 "transaction_details": {
                     "order_id": firstName + history.id,
+                    // "order_id": 'sjhfdkjshkkk',
                     "gross_amount": history.total_price
                 },
                 "credit_card": {
@@ -240,7 +241,6 @@ class HistoryController {
             res.status(201).json(trx)
             
     } catch (err) {
-        console.log(err);
         next(err)
     }
 

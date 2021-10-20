@@ -1,5 +1,5 @@
 const app = require("../app.js");
-const { Poli, sequelize } = require("../models");
+const { Poli, Employee, sequelize } = require("../models");
 const request = require("supertest");
 const { hashPassword } = require("../helpers/bcrypt.js");
 const { queryInterface } = sequelize;
@@ -81,7 +81,7 @@ describe("employee Routes Test", () => {
     },
     {
       name: "testing5",
-      email: "testing5@mail.com",
+      email: "doctor@mail.com",
       password: hashPassword("12345"),
       age: 25,
       gender: "male",
@@ -123,6 +123,10 @@ describe("employee Routes Test", () => {
       });
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
 
   afterAll((done) => {
     queryInterface
@@ -149,6 +153,21 @@ describe("employee Routes Test", () => {
       });
   });
 
+  test("200 Success login as Doctor - should return access_token", (done) => {
+    request(app)
+      .post("/employees/login")
+      .send({
+        email: "doctor@mail.com",
+        password: "12345",
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("access_token", expect.any(String));
+        done();
+      });
+  });
+
   test("401 Failed login - should return error", (done) => {
     request(app)
       .post("/employees/login")
@@ -160,6 +179,20 @@ describe("employee Routes Test", () => {
         const { body, status } = response;
         expect(status).toBe(401);
         expect(body).toHaveProperty("message", "Invalid Email/Password");
+        done();
+      });
+  });
+
+  test("401 Failed login without email - should return error", (done) => {
+    request(app)
+      .post("/employees/login")
+      .send({
+        password: "qweqwe",
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Email or password can't be empty");
         done();
       });
   });
@@ -215,6 +248,66 @@ describe("employee Routes Test", () => {
       });
   });
 
+  test("200 Get All Doctors by Poli Id with limit - should return all Doctor by poli Id", (done) => {
+    request(app)
+      .get("/employees/doctors/2?limit=5")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 2);
+        expect(body).toHaveProperty("rows.length", 2);
+        done();
+      });
+  });
+
+  test("200 Get All Doctors by Poli Id with offset - should return all Doctor by poli Id", (done) => {
+    request(app)
+      .get("/employees/doctors/2?offset=1")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 2);
+        expect(body).toHaveProperty("rows.length", 1);
+        done();
+      });
+  });
+
+  test("200 Get All Doctors - should return all Doctor ", (done) => {
+    request(app)
+      .get("/employees/doctors")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 3);
+        expect(body).toHaveProperty("rows.length", 3);
+        done();
+      });
+  });
+
+  test("200 Success Get All Doctors with limit - should return all Doctor ", (done) => {
+    request(app)
+      .get("/employees/doctors?limit= 10")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 3);
+        expect(body).toHaveProperty("rows.length", 3);
+        done();
+      });
+  });
+
+  test("200 Success Get All Doctors with limit - should return all Doctor ", (done) => {
+    request(app)
+      .get("/employees/doctors?offset= 10")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 3);
+        expect(body).toHaveProperty("rows.length", 0);
+        done();
+      });
+  });
+
   test("200 Get Employee By Id - should return employee by id", (done) => {
     request(app)
       .get("/employees/2")
@@ -258,7 +351,7 @@ describe("employee Routes Test", () => {
       .set('access_token', access_token)
       .send({
         name: "doctor",
-        email: "doctor@mail.com",
+        email: "doctors@mail.com",
         password: "12345",
         age: 25,
         gender: "male",
@@ -272,10 +365,12 @@ describe("employee Routes Test", () => {
         const { body, status } = response
         expect(status).toBe(201)
         expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('email', "doctor@mail.com")
+        expect(body).toHaveProperty('email', "doctors@mail.com")
         done()
       })
   })
+
+
 
   test('400 Failed create employee - should return error if email is null', (done) => {
     request(app)
@@ -320,6 +415,72 @@ describe("employee Routes Test", () => {
         const { body, status } = response
         expect(status).toBe(400)
         expect(body).toHaveProperty('message', ['Email is already exists'])
+        done()
+      })
+  })
+
+  test('400 Error edit employee by worng format number - should error message', (done) => {
+    request(app)
+      .put('/employees/eee')
+      .set('access_token', access_token)
+      .send({
+        name: "doctor",
+        email: "doctors@mail.com",
+        password: "12345",
+        age: 25,
+        address: "testingagain",
+        role: "Doctor",
+        poliId: 2,
+      })
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', "Id Must be a Number")
+        done()
+      })
+  })
+
+  test('400 Error edit employee by not found id - should error message', (done) => {
+    request(app)
+      .put('/employees/20')
+      .set('access_token', access_token)
+      .send({
+        name: "doctor",
+        email: "doctors@mail.com",
+        password: "12345",
+        age: 25,
+        address: "testingagain",
+        role: "Doctor",
+        poliId: 2,
+      })
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', "Id not found")
+        done()
+      })
+  })
+
+  test('400 Error delete employee by wrong format number - should error message', (done) => {
+    request(app)
+      .delete('/employees/eee')
+      .set('access_token', access_token)
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', "Id Must be a Number")
+        done()
+      })
+  })
+
+  test('400 Error delete employee by not found id - should error message', (done) => {
+    request(app)
+      .delete('/employees/20')
+      .set('access_token', access_token)
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(404)
+        expect(body).toHaveProperty('message', "Id not found")
         done()
       })
   })
@@ -376,6 +537,52 @@ describe("employee Routes Test", () => {
         expect(status).toBe(200)
         expect(body).toHaveProperty('message', 'Data has been deleted')
         done()
+      })
+  })
+
+  test('500 Failed get all doctors - Should handle error', async () => {
+    Employee.findAll = jest.fn().mockRejectedValue('Error')
+
+    return request(app)
+      .get('/employees/doctors')
+      .set('access_token', access_token)
+      .then((res) => {
+        expect(res.status).toBe(500)
+        expect(res.body.err).toBe(undefined)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
+
+  test('500 Failed get all doctors by poli id- Should handle error', async () => {
+    Employee.findAll = jest.fn().mockRejectedValue('Error')
+
+    return request(app)
+      .get('/employees/doctors/2')
+      .set('access_token', access_token)
+      .then((res) => {
+        expect(res.status).toBe(500)
+        expect(res.body.err).toBe(undefined)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  })
+  
+
+  test('500 Get All Employee error - Should handle error', async () => {
+    Employee.findAll = jest.fn().mockRejectedValue('Error')
+
+    return request(app)
+      .get('/employees')
+      .set('access_token', access_token)
+      .then((res) => {
+        expect(res.status).toBe(500)
+        expect(res.body.err).toBe(undefined)
+      })
+      .catch((err) => {
+        console.log(err)
       })
   })
 });
