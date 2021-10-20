@@ -39,9 +39,9 @@ export default function PoliCard({ data }) {
           />
           <View style={styles.column}>
             <View style={styles.row}>
-              <Ionicons name="medkit" size={15} color="green" />
+              <Ionicons name="flask-outline" size={15} color="green" />
               
-              <Text style={styles.poli}>Poliklinik {data.name}</Text>
+              <Text style={styles.poli}>Laboratorium {data.name}</Text>
             </View>
             <Text style={styles.text_content}>{content} </Text>
             {isFull ? (
