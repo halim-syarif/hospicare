@@ -25,7 +25,7 @@ export default function SignIn({navigation, route}) {
     const loadingBooking = useSelector(state => state.booking.loadingBooking)
     const DoctorScheduleId = useSelector(state => state.booking.doctorScheduleId)
     const booking_date = useSelector(state => state.booking.bookingDate)
-    const PatientId = useSelector(state => state.patients?.id) || 1
+    const PatientId = useSelector(state => state.patients.id)
     const dispatch = useDispatch()
 
     useEffect(() => {
