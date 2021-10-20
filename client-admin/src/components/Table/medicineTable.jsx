@@ -8,12 +8,12 @@ import {
   editMedicineData,
 } from "../../store/actions/medicineAction";
 import Modal from "react-modal";
-import Pagination from "../Pagination/pagination";
-// import ReactPaginate from "react-paginate"
-
-// components
 Modal.setAppElement("#root");
-export default function MedicineTable({ color }) {
+
+
+
+
+export default function MedicineTable() {
   const medicineData = useSelector((state) => state.medicineState.medicines);
   const [medicineId, setMedicineId] = useState(null);
   const [inputForm, setInputForm] = useState({
@@ -26,10 +26,7 @@ export default function MedicineTable({ color }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const medicine = useSelector((state) => state.medicineState.medicine);
   const dispatch = useDispatch();
-
   const [currentPage, setCurrentPage] = useState(1);
-  // const [loading, setLoading] = useState(false)
-  const [medicinesPerPage] = useState(20);
 
   // Get current medicines
   // const indexOfLastMedicine = currentPage * medicinesPerPage;

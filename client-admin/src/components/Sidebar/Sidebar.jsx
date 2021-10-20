@@ -158,7 +158,14 @@ export default function Sidebar() {
                   }
                   to="/medicine"
                 >
-                  <i className="fas fa-capsules text-blueGray-400 mr-2 text-sm"></i>{" "}
+                  <i
+                    className={
+                      "fas fa-capsules mr-2 text-sm " +
+                      (window.location.href.indexOf("/doctor") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
                   Medicine
                 </Link>
               </li>

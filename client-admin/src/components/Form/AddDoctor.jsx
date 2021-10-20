@@ -23,6 +23,7 @@ export default function AddDoctor() {
 
   useEffect(() => {
       dispatch(fetchPoli())
+      // eslint-disable-next-line
   }, [])
 
   function handleAddForm() {

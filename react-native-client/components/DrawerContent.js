@@ -70,6 +70,7 @@ export default function DrawerContent(props){
                             onPress={() => {props.navigation.navigate('Schedule')}}
                         />
                         <DrawerItem
+                            style={{marginLeft: 17}}
                             icon={({color, size}) => (
                                 <Foundation
                                     name="clipboard-notes"
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     },
 
     userInfoSection: {
-        paddingLeft: 20
+        paddingLeft: 15
     },
 
     userInfoWrapper: {
