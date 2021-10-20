@@ -1,14 +1,26 @@
 /*eslint-disable*/
 import React from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { setIsLogin } from "../../store/actions/userAction";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logoutHandle = (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    dispatch(setIsLogin(false));
+    history.push("/login");
+  };
 
   return (
     <>
-      <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
-        <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
+      <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white  md:w-64 z-10 py-4 px-6">
+        <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full ">
           <button
             className="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
             type="button"
@@ -16,15 +28,21 @@ export default function Sidebar() {
           >
             <i className="fas fa-bars"></i>
           </button>
-          <Link
-            className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-            to="/"
-          >
-            Hospicare
-          </Link>
+          <div className="items-center flex">
+            <span className="h-24 w-24 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+              <img
+                alt="..."
+                className="w-full rounded-full align-middle border-none shadow-lg"
+                src={require("../../assets/img/team-1-800x800.jpg").default}
+              />
+            </span>
+          </div>
+          <div className="cursor-pointer bg-green-500 mt-5 w-1/2 text-white text-xs font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 hidden md:block">
+            {localStorage.getItem("name")}
+          </div>
           <div
             className={
-              "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded " +
+              "md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-2 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded " +
               collapseShow
             }
           >
@@ -49,6 +67,8 @@ export default function Sidebar() {
                 </div>
               </div>
             </div>
+
+
             <form className="mt-6 mb-4 md:hidden">
               <div className="mb-3 pt-0">
                 <input
@@ -60,33 +80,8 @@ export default function Sidebar() {
             </form>
 
             <hr className="my-4 md:min-w-full" />
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Admin Setting
-            </h6>
 
             <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              {/* <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/home") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/home"
-                >
-                  <i
-                    className={
-                      "fas fa-tv mr-2 text-sm " +
-                      (window.location.href.indexOf("/home") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Dashboard
-                </Link>
-              </li> */}
-
               <li className="items-center">
                 <Link
                   className={
@@ -99,7 +94,7 @@ export default function Sidebar() {
                 >
                   <i
                     className={
-                      "fas fa-map-marked mr-2 text-sm " +
+                      "far fa-calendar-alt mr-2 text-sm " +
                       (window.location.href.indexOf("/schedule") !== -1
                         ? "opacity-75"
                         : "text-blueGray-300")
@@ -110,86 +105,73 @@ export default function Sidebar() {
               </li>
             </ul>
 
-            {localStorage.getItem("role") === "Admin" ? (
-              <>
-                <hr className="my-4 md:min-w-full" />
-                <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-                  Asset Setting
-                </h6>
-                <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-                  <li className="items-center">
-                    <Link
-                      className={
-                        "text-xs uppercase py-3 font-bold block " +
-                        (window.location.href.indexOf("/patient") !== -1
-                          ? "text-lightBlue-500 hover:text-lightBlue-600"
-                          : "text-blueGray-700 hover:text-blueGray-500")
-                      }
-                      to="/patient"
-                    >
-                      <i
-                        className={
-                          "fas fa-table mr-2 text-sm " +
-                          (window.location.href.indexOf("/patient") !== -1
-                            ? "opacity-75"
-                            : "text-blueGray-300")
-                        }
-                      ></i>{" "}
-                      Patients
-                    </Link>
-                  </li>
-                  <li className="items-center">
-                    <Link
-                      className={
-                        "text-xs uppercase py-3 font-bold block " +
-                        (window.location.href.indexOf("/doctor") !== -1
-                          ? "text-lightBlue-500 hover:text-lightBlue-600"
-                          : "text-blueGray-700 hover:text-blueGray-500")
-                      }
-                      to="/doctor"
-                    >
-                      <i
-                        className={
-                          "fas fa-tools mr-2 text-sm " +
-                          (window.location.href.indexOf("/doctor") !== -1
-                            ? "opacity-75"
-                            : "text-blueGray-300")
-                        }
-                      ></i>{" "}
-                      Doctors
-                    </Link>
-                  </li>
-                  <li className="items-center">
-                    <Link
-                      className={
-                        "text-xs uppercase py-3 font-bold block " +
-                        (window.location.href.indexOf("/medicine") !== -1
-                          ? "text-lightBlue-500 hover:text-lightBlue-600"
-                          : "text-blueGray-700 hover:text-blueGray-500")
-                      }
-                      to="/medicine"
-                    >
-                      <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
-                      Medicine
-                    </Link>
-                  </li>
-                  <li className="items-center">
-                    <Link
-                      className={
-                        "text-xs uppercase py-3 font-bold block " +
-                        (window.location.href.indexOf("/setting") !== -1
-                          ? "text-lightBlue-500 hover:text-lightBlue-600"
-                          : "text-blueGray-700 hover:text-blueGray-500")
-                      }
-                      to="/setting"
-                    >
-                      <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
-                      Setting
-                    </Link>
-                  </li>
-                </ul>
-              </>
-            ) : null}
+            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/patient") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/patient"
+                >
+                  <i
+                    className={
+                      "fas fa-user-injured mr-2 text-sm " +
+                      (window.location.href.indexOf("/patient") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Patients
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/doctor") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/doctor"
+                >
+                  <i
+                    className={
+                      "fas fa-user-nurse mr-2 text-sm " +
+                      (window.location.href.indexOf("/doctor") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Doctors
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/medicine") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/medicine"
+                >
+                  <i className="fas fa-capsules text-blueGray-400 mr-2 text-sm"></i>{" "}
+                  Medicine
+                </Link>
+              </li>
+              <li className="items-center">
+                <div
+                  className="cursor-pointer text-xs uppercase py-3 font-bold block text-blueGray-700 hover:text-blueGray-500"
+                  onClick={(e) => logoutHandle(e)}
+                >
+                  <i className="fas fa-sign-out-alt text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  Logout
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </nav>

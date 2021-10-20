@@ -134,7 +134,7 @@ class HistoryController {
           }
         ],
       });
-      if (!history) {
+      if (history.length === 0) {
         throw { name: "IdNotFound" };
       }
       res.status(200).json(history);

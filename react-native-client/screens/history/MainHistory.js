@@ -12,28 +12,25 @@ import {
 import Modal from "react-native-modal";
 import { Ionicons } from "react-native-vector-icons";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchHistoryPatient,
-  getAntrian,
-  setAntrian,
-} from "../../store/actions/history";
-
+import { fetchHistoryPatient, getAntrian, setAntrian } from "../../store/actions/history";
+import Moment from 'moment';
 
 export default function MainHistory({ navigation, route }) {
   const dispatch = useDispatch();
   const { id } = useSelector((state) => state.patients);
-  const { histories, antrian, loading, antrianLoading } = useSelector(
-    (state) => state.histories
-  );
+  const { histories, antrian, loading, antrianLoading } = useSelector((state) => state.histories);
   const [activeBooking, setActiveBooking] = useState([]);
   const [historyBooking, setHistoryBooking] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalData, setModalData] = useState({});
   const [refreshing, setRefreshing] = useState(false);
 
+  Moment.locale("en")
+  const newDate = modalData?.booking_date
+
   const onRefresh = () => {
     dispatch(fetchHistoryPatient(id));
-  }
+  };
 
   useEffect(() => {
     dispatch(fetchHistoryPatient(id));
@@ -71,61 +68,63 @@ export default function MainHistory({ navigation, route }) {
 
   return (
     <>
-      <ScrollView 
+      <ScrollView
         style={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-        />}>
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         {/* Modal */}
-        <Modal
-          animationIn="fadeIn"
-          isVisible={modalVisible}
-          onBackdropPress={() => closeModal()}
-        >
+        <Modal animationIn="fadeIn" isVisible={modalVisible} onBackdropPress={() => closeModal()}>
           <View style={styles.position}>
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
-                <Text>Detail Pesanan</Text>
-                <Button title="X" onPress={() => closeModal()} />
-              </View>
-              <View style={{ flex: 1, height: 4, backgroundColor: "gray" }} />
-              <View style={styles.modalContent}>
-                <Text>
-                  Poliklinik {modalData?.DoctorSchedule?.Employee?.Poli.name}
-                </Text>
-                <Text>
-                  Dokter : {modalData?.DoctorSchedule?.Employee?.name}
-                </Text>
-                <Text>Antrian : {modalData?.antrian}</Text>
-                <Text>Keluhan : {modalData?.keluhan}</Text>
-                <Text>Tanggal : {modalData?.booking_date}</Text>
-                <Text>Hari : {modalData?.DoctorSchedule?.Day?.name}</Text>
-                <Text>
-                  Jam : {modalData?.DoctorSchedule?.start_hour} -{" "}
-                  {modalData?.DoctorSchedule?.end_hour}
-                </Text>
-                <Button
-                  title="get antrian"
-                  onPress={() => getLastAntrian(modalData?.DoctorSchedule?.id)}
-                ></Button>
+                <Text style={{ fontWeight: "bold", fontSize: 20 }}>Detail Pesanan</Text>
+                {/* <Button title="X" onPress={() => closeModal()} /> */}
                 {antrianLoading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color="#0000ff"
-                    style={{ flex: 1 }}
-                  />
+                  <ActivityIndicator size="small" color="#0000ff" style={{ flex: 1 }} />
                 ) : (
                   <View>
                     {antrian?.map((item) => {
-                      return modalData?.DoctorSchedule?.id ===
-                        item.bookingId ? (
-                        <Text key={item.id}>{item.lastAntrian}</Text>
+                      return modalData?.DoctorSchedule?.id === item.bookingId ? (
+                        <Text style={{fontSize: 18, marginBottom: 10, textAlign: "center", marginTop: 2, fontWeight: "bold"}} key={item.id}>Antrian: #{item.lastAntrian}</Text>
                       ) : null;
                     })}
                   </View>
                 )}
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  height: 4,
+                  backgroundColor: "gray"
+                }}
+              />
+              <View style={styles.modalContent}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    marginBottom: 10,
+                    marginTop: -20,
+                  }}
+                >
+                  Poliklinik {modalData?.DoctorSchedule?.Employee?.Poli.name}
+                </Text>
+                <View>
+                  <Text style={{fontSize: 15}}>Dokter : {modalData?.DoctorSchedule?.Employee?.name}</Text>
+                  <Text style={{fontSize: 15}}>Keluhan : {modalData?.keluhan}</Text>
+                  <Text style={{fontSize: 15}}>Tanggal : {Moment(newDate).format('D MMMM YYYY')}</Text>
+                  <Text style={{fontSize: 15}}>Hari : {modalData?.DoctorSchedule?.Day?.name}</Text>
+                  <Text style={{fontSize: 15}}>
+                    Jam : {modalData?.DoctorSchedule?.start_hour} -{" "}
+                    {modalData?.DoctorSchedule?.end_hour}
+                  </Text>
+                  <Text style={{ fontSize: 15, marginBottom: 20}}>Antrian : {modalData?.antrian}</Text>
+  
+                  <Button
+                    title="get antrian"
+                    onPress={() => getLastAntrian(modalData?.DoctorSchedule?.id)}
+                  />
+                </View>
+                
               </View>
             </View>
           </View>
@@ -145,11 +144,16 @@ export default function MainHistory({ navigation, route }) {
                       onPress={() => openModal(el)}
                       style={styles.activeCard}
                     >
-                      <View style={styles.header}>
+                      <View style={styles.headerActive}>
                         <Ionicons name="medkit" size={15} color="green" />
                         <Text style={styles.poli}>
-                          Poliklinik {el.DoctorSchedule.Employee.Poli.name}
+                          Poliklinik {el.DoctorSchedule.Employee.Poli.name}                         
                         </Text>
+                        <View>
+                          <Text style={{fontWeight: "bold", marginLeft: 200, fontSize: 13}}>
+                            # {el.antrian}                         
+                          </Text>
+                        </View> 
                       </View>
                       <Text>
                         {el.DoctorSchedule.Day.name},{" "}
@@ -173,9 +177,11 @@ export default function MainHistory({ navigation, route }) {
                   return (
                     <TouchableOpacity
                       key={el.id}
-                      onPress={() => navigation.navigate('Detail',{
-                        data: el
-                      })}
+                      onPress={() =>
+                        navigation.navigate("Detail", {
+                          data: el
+                        })
+                      }
                       style={styles.activeCard}
                     >
                       <View style={styles.header}>
@@ -207,17 +213,17 @@ export default function MainHistory({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 20
   },
   active: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   card: {
     marginTop: 10,
     backgroundColor: "gray",
     padding: 10,
     borderRadius: 10,
-    marginBottom: 5,
+    marginBottom: 5
   },
   activeCard: {
     marginTop: 10,
@@ -229,23 +235,26 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5
   },
   header: {
+    flexDirection: "row"
+  },
+  headerActive: {
     flexDirection: "row",
   },
   poli: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 5
   },
   position: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 22
   },
   modalView: {
     backgroundColor: "white",
@@ -256,21 +265,21 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 30,
+    marginBottom: 30
   },
   modalContent: {
     flexDirection: "column",
     justifyContent: "space-between",
-    width: "100%",
-  },
+    width: "100%"
+  }
 });
