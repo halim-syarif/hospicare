@@ -6,7 +6,6 @@ import { useHistory } from "react-router";
 import CardPoli from "../../components/Cards/CardPoli";
 
 export default function StatPoli() {
-  const dispatch = useDispatch();
   const history = useHistory();
   const { poli, isLoading, errorMessage } = useSelector(
     (state) => state.scheduleState
@@ -15,6 +14,7 @@ export default function StatPoli() {
   function choosePoli(poli) {
     history.push(`/schedule/${poli.name.toLowerCase()}`);
   }
+
 
   return (
     <div>
@@ -27,12 +27,12 @@ export default function StatPoli() {
               onClick={() => choosePoli(el)}
             >
               <CardPoli
+                poliid={el.id}
                 statSubtitle={el.name}
-                statTitle="Dokter : 3"
-                statArrow="up"
+                statTitle={"Dokter : " + el.Employees.length}
                 statPercent="25"
                 statPercentColor="text-emerald-500"
-                statDescripiron="total patient"
+                statDescription="Total patient"
                 statIconName="far fa-chart-bar"
                 statIconColor="bg-red-500"
               />

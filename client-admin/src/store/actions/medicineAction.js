@@ -74,6 +74,9 @@ export function deleteMed(payload) {
         appApi({
             method: "DELETE",
             url: `/medicines/${payload}`,
+            headers: {
+                access_token: localStorage.getItem('access_token')
+            }
         })
             .then(() => {
                 dispatch(deleteMedicine(payload));
