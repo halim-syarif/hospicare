@@ -69,7 +69,7 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
                                                         color="green"
                                                         style={{paddingRight: 5}}
                                                     />
-                                                    <Text>Tersedia hari ini (Nama Rumah Sakit)</Text>
+                                                    <Text>Tersedia hari ini (Rumah Sakit Soliam)</Text>
                                                 </View>
                                             </View>
                                         </View>
