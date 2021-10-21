@@ -110,12 +110,8 @@ export default function DetailHistory({ navigation, route }) {
               <Text>{data.keluhan}</Text>
             </View>
           </View>
-
-          <View style={styles.activeCard}>
-            <Text>{data.keluhan}</Text>
-          </View>
         </View>
-        <View style={styles.card}>
+        <View >
           <View style={{ flexDirection: "row" }}>
               <View style={{ marginTop: 2, marginRight: 5 }}>
                 <FontAwesome name="stethoscope" size={20} color="green" />
@@ -155,10 +151,10 @@ export default function DetailHistory({ navigation, route }) {
                       <Text >2x sehari</Text>
                       <Text>sebelum makan</Text>
                     </View>
+                    </View>
                   </React.Fragment>
                 );
               })}
-            </View>
           </View>
 
         </View>
@@ -244,7 +240,6 @@ export default function DetailHistory({ navigation, route }) {
               </View>
             </View>
           </View>
-        </View>
       </ScrollView>
     </>
   );

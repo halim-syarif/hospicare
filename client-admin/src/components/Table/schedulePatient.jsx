@@ -102,8 +102,8 @@ export default function SchedulePatient() {
         theme: "dark",
       });
       dispatch(setSuccessMessage(""));
-      dispatch(getPatients());
       closeModal();
+      dispatch(getPatients(selectedDay));
     }
   }, [successMessage]);
 
@@ -270,7 +270,7 @@ export default function SchedulePatient() {
                         className="bg-lightBlue-500 text-white active:bg-lightBlue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                        {!historyLoading ? "Save" : null}
+                        {!historyLoading ? "Save" : (
                         <span className="mt-1">
                           <ScaleLoader
                             color="lightBlue"
@@ -279,7 +279,9 @@ export default function SchedulePatient() {
                             height="15px"
                             width="2px"
                           />
+                          
                         </span>
+                        )}
                       </button>
                     </div>
                   </div>
