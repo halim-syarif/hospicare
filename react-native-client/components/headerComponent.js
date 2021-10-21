@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Feather } from '@expo/vector-icons'
+import { Feather, FontAwesome } from '@expo/vector-icons'
 import { scheduleAsync, setBookingDate } from '../store/actions'
 
 export default function HeaderComponent(){
@@ -92,10 +92,10 @@ export default function HeaderComponent(){
                     <TouchableOpacity
                         onPress={showDateTimePicker}
                     >
-                        <Feather
+                        <FontAwesome
                             name="calendar"
                             size={20}
-                            color="grey"
+                            color="white"
                         />
                     </TouchableOpacity>
                     <Text style={styles.text_header}>{data.fullDate}</Text>
@@ -141,7 +141,8 @@ const styles = StyleSheet.create({
     text_header: {
         color: '#fff',
         fontWeight: 'bold',
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingLeft: 10
     },
 
     date: {

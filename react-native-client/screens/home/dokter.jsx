@@ -44,13 +44,16 @@ export default function Dokter({navigation, route}) {
                         >
                             <View style={styles.flatListItems}>
                                 <View style={styles.card}>
-                                    <Avatar.Image
-                                        source={{
-                                            uri:imgUrl
-                                        }}
-                                        size={50}/>
+                                    <View style={styles.avatar}>
+                                        <Avatar.Image
+                                            source={{
+                                                uri:imgUrl
+                                            }}
+                                            size={50}
+                                        />
+                                    </View>
                                     <View style={styles.card_profile}>
-                                        {/* <Text style={styles.card_employee_name_text}>{item.name}</Text> */}
+                                        <Text style={styles.card_employee_name_text}>{item.name}</Text>
                                         <View style={styles.card_availability}>
                                             <Feather
                                                 name="check-circle"
@@ -58,7 +61,7 @@ export default function Dokter({navigation, route}) {
                                                 color="green"
                                                 style={{paddingRight: 5}}
                                             />
-                                            <Text>Tersedia hari ini (Nama Rumah Sakit)</Text>
+                                            <Text>Tersedia hari ini (Rumah Sakit Soliam)</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -111,9 +114,14 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
 
+    avatar: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
     card_employee_name_text: {
         fontWeight: 'bold',
-        width: '90'
+        width: '90%'
     },
 
     card_profile: {
