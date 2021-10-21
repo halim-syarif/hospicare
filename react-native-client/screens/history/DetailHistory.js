@@ -72,127 +72,152 @@ export default function DetailHistory({ navigation, route }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
-        <StatusBarLight />
-        <View style={styles.active}>
-          <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
-          <View style={styles.header}>
-            <Text style={{ fontSize: 18 }}>
-              Poliklinik {data.DoctorSchedule.Employee.Poli.name}
-            </Text>
-            <Text style={{ fontSize: 18 }}>Dokter : {data.DoctorSchedule.Employee.name}</Text>
-            <Text style={{ fontSize: 18 }}>
-              Tanggal Pemeriksaan : {new Date(data.booking_date).toUTCString().slice(0, 16)}
-            </Text>
+    <ScrollView style={styles.container}>
+      <StatusBarLight/>
+      <View style={styles.active}>
+        <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
+        <View style={styles.header}>
+          <View style={{flexDirection: "column"}}>
+            <Text style={{fontSize: 18}}>Polyclinic</Text>
+            <Text style={{fontSize: 18, paddingTop: 5}}>Doctor</Text>
+            <Text style={{fontSize: 18, paddingTop: 5}}>Check Up Date</Text>
           </View>
-          <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
-          <View style={styles.card}>
+          <View style={{flexDirection: "column"}}>
+            <Text style={{fontSize: 18, paddingLeft: 10}}>:</Text>
+            <Text style={{fontSize: 18, paddingLeft: 10, paddingTop: 5}}>:</Text>
+            <Text style={{fontSize: 18, paddingLeft: 10, paddingTop: 5}}>:</Text>
+          </View>
+          <View style={{flexDirection: "column"}}>
+            <Text style={{fontSize: 18, paddingLeft: 10}}>{data.DoctorSchedule.Employee.Poli.name}</Text>
+            <Text style={{fontSize: 18, paddingLeft: 10, paddingTop: 5}}>{data.DoctorSchedule.Employee.name}</Text>
+            <Text style={{fontSize: 18, paddingLeft: 10, paddingTop: 5}}>{new Date(data.booking_date).toUTCString().slice(0, 16)}</Text>
+          </View>
+          {/* <Text style={{fontSize: 18}}>Poliklinik {data.DoctorSchedule.Employee.Poli.name}</Text>
+          <Text style={{fontSize: 18}}>Dokter : {data.DoctorSchedule.Employee.name}</Text>
+          <Text style={{fontSize: 18}}>
+            Tanggal Pemeriksaan : {new Date(data.booking_date).toUTCString().slice(0, 16)}
+          </Text> */}
+        </View>
+        <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
+        <View style={styles.card}>
           <View style={{ flexDirection: "row" }}>
               <View style={{ marginTop: 2, marginRight: 5 }}>
                 <MaterialIcons name="sick" size={20} color="green" />
               </View>
-              <Text style={{ fontSize: 18 }}>Keluhan</Text>
+            <Text style={{fontSize: 18}}>Symptoms</Text>
             </View>
             <View style={styles.activeCard}>
               <Text>{data.keluhan}</Text>
             </View>
           </View>
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
+
+          <View style={styles.activeCard}>
+            <Text>{data.keluhan}</Text>
+          </View>
+        </View>
+        <View style={styles.card}>
+          <View style={{ flexDirection: "row" }}>
               <View style={{ marginTop: 2, marginRight: 5 }}>
                 <FontAwesome name="stethoscope" size={20} color="green" />
               </View>
-              <Text style={{ fontSize: 18 }}>Diagnosa Penyakit</Text>
+          <Text style={{fontSize: 18}}>Disease Diagnosis</Text>
             </View>
-            <View style={styles.activeCard}>
-              <Text>{data.MedicationHistory.description}</Text>
-            </View>
+          <View style={styles.activeCard}>
+            <Text>{data.MedicationHistory.description}</Text>
           </View>
-          <View style={styles.cardMedicines}>
-            <View style={{ flexDirection: "row" }}>
+        </View>
+        <View style={styles.cardMedicines}>
+           <View style={{ flexDirection: "row" }}>
               <View style={{ marginTop: 2, marginRight: 5 }}>
                 <Fontisto name="drug-pack" size={20} color="green" />
               </View>
-              <Text style={{ fontSize: 18 }}>Obat</Text>
+          <Text style={{fontSize: 18}}>Medications</Text>
             </View>
-            <View style={styles.activeCardMedicines}>
-              {data.MedicationHistory.PatientMedicines.map((el) => {
-                return (
-                  <React.Fragment key={el.id}>
-                    <View key={el.id} style={styles.wrap}>
-                      <View style={{ width: 155, height: 80 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 18 }}>
-                          {el.Medicine.name}{" "}
-                          <Pressable
-                            onPress={() =>
-                              openModal({
-                                name: el.Medicine.name,
-                                description: el.Medicine.description
-                              })
-                            }
-                          >
-                            <Ionicons name="information-circle-outline" size={15} color="gray" />
-                          </Pressable>
-                        </Text>
-                        <Text>2x sehari</Text>
-                        <Text>sebelum makan</Text>
-                      </View>
+          <View style={styles.activeCardMedicines}>
+            {data.MedicationHistory.PatientMedicines.map((el) => {
+              return (
+                <React.Fragment key={el.id}>
+                  <View key={el.id} style={styles.wrap}>
+                    <View style={{width: 155, height:  80}}>
+                      <Text style={{ fontWeight: "bold", fontSize: 18}}>
+                        {el.Medicine.name}{" "}
+                        <Pressable
+                          onPress={() =>
+                            openModal({
+                              name: el.Medicine.name,
+                              description: el.Medicine.description
+                            })
+                          }
+                        >
+                          <Ionicons  name="information-circle-outline" size={15} color="gray" />
+                        </Pressable>
+                      </Text>
+                      <Text >2x sehari</Text>
+                      <Text>sebelum makan</Text>
                     </View>
                   </React.Fragment>
                 );
               })}
             </View>
           </View>
-          <View style={styles.card}>
-            <View style={{ flexDirection: "row" }}>
+
+        </View>
+        <View style={styles.card}>
+          <View style={{ flexDirection: "row" }}>
               <View style={{ marginTop: 2, marginRight: 5 }}>
                 <Ionicons name="card-outline" size={20} color="green" />
               </View>
-              <Text style={{ fontSize: 18 }}>Biaya</Text>
+          <Text style={{fontSize: 18}}>Price</Text>
             </View>
-            <View style={styles.activeCard}>
-              <View style={styles.wrap}>
-                <Text>Biaya Dokter : </Text>
-                <Text>Rp {data.DoctorSchedule.price.toLocaleString("id-ID")}</Text>
-              </View>
-              <Text>Obat :</Text>
-              {data.MedicationHistory.PatientMedicines.map((el, index) => {
-                return (
-                  <View key={el.id} style={styles.wrap}>
-                    <Text style={{ paddingLeft: 10 }}>
-                      {index + 1}. {el.Medicine.name}
-                    </Text>
-                    <Text>Rp {el.price.toLocaleString("id-ID")}</Text>
-                  </View>
-                );
-              })}
+          <View style={styles.activeCard}>
+            <View style={styles.wrap}>
+              <Text>Doctor Fee : </Text>
+              <Text>Rp {data.DoctorSchedule.price.toLocaleString("id-ID")}</Text>
+            </View>
+            <Text>Medications :</Text>
+            {data.MedicationHistory.PatientMedicines.map((el, index) => {
+              return (
+                <View key={el.id} style={styles.wrap}>
+                  <Text style={{ paddingLeft: 10 }}>
+                    {index + 1}. {el.Medicine.name}
+                  </Text>
+                  <Text>Rp {el.price.toLocaleString("id-ID")}</Text>
+                </View>
+              );
+            })}
 
-              <View style={styles.wrap}>
-                <Text style={{ marginTop: 10, fontSize: 16 }}>Total Harga : </Text>
-                <Text style={{ marginTop: 10, fontWeight: "bold", fontSize: 18 }}>
-                  Rp {data.MedicationHistory.total_price.toLocaleString("id-ID")}
-                </Text>
-              </View>
-              <View style={{ marginTop: 10, width: "100%" }}>
+            <View style={styles.wrap}>
+              <Text style={{marginTop: 10, fontSize: 16}}>Total Price : </Text>
+              <Text style={{marginTop: 10, fontWeight: "bold", fontSize: 18}}>Rp {data.MedicationHistory.total_price.toLocaleString("id-ID")}</Text>
+            </View>
+            <View style={{ marginTop: 10, width: "100%" }}>
                 {statusLoading ? (
                   <ActivityIndicator size="small" color="#0000ff" style={styles.button} />
                 ) : (
                   <>
                     {paymentStatus === "Transaction doesn't exist." ? (
                       <Pressable onPress={paynow}>
-                        <Text style={styles.buttonless}>Bayar Sekarang</Text>
+                        <Text style={styles.buttonless}>Pay Now</Text>
                       </Pressable>
                     ) : (
                       <>
                         {paymentStatus?.transaction_status === "pending" ? (
                           <Pressable onPress={paynow}>
-                            <Text style={styles.buttonPending}>Selesaikan Pembayaran</Text>
+
+                            <Text style={styles.buttonPending}>
+                              Finish Payment
+                            </Text>
                             <View>
-                              <Text>Metode pembayaran : {paymentStatus.payment_type}</Text>
+                              <Text>
+                                Payment Method : {paymentStatus.payment_type}
+                              </Text>
                               {paymentStatus.payment_type === "cstore" ? (
                                 <>
                                   <Text>Merchant : {paymentStatus.store}</Text>
-                                  <Text>Kode Pembayaran : {paymentStatus.payment_code}</Text>
+                                  <Text>
+                                    Payment Code :{" "}
+                                    {paymentStatus.payment_code}
+                                  </Text>
                                 </>
                               ) : (
                                 <>
@@ -210,7 +235,7 @@ export default function DetailHistory({ navigation, route }) {
                             {/* <Text>{JSON.stringify(paymentStatus)}</Text> */}
                           </Pressable>
                         ) : (
-                          <Text style={styles.button}>Pembayaran Berhasil</Text>
+                          <Text style={styles.button}>Payment Succesfull</Text>
                         )}
                       </>
                     )}
@@ -270,7 +295,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   header: {
-    marginVertical: 10
+    marginVertical: 10,
+    flexDirection: "row"
   },
   cardMedicines: {
     marginTop: 15

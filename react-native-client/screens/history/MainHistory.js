@@ -7,7 +7,8 @@ import {
   ActivityIndicator,
   ScrollView,
   Button,
-  RefreshControl
+  RefreshControl,
+  LogBox
 } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "react-native-vector-icons";
@@ -35,6 +36,10 @@ export default function MainHistory({ navigation, route }) {
   useEffect(() => {
     dispatch(fetchHistoryPatient(id));
   }, []);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop']);
+}, [])
 
   useEffect(() => {
     let active = [];
@@ -85,7 +90,11 @@ export default function MainHistory({ navigation, route }) {
                   <View>
                     {antrian?.map((item) => {
                       return modalData?.DoctorSchedule?.id === item.bookingId ? (
-                        <Text style={{fontSize: 18, marginBottom: 10, textAlign: "center", marginTop: 2, fontWeight: "bold"}} key={item.id}>Antrian: #{item.lastAntrian}</Text>
+                        <Text 
+                          style={{fontSize: 18, marginBottom: 10, textAlign: "center", marginTop: 2, fontWeight: "bold"}} 
+                          key={item.id}>
+                            Antrian: #{item.lastAntrian}
+                        </Text>
                       ) : null;
                     })}
                   </View>
@@ -167,14 +176,26 @@ export default function MainHistory({ navigation, route }) {
                           Poliklinik {el.DoctorSchedule.Employee.Poli.name}                         
                         </Text>
                       </View>
-                      <Text>
-                        {el.DoctorSchedule.Day.name},{" "}
-                        {new Date(el.booking_date).toLocaleDateString("id-ID")}
-                      </Text>
-                      <Text>
-                        jam {el.DoctorSchedule.start_hour.slice(0, 5)} -{" "}
-                        {el.DoctorSchedule.end_hour.slice(0, 5)}
-                      </Text>
+                      <View style={{flexDirection: "row", paddingTop: 5}}>
+                        <View>
+                          <Text>Hari</Text>
+                          <Text>Waktu</Text>
+                        </View>
+                        <View style={{paddingLeft: 10}}>
+                          <Text>:</Text>
+                          <Text>:</Text>
+                        </View>
+                        <View style={{paddingLeft: 10}}>
+                          <Text>
+                          {el.DoctorSchedule.Day.name},{" "}
+                          {new Date(el.booking_date).toLocaleDateString("id-ID")}
+                        </Text>
+                        <Text>
+                          {el.DoctorSchedule.start_hour.slice(0, 5)} -{" "}
+                          {el.DoctorSchedule.end_hour.slice(0, 5)}
+                        </Text>
+                        </View>
+                      </View>
                     </TouchableOpacity>
                   );
                 })}
@@ -202,14 +223,26 @@ export default function MainHistory({ navigation, route }) {
                           Poliklinik {el.DoctorSchedule.Employee.Poli.name}
                         </Text>
                       </View>
-                      <Text>
-                        {el.DoctorSchedule.Day.name},{" "}
-                        {new Date(el.booking_date).toLocaleDateString("id-ID")}
-                      </Text>
-                      <Text>
-                        jam {el.DoctorSchedule.start_hour.slice(0, 5)} -{" "}
-                        {el.DoctorSchedule.end_hour.slice(0, 5)}
-                      </Text>
+                      <View style={{flexDirection: "row", paddingTop: 5}}>
+                        <View>
+                          <Text>Hari</Text>
+                          <Text>Waktu</Text>
+                        </View>
+                        <View style={{paddingLeft: 10}}>
+                          <Text>:</Text>
+                          <Text>:</Text>
+                        </View>
+                        <View style={{paddingLeft: 10}}>
+                          <Text>
+                          {el.DoctorSchedule.Day.name},{" "}
+                          {new Date(el.booking_date).toLocaleDateString("id-ID")}
+                        </Text>
+                        <Text>
+                          {el.DoctorSchedule.start_hour.slice(0, 5)} -{" "}
+                          {el.DoctorSchedule.end_hour.slice(0, 5)}
+                        </Text>
+                        </View>
+                      </View>
                     </TouchableOpacity>
                   );
                 })}
@@ -260,7 +293,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   poli: {
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
+    fontWeight: "bold"
   },
   position: {
     flex: 1,

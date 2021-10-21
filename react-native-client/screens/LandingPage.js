@@ -30,8 +30,8 @@ export default function LandingPage({navigation}){
             style={styles.footer}
             animation="fadeInUpBig"
         >
-            <Text style={styles.title}>Let Hospicare help you</Text>
-            <Text style={styles.text}>But, sign in to your account first</Text>
+            <Text style={styles.title}>The Official Hospicare App</Text>
+            <Text style={styles.text}>We will help you to find the best doctors and appointment schedule best suited for you. </Text>
             <View style={styles.button}>
                 <TouchableOpacity onPress={() => navigation.navigate("SignInScreen")}>
                     <LinearGradient
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 
     text: {
         alignItems: 'flex-end',
-        marginTop: 30,
+        marginTop: 10,
     },
 
     button: {
