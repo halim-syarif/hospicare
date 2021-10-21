@@ -1,14 +1,13 @@
+// eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import appApi from "../../store/config/instanceAxios";
-import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 export default function CardPoli({
   poliid,
   statSubtitle,
   statTitle,
-  statPercent,
   statPercentColor,
   statDescription,
   statIconName,
@@ -33,9 +32,10 @@ export default function CardPoli({
       })
       .finally(() => {
         setTimeout(() => {
-          setLoading(false)
-        },3000)
+          setLoading(false);
+        }, 2000);
       });
+      // eslint-disable-next-line
   }, []);
   return (
     <>
@@ -69,7 +69,6 @@ export default function CardPoli({
                 <ScaleLoader
                   color="lightBlue"
                   loading={loading}
-                  // css={override}
                   height="10px"
                   width="2px"
                 />
@@ -102,18 +101,9 @@ CardPoli.propTypes = {
   statTitle: PropTypes.string,
   statArrow: PropTypes.oneOf(["up", "down"]),
   statPercent: PropTypes.string,
-  // can be any of the text color utilities
-  // from tailwindcss
   statPercentColor: PropTypes.string,
   statDescripiron: PropTypes.string,
   statIconName: PropTypes.string,
-  // can be any of the background color utilities
-  // from tailwindcss
   statIconColor: PropTypes.string,
 };
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: lime;
-`;

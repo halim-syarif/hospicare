@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchDoctor,
@@ -33,10 +32,12 @@ export default function DoctorTable({ color }) {
 
   useEffect(() => {
     dispatch(fetchDoctor());
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     dispatch(fetchPoli());
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function DoctorTable({ color }) {
     } else {
       dispatch(fetchOneDoctor(doctorId));
     }
+    // eslint-disable-next-line
   }, [doctorId]);
 
   useEffect(() => {

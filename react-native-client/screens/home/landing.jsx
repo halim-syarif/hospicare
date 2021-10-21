@@ -10,6 +10,7 @@ import {
   Dimensions,
   Pressable,
   FlatList,
+  Linking
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SearchBar } from "react-native-elements";
@@ -34,15 +35,22 @@ export default function Landing({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('')
   const searchArea = useRef(null)
   const doctorNames = useSelector(state => state.doctors.doctorNames)
+  const [doctorFilter, setDoctorFilter] = useState([])
 
   useEffect(() => {
     dispatch(doctorNamesAsync())
   }, [])
 
+  useEffect(() => {
+    const newList = doctorNames.filter(el => el.name.slice(4).toLowerCase().startsWith(searchQuery.toLowerCase()))
+    setDoctorFilter(newList)
+  }, [searchQuery, doctorNames])
+
 
   function hideSearch(){
     searchArea.current.blur()
     setSearchActive(false);
+    setSearchQuery('')
   }
 
   const updateSearch = (search) => {
@@ -58,6 +66,11 @@ export default function Landing({ navigation }) {
   const searchByName = (name) => {
     dispatch(scheduleByDoctorName(name))
     navigation.navigate('Schedule')
+  }
+
+  function emergencyCall(){
+    const phoneNumber = 'tel:${085555555555}'
+    Linking.openURL(phoneNumber)
   }
 
   return (
@@ -133,7 +146,7 @@ export default function Landing({ navigation }) {
       </View>
       {searchActive ? (
         <FlatList
-          data={doctorNames}
+          data={doctorFilter}
           renderItem={({item}) => (
             <TouchableOpacity style={styles.scrollViewDoctorNames}
               onPress={() => searchByName(item.name)}>
@@ -185,7 +198,7 @@ export default function Landing({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.iconitem}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={emergencyCall}>
                 <Feather
                   name="phone-call"
                   size={35}
@@ -345,8 +358,8 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   slider: {
-    width: 390,
-    height: 200,
+    width: 430,
+    height: 220,
     borderColor: "white",
     borderWidth: 5,
   },

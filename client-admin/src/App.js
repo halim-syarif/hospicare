@@ -5,9 +5,7 @@ import { useDispatch } from "react-redux";
 import { setIsLogin } from "./store/actions/userAction";
 import { getPolis } from "./store/actions/schedule";
 
-import Navbar from "./components/Navbar/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
-
 import Home from "./pages/home";
 import Doctor from "./pages/doctor";
 import Medicine from "./pages/medicine";

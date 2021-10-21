@@ -14,7 +14,7 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setDoctorScheduleId } from '../store/actions';
-import { Feather } from '@expo/vector-icons'
+import { Feather, Fontisto, FontAwesome } from '@expo/vector-icons'
 import { priceFormat } from '../helpers/priceFormat';
 
 
@@ -38,8 +38,12 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
         <View style={styles.container}>
 			{
             schedules.length == 0 ?
-                <View  style={styles.footer_container} >
-                    <Text style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>No data yet, input your preferences</Text> 
+                <View  style={styles.footer_container}>
+                    <Fontisto
+                        name="doctor"
+                        size={50}
+                    />
+                    <Text style={styles.empty_cards}>No data yet, input your preferences</Text> 
                 </View> 
                 :
 			isLoading ? 
@@ -69,7 +73,7 @@ export default function ScheduleCards({schedules, isLoading, error, navigation})
                                                         color="green"
                                                         style={{paddingRight: 5}}
                                                     />
-                                                    <Text>Tersedia hari ini (Nama Rumah Sakit)</Text>
+                                                    <Text>Tersedia hari ini (Rumah Sakit Soliam)</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -128,6 +132,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 7,
         elevation: 10
+    },
+
+    empty_cards: {
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        paddingTop: 30,
+        fontSize: 24,
+        fontWeight: 'bold',
     },
 
     activeCard: {

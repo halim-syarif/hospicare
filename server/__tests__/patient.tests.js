@@ -122,6 +122,25 @@ describe("Patient Routes Test", () => {
       .catch((err) => done(err));
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  test("200 Success login - should return access_token", (done) => {
+    request(app)
+      .post("/patients/login")
+      .send({
+        email: "luwar.sinaga@yahoo.com",
+        password: "password",
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("access_token", expect.any(String));
+        done();
+      });
+  });
+
   test("200 Success get all patients - should return all patients data", (done) => {
     request(app)
       .get("/patients")
@@ -138,6 +157,38 @@ describe("Patient Routes Test", () => {
       });
   });
 
+  test("200 Success get all patients with limit - should return all patients data", (done) => {
+    request(app)
+      .get("/patients?limit=20")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 5);
+        expect(body).toHaveProperty("rows.length", 5);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("200 Success get all patients with offset - should return all patients data", (done) => {
+    request(app)
+      .get("/patients?offset=20")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(200);
+        expect(body).toHaveProperty("count", 5);
+        expect(body).toHaveProperty("rows.length", 0);
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
   test("201 Success register or add patient - should return registered patients data", (done) => {
     request(app)
       .post("/patients")
@@ -147,7 +198,8 @@ describe("Patient Routes Test", () => {
         gender: "female",
         password: 'password',
         address: "Jl Melasti 18 A, Dki Jakarta",
-        email: "adriansyah55.laila@yahoo.com",
+        email: "adriansyah2.laila@yahoo.com",
+        password: 'mantapmantap',
         imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -156,7 +208,7 @@ describe("Patient Routes Test", () => {
         const { body, status } = response;
         expect(status).toBe(201);
         expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('email', "adriansyah55.laila@yahoo.com")
+        expect(body).toHaveProperty('email', "adriansyah2.laila@yahoo.com")
         expect(body).toHaveProperty('address', "Jl Melasti 18 A, Dki Jakarta")
         done();
       })
@@ -225,26 +277,210 @@ describe("Patient Routes Test", () => {
       })
   })
 
-  test('200 Login succes - should return obj with access_token and payload as a key', (done) => {
+  
+
+  test('404 login failed - password/email matched no data should return error message ', (done) => {
     request(app)
       .post('/patients/login')
       .send({
-        email: 'novitasari.ayu@kuswandari.asia',
-        password: 'password'
+        email: 'wrongmail@maill.com',
+        password: 'wrongpass'
       })
       .then(response => {
         const { body, status } = response
-        expect(status).toBe(200)
-        expect(body).toHaveProperty('access_token', expect.any(String)),
-        expect(body).toHaveProperty('id', expect.any(Number))
-        expect(body).toHaveProperty('name', expect.any(String))
-        expect(body).toHaveProperty('email', expect.any(String))
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Invalid Email/Password')
         done()
       })
       .catch(err => {
         console.log(err.name, "maaaakplungggggggggggg😂");
       })
+  });
+  
+  test('404 login failed - gave no email/password should return message User', (done) => {
+    request(app)
+      .post('/patients/login')
+      .send({
+        email: '',
+        password: ''
+      })
+      .then(response => {
+        const { body, status } = response
+        expect(status).toBe(401)
+        expect(body).toHaveProperty('message', 'Email or password can\'t be empty')
+        done()
+      })
+      .catch(err => {
+        console.log(err);
+        console.log(err.name, "maaaakplungggggggggggg😂");
+      })
+  });
+
+  test("401 failed get data patients by id - should return error message", (done) => {
+    request(app)
+      .get("/patients/ndar")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Id Must be a Number");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+  
+  test("401 failed get data patients by id - should return error message", (done) => {
+    request(app)
+      .get("/patients/99")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Id not found");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("400 Failed to register or add patient - should return array of error message", (done) => {
+    request(app)
+      .post("/patients")
+      .send({
+        name: "Kartika Usamah",
+        age: 30,
+        gender: "female",
+        address: "Jl Melasti 18 A, Dki Jakarta",
+        email: "adriansyah2.laila@yahoo.com",
+        imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(400);
+        expect(body).toHaveProperty('message', expect.any(Array))
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("401 failed edit data patients by id - should return error message", (done) => {
+      request(app)
+        .put("/patients/ndar")
+        .set("access_token", access_token)
+        .then((response) => {
+          const { body, status } = response;
+          expect(status).toBe(401);
+          expect(body).toHaveProperty("message", "Id Must be a Number");
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+  test("401 failed edit data patients by id - should return error message", (done) => {
+    request(app)
+      .put("/patients/99")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Id not found");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("400 Failed edit register or add patient - should return array of error message", (done) => {
+    request(app)
+      .put("/patients/1")
+      .send({
+        name: "Kartika Usamah",
+        age: 30,
+        gender: "female",
+        address: "Jl Melasti 18 A, Dki Jakarta",
+        email: "adriansyah2.laila@yahoo.com",
+        imgUrl: "https://www.random-name-generator.com/images/faces/female-asia/22.jpg",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty('message', "You must login first")
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("401 failed delete data patients by id - should return error message", (done) => {
+    request(app)
+      .delete("/patients/ndar")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty("message", "Id Must be a Number");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("404 failed delete data patients by id - should return error message", (done) => {
+    request(app)
+      .delete("/patients/99")
+      .set("access_token", access_token)
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(404);
+        expect(body).toHaveProperty("message", "Id not found");
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test("401 failed to  get all patients - should return error message", (done) => {
+    request(app)
+      .get("/patients")
+      .then((response) => {
+        const { body, status } = response;
+        expect(status).toBe(401);
+        expect(body).toHaveProperty('message', "You must login first")
+        done();
+      })
+      .catch((err) => {
+        done(err);
+      });
+  });
+
+  test('500 Get All Patient error - Should handle error', async () => {
+    Patient.findAll = jest.fn().mockRejectedValue('Error')
+
+    return request(app)
+      .get('/patients')
+      .set("access_token", access_token)
+      .then((res) => {
+        expect(res.status).toBe(500)
+        expect(res.body.err).toBe(undefined)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   })
 
-  
 });

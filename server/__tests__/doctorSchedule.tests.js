@@ -1,5 +1,5 @@
 const app = require("../app.js");
-const { DoctorSchedule, sequelize, Employee, Day, Patient } = require("../models");
+const { DoctorSchedule, sequelize, Employee, Day, Patient, Poli } = require("../models");
 const request = require("supertest");
 const { hashPassword } = require("../helpers/bcrypt");
 const { queryInterface } = sequelize;
@@ -14,6 +14,7 @@ describe("DoctorSchedule routes test", () => {
             gender: "female",
             address: "Gg. Pelajar Pejuang 45 No. 943, Bekasi",
             role: "Admin",
+            poliId: 1,
             createdAt: new Date(),
             updatedAt: new Date(),
         },
@@ -25,6 +26,7 @@ describe("DoctorSchedule routes test", () => {
             gender: "female",
             address: "Jl Raden Mataher 70, Jakarta Utara",
             role: "Doctor",
+            poliId: 1,
             createdAt: new Date(),
             updatedAt: new Date(),
         },
@@ -63,6 +65,24 @@ describe("DoctorSchedule routes test", () => {
             updatedAt: new Date(),
         },
     ];
+
+    const poliId = [
+        {
+            name: "Kebidanan",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            name: "Anak",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+        {
+            name: "Jantung",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        },
+    ]
 
     let access_token = "";
     const invalidIdFormat = "kfajfawfn";
@@ -108,6 +128,17 @@ describe("DoctorSchedule routes test", () => {
                 })
             })
             .then(() => {
+                return Poli.destroy({
+                    where: {},
+                    truncate: true,
+                    cascade: true,
+                    restartIdentity: true,
+                })
+            })
+            .then(() => {
+                return queryInterface.bulkInsert("Polis", poliId);
+            })
+            .then(() => {
                 return queryInterface.bulkInsert("Employees", employeeData);
             })
             .then(() => {
@@ -147,6 +178,10 @@ describe("DoctorSchedule routes test", () => {
             .catch((err) => done(err));
     });
 
+    beforeEach(() => {
+        jest.clearAllMocks()
+      })
+
     test("200 Success get all schedules - should return all schedule data", (done) => {
         request(app)
             .get("/schedules?limit=10")
@@ -156,8 +191,32 @@ describe("DoctorSchedule routes test", () => {
                 expect(status).toBe(200);
                 expect(body).toHaveProperty("count", expect.any(Number));
                 expect(Array.isArray(body.rows)).toBeTruthy();
-                // expect(Array.isArray(body)).toBeTruthy();
-                // expect(body.length).toBeGreaterThan(0);
+                return done();
+            });
+    });
+
+    test("200 Success get all schedules without limit - should return all schedule data", (done) => {
+        request(app)
+            .get("/schedules")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                expect(body).toHaveProperty("count", expect.any(Number));
+                expect(Array.isArray(body.rows)).toBeTruthy();
+                return done();
+            });
+    });
+
+    test("200 Success get all schedules with offset - should return all schedule data", (done) => {
+        request(app)
+            .get("/schedules?offset=10")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                expect(body).toHaveProperty("count", expect.any(Number));
+                expect(Array.isArray(body.rows)).toBeTruthy();
                 return done();
             });
     });
@@ -201,25 +260,51 @@ describe("DoctorSchedule routes test", () => {
             });
     });
 
-    // test("200 Success get data schedule by doctorId", (done) => {
-    //     request(app)
-    //         .get("/schedules/1")
-    //         .set("access_token", access_token)
-    //         .then(response => {
-    //             const { body, status } = response
-    //             expect(status).toBe(200)
-    //             expect(body).toHaveProperty("EmployeeId", expect.any(Number))
-    //             expect(body).toHaveProperty("DayId", expect.any(Number))
-    //             expect(body).toHaveProperty("booking_limit", expect.any(Number))
-    //             expect(body).toHaveProperty("price", expect.any(Number))
-    //             expect(body),toHaveProperty("start_hour", expect.any(String))
-    //             expect(body).toHaveProperty("end_hour", expect.any(String))
-    //             done()
-    //         })
-    //         .catch((err) => {
-    //             done(err)
-    //         })
-    // })
+    test("200 Success get data schedule by doctorId", (done) => {
+        request(app)
+            .get("/schedules/1")
+            .set("access_token", access_token)
+            .then(response => {
+                const { body, status } = response
+                expect(status).toBe(200)
+                expect(body).toHaveProperty("booking_limit", expect.any(Number))
+                expect(body).toHaveProperty("price", expect.any(Number))
+                expect(body).toHaveProperty("BookingSchedules", expect.any(Array))
+                done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("200 Success get data schedule by doctor name", (done) => {
+        request(app)
+            .get("/schedules/doctor/dr. Ketut Ratna Dewi Wijayanti, Sp. OG")
+            .set("access_token", access_token)
+            .then(response => {
+                const { body, status } = response
+                expect(status).toBe(200)
+                expect(Array.isArray(body)).toBeTruthy();
+                done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
+
+    test("500 Failed get data schedule by doctorId", (done) => {
+        request(app)
+            .get("/schedules/eee")
+            .set("access_token", access_token)
+            .then(response => {
+                const { body, status } = response
+                expect(status).toBe(500)
+                done()
+            })
+            .catch((err) => {
+                done(err)
+            })
+    })
 
     test("200 Success updated - should return message data updated", (done) => {
         request(app)
@@ -252,7 +337,7 @@ describe("DoctorSchedule routes test", () => {
             });
     });
 
-   
+
 
     test("401 Failed to update doctorSchedule by invalid id format - should return error", (done) => {
         request(app)
@@ -283,33 +368,97 @@ describe("DoctorSchedule routes test", () => {
             })
     })
 
-    // test("404 Failed to get doctorSchedule by doctorId, should return error message", (done) => {
-    //     request(app)
-    //         .get("/schedules/99")
-    //         .set("access_token", access_token)
-    //         .then(response => {
-    //             const { body, status } = response
-    //             expect(status).toBe(404)
-    //             expect(body).toHaveProperty("message", "Id not found")
-    //             done()
-    //         })
-    //         .catch(err => {
-    //             done(err)
-    //         })
-    // })
+    test("404 Failed get all schedules by Poli and day - should return error message", (done) => {
+        request(app)
+            .get("/schedules/100/100")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(404);
+                expect(body).toHaveProperty('message', "Id not found")
+                return done();
+            });
+    });
 
-    // test("401 Failed to get doctorSchedule by invalidFormatId, should return error message", (done) => {
-    //     request(app)
-    //         .get(`/schedules/${invalidIdFormat}`)
-    //         .set("access_token", access_token)
-    //         .then(response => {
-    //             const { body, status } = response
-    //             expect(status).toBe(401)
-    //             expect(body).toHaveProperty("message", "Id Must be a Number")
-    //             done()
-    //         })
-    //         .catch(err => {
-    //             done(err)
-    //         })
-    // })
+    test("200 Success get all schedules by Poli and day - should return all schedule data", (done) => {
+        request(app)
+            .get("/schedules/1/1")
+            .set("access_token", access_token)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                // expect(body).toHaveProperty('message', "Id not found")
+                return done();
+            });
+    });
+
+    test("401 failed delete booking schedule  by id - should return error message", (done) => {
+        request(app)
+          .delete("/schedules/ndar")
+          .set("access_token", access_token)
+          .then((response) => {
+            const { body, status } = response;
+            expect(status).toBe(401);
+            expect(body).toHaveProperty("message", "Id Must be a Number");
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          });
+    });
+
+    test("400 Failed add booking schedule - should return array of error message", (done) => {
+        request(app)
+          .post("/schedules")
+          .send(
+            {
+                EmployeeId: 2,
+                booking_limit: 20,
+                price: 50000,
+                start_hour: "08:00:00",
+                end_hour: "12:00:00",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            }
+          )
+          .then((response) => {
+            const { body, status } = response;
+            expect(status).toBe(400);
+            expect(body).toHaveProperty('message', expect.any(Array))
+            done();
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
+
+    test('500 Failed Get Schedule by docter name - Should handle error', async () => {
+        DoctorSchedule.findAll = jest.fn().mockRejectedValue('Error')
+    
+        return request(app)
+          .get('/schedules/doctor/dr. Ketut')
+          .set('access_token', access_token)
+          .then((res) => {
+            expect(res.status).toBe(500)
+            expect(res.body.err).toBe(undefined)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+
+      test('500 Failed Get All Bookings - Should handle error', async () => {
+        DoctorSchedule.findAll = jest.fn().mockRejectedValue('Error')
+    
+        return request(app)
+          .get('/schedules')
+          .set('access_token', access_token)
+          .then((res) => {
+            expect(res.status).toBe(500)
+            expect(res.body.err).toBe(undefined)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
 });
