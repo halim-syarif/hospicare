@@ -27,13 +27,13 @@ function App() {
       <Sidebar />
       <div className="relative md:ml-64">
         <Switch>
-          <Route path="/home" component={Home} />
+          {/* <Route path="/home" component={Home} /> */}
           <Route path="/doctor" component={Doctor} />
           <Route path="/medicine" component={Medicine} />
           <Route path="/patient" component={Patient} />
           <Route path="/schedule" component={Schedule} />
           <Route path="/setting" component={Schedule} />
-          <Redirect from="/" to="/home" />
+          <Redirect from="/" to="/schedule" />
         </Switch>
       </div>
     </>

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -7,10 +6,13 @@ import {
   ScrollView,
   Pressable,
   Button,
-  ActivityIndicator,
+  ActivityIndicator
 } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import Modal from "react-native-modal";
+import { Fontisto } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { transaction, getStatusTransaction } from "../../store/actions/history";
 import StatusBarLight from "../../components/StatusBarLight";
@@ -63,7 +65,7 @@ export default function DetailHistory({ navigation, route }) {
   useEffect(() => {
     if (midtransUrl) {
       navigation.navigate("Payment", {
-        midtransUrl,
+        midtransUrl
       });
     }
   }, [midtransUrl]);
@@ -98,19 +100,39 @@ export default function DetailHistory({ navigation, route }) {
         </View>
         <View style={{ height: 1, width: "100%", backgroundColor: "gray" }} />
         <View style={styles.card}>
-          <Text style={{fontSize: 18}}>Symptoms</Text>
+          <View style={{ flexDirection: "row" }}>
+              <View style={{ marginTop: 2, marginRight: 5 }}>
+                <MaterialIcons name="sick" size={20} color="green" />
+              </View>
+            <Text style={{fontSize: 18}}>Symptoms</Text>
+            </View>
+            <View style={styles.activeCard}>
+              <Text>{data.keluhan}</Text>
+            </View>
+          </View>
+
           <View style={styles.activeCard}>
             <Text>{data.keluhan}</Text>
           </View>
         </View>
         <View style={styles.card}>
+          <View style={{ flexDirection: "row" }}>
+              <View style={{ marginTop: 2, marginRight: 5 }}>
+                <FontAwesome name="stethoscope" size={20} color="green" />
+              </View>
           <Text style={{fontSize: 18}}>Disease Diagnosis</Text>
+            </View>
           <View style={styles.activeCard}>
             <Text>{data.MedicationHistory.description}</Text>
           </View>
         </View>
         <View style={styles.cardMedicines}>
+           <View style={{ flexDirection: "row" }}>
+              <View style={{ marginTop: 2, marginRight: 5 }}>
+                <Fontisto name="drug-pack" size={20} color="green" />
+              </View>
           <Text style={{fontSize: 18}}>Medications</Text>
+            </View>
           <View style={styles.activeCardMedicines}>
             {data.MedicationHistory.PatientMedicines.map((el) => {
               return (
@@ -133,14 +155,20 @@ export default function DetailHistory({ navigation, route }) {
                       <Text >2x sehari</Text>
                       <Text>sebelum makan</Text>
                     </View>
-                  </View>
-                </React.Fragment>
-              );
-            })}
+                  </React.Fragment>
+                );
+              })}
+            </View>
           </View>
+
         </View>
         <View style={styles.card}>
+          <View style={{ flexDirection: "row" }}>
+              <View style={{ marginTop: 2, marginRight: 5 }}>
+                <Ionicons name="card-outline" size={20} color="green" />
+              </View>
           <Text style={{fontSize: 18}}>Price</Text>
+            </View>
           <View style={styles.activeCard}>
             <View style={styles.wrap}>
               <Text>Doctor Fee : </Text>
@@ -164,11 +192,7 @@ export default function DetailHistory({ navigation, route }) {
             </View>
             <View style={{ marginTop: 10, width: "100%" }}>
                 {statusLoading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color="#0000ff"
-                    style={styles.button}
-                  />
+                  <ActivityIndicator size="small" color="#0000ff" style={styles.button} />
                 ) : (
                   <>
                     {paymentStatus === "Transaction doesn't exist." ? (
@@ -179,6 +203,7 @@ export default function DetailHistory({ navigation, route }) {
                       <>
                         {paymentStatus?.transaction_status === "pending" ? (
                           <Pressable onPress={paynow}>
+
                             <Text style={styles.buttonPending}>
                               Finish Payment
                             </Text>
@@ -196,16 +221,11 @@ export default function DetailHistory({ navigation, route }) {
                                 </>
                               ) : (
                                 <>
-                                  {paymentStatus.payment_type ===
-                                  "bank_transfer" ? (
+                                  {paymentStatus.payment_type === "bank_transfer" ? (
                                     <>
+                                      <Text>Bank tujuan : {paymentStatus.va_numbers[0].bank}</Text>
                                       <Text>
-                                        Bank tujuan :{" "}
-                                        {paymentStatus.va_numbers[0].bank}
-                                      </Text>
-                                      <Text>
-                                        VA number :{" "}
-                                        {paymentStatus.va_numbers[0].va_number}
+                                        VA number : {paymentStatus.va_numbers[0].va_number}
                                       </Text>
                                     </>
                                   ) : null}
@@ -222,9 +242,9 @@ export default function DetailHistory({ navigation, route }) {
                   </>
                 )}
               </View>
+            </View>
           </View>
         </View>
-      </View>
       </ScrollView>
     </>
   );
@@ -257,7 +277,7 @@ const styles = StyleSheet.create({
   },
   activeCardMedicines: {
     flexWrap: "wrap",
-    flexDirection:"row",
+    flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
     marginHorizontal: 3,
@@ -279,11 +299,10 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   cardMedicines: {
-    marginTop: 15,
-    
+    marginTop: 15
   },
   card: {
-    marginTop: 15,
+    marginTop: 15
   },
   medicinesWrap: {
     // flexWrap: "wrap",
@@ -322,7 +341,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     borderRadius: 5,
-    marginTop: 3,
+    marginTop: 3
   },
   buttonless: {
     width: "100%",
@@ -332,7 +351,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     borderRadius: 5,
-    marginTop: 3,
+    marginTop: 3
   },
 
   buttonPending: {
@@ -343,6 +362,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 5,
     borderRadius: 5,
-    marginTop: 3,
-  },
+    marginTop: 3
+  }
 });
