@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles --forceExit  --coverage",
-    "dev": "nodemon bin/www"
+    "dev": "nodemon bin/www",
+    "start": "node bin/www"
   },
   "keywords": [],
   "author": "",
