@@ -4,7 +4,8 @@ import {
   SET_HISTORY_ERROR,
   SET_ANTRIAN,
   SET_ANTRIAN_LOADING,
-  SET_MIDTRANS
+  SET_MIDTRANS,
+  SET_MIDTRANS_LOADING
 } from "../keys";
 import http from "../../libs/history";
 import apiSchedules from "../../libs/schedule";
@@ -19,6 +20,13 @@ export function setHistory(payload) {
 export function setLoading(payload) {
   return {
     type: SET_HISTORY_LOADING,
+    payload,
+  };
+}
+
+export function setMidtransLoading(payload) {
+  return {
+    type: SET_MIDTRANS_LOADING,
     payload,
   };
 }
@@ -92,6 +100,7 @@ export function getAntrian(bookingId) {
 
 export function transaction(id){
   return async (dispatch) => {
+    dispatch(setMidtransLoading(true))
     await http.post(`/transaction/${id}`)
     .then(res => {
       dispatch(setMidtrans(res.data.redirect_url))
@@ -99,6 +108,7 @@ export function transaction(id){
     .catch(err => {
       console.log(err);
     })
+    .finally(() => dispatch(setMidtransLoading(false)));
   }
 }
 

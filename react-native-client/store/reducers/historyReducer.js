@@ -4,7 +4,8 @@ import {
   SET_HISTORY_ERROR,
   SET_ANTRIAN,
   SET_ANTRIAN_LOADING,
-  SET_MIDTRANS
+  SET_MIDTRANS,
+  SET_MIDTRANS_LOADING
 } from "../keys";
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   histories: [],
   antrian: [],
   antrianLoading: false,
-  midtransUrl: ''
+  midtransUrl: '',
+  midtransLoading: false
 };
 
 function reducer(state = initialState, action) {
@@ -22,6 +24,8 @@ function reducer(state = initialState, action) {
       return { ...state, loading: action.payload };
     case SET_ANTRIAN_LOADING:
       return { ...state, antrianLoading: action.payload };
+    case SET_MIDTRANS_LOADING:
+      return { ...state, midtransLoading: action.payload };
     case SET_HISTORY_DATA:
       return { ...state, histories: action.payload };
     case SET_HISTORY_ERROR:

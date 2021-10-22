@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+import { css } from "@emotion/react";
+import BeatLoader from "react-spinners/BeatLoader";
 import {
   fetchMedicines,
   deleteMed,
@@ -10,8 +12,11 @@ import {
 import Modal from "react-modal";
 Modal.setAppElement("#root");
 
-
-
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: lime;
+`;
 
 export default function MedicineTable() {
   const medicineData = useSelector((state) => state.medicineState.medicines);
@@ -24,7 +29,7 @@ export default function MedicineTable() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
-  const medicine = useSelector((state) => state.medicineState.medicine);
+  const { medicine, isLoading } = useSelector((state) => state.medicineState);
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -118,54 +123,75 @@ export default function MedicineTable() {
                     ) : null}
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  {medicineData.rows?.map((el, index) => {
-                    return (
-                      <tr key={el.id}>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="flex items-center">
-                            <div class="text-sm font-bold text-gray-900">
-                              {index + 1}
-                            </div>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.name}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.price}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">
-                            {el.description}
-                          </div>
-                        </td>
-                        {localStorage.getItem("role") === "Admin" ? (
-                          <td class="px-6 py-4 whitespace-nowrap flex flex-row">
-                            <div
-                              className="cursor-pointer"
-                              onClick={() => openModal(el.id)}
-                            >
-                              <i
-                                class="fas fa-edit "
-                                style={{ color: "#059669", fontSize: 15 }}
-                              ></i>
-                            </div>
-                            <div
-                              className="cursor-pointer ml-5"
-                              onClick={() => dispatch(deleteMed(el.id))}
-                            >
-                              <i
-                                class="fas fa-trash-alt "
-                                style={{ color: "#EF4444", fontSize: 15 }}
-                              ></i>
-                            </div>
-                          </td>
-                        ) : null}
-                      </tr>
-                    );
-                  })}
-                </tbody>
+                {isLoading ? (
+                  <>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td className="w-400 flex justify-center my-20 ">
+                        <BeatLoader
+                          color="green"
+                          // loading={isLoading}
+                          css={override}
+                        />
+                      </td>
+                    </tr>
+                  </>
+                ) : (
+                  <>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      {medicineData.rows?.map((el, index) => {
+                        return (
+                          <tr key={el.id}>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="flex items-center">
+                                <div class="text-sm font-bold text-gray-900">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">{el.name}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">
+                                {el.price}
+                              </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">
+                                {el.description}
+                              </div>
+                            </td>
+                            {localStorage.getItem("role") === "Admin" ? (
+                              <td class="px-6 py-4 whitespace-nowrap flex flex-row">
+                                <div
+                                  className="cursor-pointer"
+                                  onClick={() => openModal(el.id)}
+                                >
+                                  <i
+                                    class="fas fa-edit "
+                                    style={{ color: "#059669", fontSize: 15 }}
+                                  ></i>
+                                </div>
+                                <div
+                                  className="cursor-pointer ml-5"
+                                  onClick={() => dispatch(deleteMed(el.id))}
+                                >
+                                  <i
+                                    class="fas fa-trash-alt "
+                                    style={{ color: "#EF4444", fontSize: 15 }}
+                                  ></i>
+                                </div>
+                              </td>
+                            ) : null}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </>
+                )}
               </table>
             </div>
           </div>

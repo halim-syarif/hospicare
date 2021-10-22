@@ -161,7 +161,7 @@ export default function MainHistory({ navigation, route }) {
         ) : (
           <>
             <View style={styles.active}>
-              <Text>Pesanan Aktif</Text>
+              <Text style={{fontWeight: 'bold'}}>Pesanan Aktif</Text>
               <View style={styles.active}>
                 {activeBooking?.map((el) => {
                   return (
@@ -204,7 +204,7 @@ export default function MainHistory({ navigation, route }) {
 
             {/* History Pesanan */}
             <View style={styles.active}>
-              <Text>History Pesanan</Text>
+              <Text style={{fontWeight: 'bold'}}>History Pesanan</Text>
               <View style={styles.active}>
                 {historyBooking?.map((el) => {
                   return (
@@ -258,7 +258,8 @@ export default function MainHistory({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
+    backgroundColor: 'white',
   },
   active: {
     marginBottom: 20,
