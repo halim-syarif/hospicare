@@ -135,7 +135,7 @@ export default function SignIn({navigation, route}) {
                             size={20}
                         /> 
                         <TextInput
-                            placeholder="Enter any symptomps that you might be having"
+                            placeholder="Enter any symptoms that you might be having"
                             style={styles.textInput}
                             value={data.keluhan}
                             autoCapitalize="none"

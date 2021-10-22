@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPatient } from "../../store/actions/userAction";
+import { css } from "@emotion/react";
+import BeatLoader from "react-spinners/BeatLoader";
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: lime;
+`;
 
 export default function PatientTable() {
   const dispatch = useDispatch();
-  const { patients } = useSelector((state) => state.userState);
+  const { patients, isLoading } = useSelector((state) => state.userState);
   useEffect(() => {
     dispatch(getPatient());
   }, []);
@@ -18,7 +26,7 @@ export default function PatientTable() {
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                   <tr>
-                  <th
+                    <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-semibold font-medium text-gray-500 uppercase tracking-wider"
                     >
@@ -56,38 +64,67 @@ export default function PatientTable() {
                     </th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  {patients?.map((el, index) => {
-                    return (
-                      <tr key={el.id}>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="flex items-center">
-                            <div class="text-sm font-bold text-gray-900">
-                              {index + 1}
-                            </div>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.name}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.age}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.gender}</div>
-                        </td>
+                
+                  {isLoading ? (
+                    <>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    <td className="w-400 flex justify-center my-20 ">
+                      <BeatLoader
+                        color="green"
+                        // loading={isLoading}
+                        css={override}
+                      />
+                      </td>
+                    </tr>
+                    </>
+                  ) : (
+                    <>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      {patients?.map((el, index) => {
+                        return (
+                          <tr key={el.id}>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="flex items-center">
+                                <div class="text-sm font-bold text-gray-900">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">{el.name}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">{el.age}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">
+                                {el.gender}
+                              </div>
+                            </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.address}</div>
-                        </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">
+                                {el.address}
+                              </div>
+                            </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap">
-                          <div class="text-sm text-gray-500">{el.email}</div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <div class="text-sm text-gray-500">
+                                {el.email}
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                      </tbody>
+                      
+                    </>
+                    
+                  )}
+                
               </table>
             </div>
           </div>

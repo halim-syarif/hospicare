@@ -9,7 +9,7 @@ export function setMedicine(payload) {
 
 export function setLoading(payload) {
   return {
-    type: 'medicine/setLoading',
+    type: 'medicine/setIsLoading',
     payload,
   };
 }

@@ -30,11 +30,23 @@ export default function Sidebar() {
           </button>
           <div className="items-center flex">
             <span className="h-24 w-24 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">
-              <img
-                alt="..."
-                className="w-full rounded-full align-middle border-none shadow-lg"
-                src={require("../../assets/img/team-1-800x800.jpg").default}
-              />
+              {localStorage.getItem("role") === "Admin" ? (
+                <img
+                  alt="..."
+                  className="h-full w-full rounded-full align-middle border-none shadow-lg"
+                  src={
+                    "https://i0.wp.com/quipperhome.wpcomstaging.com/wp-content/uploads/2018/11/47ce4-template-image-blog-white-22.png?fit=800%2C533&ssl=1"
+                  }
+                />
+              ) : (
+                <img
+                  alt="..."
+                  className="h-full w-full rounded-full align-middle border-none shadow-lg"
+                  src={
+                    "https://fs.genpi.co/uploads/arsip/watermark/2021/10/04/dokter-haekal-buka-bukaan-cairan-pria-wanita-ingin-merasaka-z3ux.jpg"
+                  }
+                />
+              )}
             </span>
           </div>
           <div className="cursor-pointer bg-green-500 mt-5 w-1/2 text-white text-xs font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 hidden md:block">
@@ -67,7 +79,6 @@ export default function Sidebar() {
                 </div>
               </div>
             </div>
-
 
             <form className="mt-6 mb-4 md:hidden">
               <div className="mb-3 pt-0">
